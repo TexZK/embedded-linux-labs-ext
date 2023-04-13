@@ -345,7 +345,7 @@ The first user space program that gets executed by the kernel is `/sbin/init`, w
 file is `/etc/inittab`.
 
 In the *BusyBox* sources, read details about `/etc/inittab` in the `examples/inittab` file (press ++q++ to quit from `less`). Let's create it from the example template; we'll tweak it soon.<br>
-Perform some housekeeping with permissions, since we messes with the *root* shell from *QEMU*.
+Perform some housekeeping with permissions, since we messed with the *root* shell from *QEMU*.
 
 ```console
 $ cd $LAB_PATH/nfsroot/
@@ -356,7 +356,7 @@ $ cp ../busybox/examples/inittab etc/inittab
 $ nano etc/inittab
 ```
 
-Comment out any *getty respawn* from `etc/inittab`, otherwise those whells would keep respawning in our emulated board. Save (++ctrl+o++) and exit (++ctrl+x++).
+Comment out any *getty respawn* from `etc/inittab`, otherwise those shells would keep respawning in our emulated board. Save (++ctrl+o++) and exit (++ctrl+x++).
 
 ```sh title="File: $LAB_PATH/nfsroot/etc/inittab - respawning getty commented out" hl_lines="3-4"
     ...
