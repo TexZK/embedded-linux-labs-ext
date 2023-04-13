@@ -1,0 +1,61 @@
+@startuml Deployment
+
+cloud Internet {
+    database Packages
+    database GitHub
+}
+
+frame "Workstation" as HostMachine {
+
+    frame "Host: Lubuntu 22.04 LTS / VirtualBox @ 10.0.2.15" as VirtualBox {
+
+        folder "Lab folders @ \~/embedded-linux-qemu-labs/" as Labs {
+            folder "appdev" as LAB_appdev
+            folder "bootloader" as LAB_bootloader
+            folder "buildroot" as LAB_buildroot
+            folder "debugging" as LAB_debugging
+            folder "kernel" as LAB_kernel
+            folder "tinysystem" as LAB_tinysystem
+            folder "toolchain" as LAB_toolchain
+        }
+
+        frame "TFTP Server @ /srv/tftp/" as TFTPServer {
+            file "zImage" as TFTP_zImage
+            file "vexpress-v2p-ca9.dtb" as TFTP_DTB
+        }
+
+        frame "NFS Server @ /srv/nfs/" as NFSServer {
+        }
+
+        frame "Target: ARM Versatile Express A9 / QEMU @ 10.0.2.69" as TargetMachine {
+
+            storage "SD Image" as SD {
+                component "U-Boot" as Bootloader
+                component "Kernel" as Kernel
+                component "Root FS" as RootFS {
+                    component "BusyBox" as BusyBox
+                    component "Website @ /www/" as WebSite
+                }
+            }
+        }
+    }
+}
+
+HostMachine -up- Internet
+Kernel -- TFTPServer
+RootFS -- NFSServer
+
+LAB_bootloader -- Bootloader
+LAB_kernel -- Kernel
+LAB_tinysystem -- BusyBox
+
+' Layout constraints
+
+BusyBox -[hidden]ri- WebSite
+
+TFTP_zImage -[hidden]ri- TFTP_DTB
+
+Bootloader -[hidden]ri- Kernel
+Kernel -[hidden]ri- RootFS
+
+@enduml

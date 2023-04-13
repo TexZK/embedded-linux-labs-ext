@@ -1,0 +1,4 @@
+mkdocs
+mkdocs-material
+mkdocs-enumerate-headings-plugin
+mkdocs-build-plantuml-plugin

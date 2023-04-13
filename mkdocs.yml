@@ -1,0 +1,56 @@
+site_name: Embedded Systems Linux Development Notes
+nav:
+  - index.md
+
+  - QEMU variant:
+    - qemu/virtualbox.md
+    - qemu/toolchain.md
+    - qemu/bootloader.md
+    - qemu/kernel.md
+    - qemu/tinysystem.md
+    - qemu/hardware.md
+    - qemu/blockfs.md
+    - qemu/thirdparty.md
+    - qemu/buildroot.md
+    - qemu/appdev.md
+    - qemu/debugging.md
+    - 'debootstrap': qemu/debootstrap.md
+
+  - Knowledge Base:
+    - 'git commit hash expansion': kb/git-hash.md
+    - 'menuconfig': kb/menuconfig.md
+    - kb/processors.md
+
+  - copying.md
+
+theme:
+  name: material
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+plugins:
+  - build_plantuml:
+      render: 'server' # or "local" for local rendering
+      bin_path: '/usr/local/bin/plantuml' # ignored when render: server
+      server: 'http://www.plantuml.com/plantuml' # official plantuml server
+      disable_ssl_certificate_validation: true # for self-signed and invalid certs
+      output_format: 'svg' # or "png"
+      diagram_root: 'docs/diagrams' # should reside under docs_dir
+      output_folder: 'out'
+      input_folder: 'src'
+      input_extensions: '' # comma separated list of extensions to parse, by default every file is parsed
+      theme_enabled: true
+      theme_folder: 'include/themes'
+      theme_light: 'light.puml'
+      theme_dark: 'dark.puml'
+  - enumerate-headings:
+      toc_depth: 0
+  - search
