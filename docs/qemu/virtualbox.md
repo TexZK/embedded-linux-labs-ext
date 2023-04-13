@@ -82,7 +82,7 @@ After a few minutes the installer should have terminated, and the VM can be rest
 Once the installed *VM guest OS* is run, it should install any updates from the internet.
 
 For shell commands I typically use the default terminal application provided by the OS.
-In the case of Lubuntu, it's *QTerminal*, which can be accessed either via the *start menu*, or by pressing `[Ctrl]+[Alt]+[T]`.
+In the case of Lubuntu, it's *QTerminal*, which can be accessed either via the *start menu*, or by pressing ++ctrl+alt+t++.
 
 So, let's update the system, with the canonical commands for *Debian*-based Linux distros:
 
@@ -107,9 +107,9 @@ $ cd /media/me/VBox_GAs_7.0.6/
 $ sudo ./VBoxLinuxAdditions.run
 ```
 
-> You can usually type `cd /media` and press the `[Tab]` key repeatedly for automatic completion; the same for the run script.
+> You can usually type `cd /media` and press the ++tab++ key repeatedly for automatic completion; the same for the run script.
 >
-> If you double-press `[Tab]`, the shell prints some suggestions. It's often handy to click the desired suggestion with the central mouse button to automatically append it to the command line.
+> If you double-press ++tab++, the shell prints some suggestions. It's often handy to click the desired suggestion with the central mouse button to automatically append it to the command line.
 
 After the installation has finished, it's best to reboot again.
 
