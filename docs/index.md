@@ -2,7 +2,7 @@
 
 This document extends the *Practical Labs* provided by [**Bootlin**](https://bootlin.com/).
 Their courses for embedded system development are really good, and what I appreciate the most is their open source approach.<br/>
-On one hand, their paid trainnig sessions are valuable for professionals and to have live support from their team, which is expected for the many paid courses available all around the world.<br/>
+On one hand, their paid trainnig sessions are valuable for professionals, and to have live support from their team, which is expected for the many paid courses available all around the world.<br/>
 On the other hand, having the very same training material released as open source really gives more opportunity to spread knowledge on such complex topics even for students, hobbyists, and us amateurs in general!
 We all love free open source stuff!
 
@@ -85,7 +85,30 @@ as soon as the user puts
 an 'EOF' on a standalone line.
 ```
 
-Inline code: `int main(int argc, char *argv[])` (not formatted).
+An untitled shell block usually represents a shell running on the Linux *host* machine.<br/>
+In case of a shell running on a different machine, like a *QEMU guest* or a *remote* shell, or even file content, that shell is given a title:
+
+```console title="picocomBBB - BusyBox"
+$ echo "I'm a BusyBox shell running on the remote BeagleBone Black board!"
+$ echo "You can use me because you're connected to me via serial connection with `picocom`!"
+```
+
+```console title="ssh - Debian"
+$ echo "I'm a BASH shell running on the remote Debian board!"
+$ echo "You can use me because you're connected to me via SSH!"
+```
+
+``` title="QEMU - U-Boot"
+=> echo "I'm an U-Boot prompt running on the emulated target board!"
+=> echo "You can use me because you're running QEMU on your host machine!"
+```
+
+```sh title="script.sh"
+#!/bin/sh
+echo "Hello $USER! I'm a shell script file!"
+```
+
+Inline code: `int main(int argc, char *argv[]);`.
 
 
 ## Backups

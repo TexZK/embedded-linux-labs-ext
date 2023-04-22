@@ -151,6 +151,11 @@ $ make menuconfig
 
 * Add `CONFIG_DEVTMPFS_MOUNT` to your configuration.
 
+* Add *static* support (instead of *module*) for the *hardware random generator*.
+  Without it, you would get annoying messages and lower performance.
+
+    * Set `CONFIG_HW_RANDOM=y`.
+
 Now you can `<Save>` and backup:
 
 ```console
@@ -207,7 +212,7 @@ We use TFTP to load the kernel image on the board:
 On your workstation, copy the `zImage` and DTB (`vexpress-v2p-ca9.dtb`) to the directory exposed by the TFTP server (`/srv/tftp/`).
 
 ```console
-$ cd $LAB_PATH/linux
+$ cd "$LAB_PATH/linux/"
 $ cp "arch/$ARCH/boot/zImage" /srv/tftp/
 $ cp "arch/$ARCH/boot/dts/vexpress-v2p-ca9.dtb" /srv/tftp/
 ```
@@ -250,7 +255,7 @@ This isn't really required now, because we're going to recompile the kernel and 
 Anyway, in case you need them, you can backup a snapshot of the images up to this point.
 
 ```console
-$ cd /srv/tftp
+$ cd /srv/tftp/
 $ tar cfJv "$LAB_PATH/kernel-tftp.tar.xz" zImage vexpress-v2p-ca9.dtb
 $ cd "$LAB_PATH/../bootloader/"
 $ tar cfJv "$LAB_PATH/kernel-sd.img.tar.xz" sd.img
@@ -259,9 +264,9 @@ $ tar cfJv "$LAB_PATH/kernel-sd.img.tar.xz" sd.img
 To restore the content:
 
 ```console
-$ sudo mkdir -p /srv/tftp
+$ sudo mkdir -p /srv/tftp/
 $ sudo chown tftp:tftp /srv/tftp
-$ cd /srv/tftp
+$ cd /srv/tftp/
 $ tar xfv "$LAB_PATH/kernel-tftp.tar.xz"
 ```
 

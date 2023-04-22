@@ -185,7 +185,7 @@ This virtual filesystem contains device files for all the devices known to the k
 To address this, just create a `dev` directory under `nfsroot`:
 
 ```console
-$ mkdir -p "$LAB_PATH/nfsroot/dev"
+$ mkdir -p "$LAB_PATH/nfsroot/dev/"
 ```
 
 Now restart *QEMU*. The kernel should complain for the last time, saying that it can’t find an `init` application:
@@ -245,7 +245,7 @@ Build BusyBox using the toolchain that you used to build the kernel.
 
 ```console
 $ TC_NAME="arm-training-linux-uclibcgnueabihf"
-$ TC_BASE="$HOME/x-tools/${TC_NAME}"
+$ TC_BASE="$HOME/x-tools/$TC_NAME"
 $ export PATH="$TC_BASE/bin:$PATH"
 $ export CROSS_COMPILE=arm-linux-
 $ export MAKEFLAGS=-j$(nproc)
@@ -300,8 +300,8 @@ From the command line of the target, create the `proc`, `sys` and `etc` director
 *root* filesystem:
 
 ```console title="QEMU - BusyBox"
-# cd /
-# mkdir proc sys etc
+$ cd "$LAB_PATH/nfsroot/"
+$ mkdir proc sys etc
 ```
 
 Now mount the `proc` virtual filesystem. Now that `/proc` is available, test again the `ps` command.
@@ -344,14 +344,11 @@ You can now quit *QEMU* as usual (++ctrl+a++ then ++x++), this time more safely.
 The first user space program that gets executed by the kernel is `/sbin/init`, whose configuration
 file is `/etc/inittab`.
 
-In the *BusyBox* sources, read details about `/etc/inittab` in the `examples/inittab` file (press ++q++ to quit from `less`). Let's create it from the example template; we'll tweak it soon.<br>
-Perform some housekeeping with permissions, since we messed with the *root* shell from *QEMU*.
+In the *BusyBox* sources, read details about `/etc/inittab` in the `examples/inittab` file (press ++q++ to quit from `less`). Let's create it from the example template; we'll tweak it soon.
 
 ```console
-$ cd $LAB_PATH/nfsroot/
+$ cd "$LAB_PATH/nfsroot/"
 $ less ../busybox/examples/inittab
-$ sudo chown -R tftp:tftp .
-$ sudo chmod o-w *
 $ cp ../busybox/examples/inittab etc/inittab
 $ nano etc/inittab
 ```
@@ -403,7 +400,7 @@ mount -t sysfs sys /sys
 Quick typing from the shell:
 
 ```console
-$ mkdir -p etc/init.d
+$ mkdir -p etc/init.d/
 $ cat > etc/init.d/rcS <<'EOF'
 #!/bin/sh
 mount -t proc proc /proc
@@ -727,6 +724,8 @@ Now go back to booting the system through NFS, which is more convenient for thes
 ```console
 $ cp /srv/tftp/zImage-without-initramfs /srv/tftp/zImage
 ```
+
+At reboot it should complain about `/dev` being busy, as we're trying to mount it twice with the updated `rcS` script; just ignore this message.
 
 
 ## Licensing
