@@ -1106,6 +1106,7 @@ This should generate a `0001-Custom-DTS-for-Bootlin-lab.patch` file.
 ```console
 $ git format-patch v5.15.104
 0001-Custom-DTS-for-Bootlin-lab.patch
+$ cp 0001-Custom-DTS-for-Bootlin-lab.patch $LAB_PATH
 ```
 
 Creating the branch will impact the versions of the kernel and the modules.<br/>

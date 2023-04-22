@@ -193,7 +193,7 @@ In `C-library`:
 In `C compiler`:
 
 * Set `Version of gcc` = `11.3.0`.<br/>
-  We need to stick to *GCC 11.x*, because *Buildroot 2022.02* (which we are going to use later) doesn’t support *GCC 12.x* toolchains yet (released after).
+  We need to stick to *GCC 11.x*, because *Buildroot 2022.02* (which we are going to use later) doesn't support *GCC 12.x* toolchains yet (released after).
 
 * Enable `C++` (`CC_LANG_CXX`).
 
@@ -246,7 +246,7 @@ Possible errors might occur because of an unstable connection, or because the VM
 
 The toolchain is installed by default under `~/x-tools/`.<br/>
 In our example: `~/x-tools/arm-training-linux-uclibcgnueabihf/`.<br/>
-That’s something you could have changed in the configuration of *crosstool-NG*.
+That's something you could have changed in the configuration of *crosstool-NG*.
 
 
 ## Backup and restore
@@ -314,8 +314,8 @@ $ qemu-arm hello
 qemu-arm: Could not open '/lib/ld-uClibc.so.0': No such file or directory
 ```
 
-What’s happening is that `qemu-arm` is missing the shared C library (compiled for ARM) that
-this binary uses. Let’s find it in our newly compiled toolchain:
+What's happening is that `qemu-arm` is missing the shared C library (compiled for ARM) that
+this binary uses. Let's find it in our newly compiled toolchain:
 
 ```console
 $ find ~/x-tools/ -name ld-uClibc.so.0
