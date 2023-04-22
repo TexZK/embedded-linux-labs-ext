@@ -16,6 +16,19 @@ nav:
     - qemu/debugging.md
     - 'debootstrap': qemu/debootstrap.md
 
+  - BeagleBone Black variant:
+    - bbb/virtualbox.md
+    - bbb/toolchain.md
+    - bbb/bootloader.md
+    - bbb/kernel.md
+    - bbb/tinysystem.md
+    - bbb/hardware.md
+    - bbb/blockfs.md
+    - bbb/thirdparty.md
+    - bbb/buildroot.md
+    - bbb/appdev.md
+    - bbb/debugging.md
+
   - Knowledge Base:
     - 'git commit hash expansion': kb/git-hash.md
     - 'menuconfig': kb/menuconfig.md
