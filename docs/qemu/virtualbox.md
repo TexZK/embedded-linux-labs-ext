@@ -120,6 +120,7 @@ I usually select the latter, so that I can open a PDF in the host OS, and superi
 ## Networking
 
 There's no special configuration to be made to follow this tutorial.
+You can leave the *VirtualBox* emulated network interface configured as *NAT*, which makes life easier for our course.
 Just make sure that the *VM guest OS* can reach the internet in a stable and possibly fast way.
 
 The conventions for this tutorial are the following:

@@ -18,7 +18,7 @@ previous lab.
 
 ## Exploring `/dev`
 
-Start by exploring `/dev` on your target system (with *QEMU*).
+Start by exploring `/dev/` on your target system (with *QEMU*).
 
 ```console title="QEMU - BusyBox"
 # ls /dev/
@@ -69,12 +69,12 @@ Here are a few noteworthy device files that you will see:
   You will also find the `ttyAMA0` device file we used for the emulated debug serial port.
 
 * *Pseudo-terminal devices*: devices starting with `pty`, used when you connect through SSH for example.<br/>
-  Those are virtual devices, but there are so many in `/dev` that we wanted to give a description here.
+  Those are virtual devices, but there are so many in `/dev/` that we wanted to give a description here.
 
 * *MMC devices and partitions*: devices starting with `mmcblk`.<br/>
   You should here recognize the MMC devices on your system, and the associated partitions.
 
-Don’t hesitate to explore `/dev` on your workstation too!
+Don’t hesitate to explore `/dev/` on your workstation too!
 
 ```console
 $ ls /dev/
@@ -115,7 +115,7 @@ loop0            rtc           tty19     tty46  ttyS14     userio   zfs
 
 The next thing you can explore is the *sysfs* filesystem.
 
-A good place to start is `/sys/class`, which exposes devices classified by the kernel frameworks which manage them.
+A good place to start is `/sys/class/`, which exposes devices classified by the kernel frameworks which manage them.
 
 ```console title="QEMU - BusyBox"
 # ls /sys/class/
@@ -128,7 +128,7 @@ block         leds          power_supply  scsi_host     vtconsole
 devlink       mdio_bus      pps           sound         wakeup
 ```
 
-For example, go to `/sys/class/net`, and you will see all the networking interfaces on your system, whether they are internal, external or virtual ones.
+For example, go to `/sys/class/net/`, and you will see all the networking interfaces on your system, whether they are internal, external or virtual ones.
 
 ```console title="QEMU - BusyBox"
 # ls /sys/class/net/
@@ -168,7 +168,7 @@ duplex                phys_port_id          uevent
 963618
 ```
 
-You can also check whether `/sys/class/thermal` exists and is not empty on your system.
+You can also check whether `/sys/class/thermal/` exists and is not empty on your system.
 That’s the thermal framework, and it allows to access temperature measures from the thermal sensors on your system.
 
 ```console title="QEMU - BusyBox"
@@ -176,8 +176,8 @@ That’s the thermal framework, and it allows to access temperature measures fro
 ls: /sys/class/thermal: No such file or directory
 ```
 
-Next, you can now explore all the buses (virtual or physical) available on your system, by checking the contents of `/sys/bus`.
-In particular, go to `/sys/bus/mmc/devices` to see all the MMC devices on your system.<br/>
+Next, you can now explore all the buses (virtual or physical) available on your system, by checking the contents of `/sys/bus/`.
+In particular, go to `/sys/bus/mmc/devices/` to see all the MMC devices on your system.<br/>
 Go inside the directory for the first device and check several files (for example):
 
 * `serial`: the serial number for your device.
@@ -212,7 +212,7 @@ fwrev                 rca
 QEMU!
 ```
 
-Don’t hesitate to spend more time exploring `/sys` on your system!
+Don’t hesitate to spend more time exploring `/sys/` on your system!
 
 
 ## Licensing

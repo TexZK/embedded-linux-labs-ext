@@ -128,7 +128,7 @@ Get an understanding of *U-Boot*’s configuration and compilation steps by read
 Our board is an *ARM Vexpress Cortex A9*, so let's find it:
 
 ```console hl_lines="6"
-$ cd $LAB_PATH/u-boot
+$ cd $LAB_PATH/u-boot/
 $ ls configs/ | grep vexpress
 vexpress_aemv8a_juno_defconfig
 vexpress_aemv8a_semi_defconfig
@@ -153,7 +153,7 @@ Also, remmeber to parallelize to save time.
 
 ```console
 $ TC_NAME="arm-training-linux-uclibcgnueabihf"
-$ TC_BASE="$HOME/x-tools/${TC_NAME}"
+$ TC_BASE="$HOME/x-tools/$TC_NAME"
 $ export PATH="$TC_BASE/bin:$PATH"
 $ export CROSS_COMPILE=arm-linux-
 $ export MAKEFLAGS=-j$(nproc)
@@ -162,7 +162,7 @@ $ export MAKEFLAGS=-j$(nproc)
 We're going to use the `menuconfig` to refine the configuration to suit our needs.
 
 ```console
-$ cd $LAB_PATH/u-boot
+$ cd $LAB_PATH/u-boot/
 $ make menuconfig
 ```
 
@@ -294,16 +294,16 @@ In the `cfdisk` interface, create three *primary* partitions, starting from the 
 
 Select `Write` when you are done.
 
-You could've done something similar with a single `parted` issue:
-
-```console
-$ parted -s sd.img --  \
-    mklabel msdos  \
-    mkpart primary boot fat16 1m 64m  \
-    mkpart primary root ext4 32m 64m  \
-    mkpart primary data ext4 64m -1s  \
-    set 1 boot on
-```
+> You could've done something similar with a single `parted` issue:
+>
+> ```console
+> $ parted -s sd.img --  \
+>     mklabel msdos  \
+>     mkpart primary boot fat16 1m 64m  \
+>     mkpart primary root ext4 64m 96m  \
+>     mkpart primary data ext4 96m -1s  \
+>     set 1 boot on
+> ```
 
 We're allocating a *loop* driver to emulate block devices from this image and its partitions, by calling `losetup`
 (returned <code>loop<b><i>13</i></b></code> in the example):
@@ -373,6 +373,7 @@ Run `reset` to reboot the virtual board, and then check that the `foo` variable 
 ``` title="QEMU - U-Boot"
 => reset
     ...
+Hit any key to stop autoboot:  0
 => printenv foo
 foo=bar
 ```
@@ -471,7 +472,8 @@ To make these settings permanent, save the environment.
 => saveenv
 ```
 
-You can now test the connection to the host:
+You can now test the connection to the host, with the `ping` command of *U-Boot*.<br/>
+Note that while *U-Boot* can *ping* other machines, it cannot be *ping*ed back, because *U-Boot* doesn't use a complete network stack.
 
 ``` title="QEMU - U-Boot"
 => ping $serverip
@@ -502,10 +504,21 @@ $ sudo adduser $USER tftp
 $ newgrp tftp
 ```
 
-> The `newgrp tftp` command makes this group available to the current shell without restarting the host login session.
+> The `newgrp tftp` command makes this group available to the current shell without restarting the *host* login session.
 > Until the next login session, you have to type this command again for any new shells of the current login session.
 
-**TODO: additional TFTP steps + dedicated KB page**
+To test the TFTP connection, put a small text file in the directory exported through TFTP on your *host* machine, then try to read it back as a TFTP client to check that the server is working properly.
+
+```console
+$ echo "Hello, World!" > /srv/tftp/textfile.txt
+$ cd $LAB_PATH
+$ tftp localhost -v -c get textfile.txt
+Connected to localhost (::1), port 69
+getting from localhost:textfile.txt to textfile.txt [netascii]
+Received 15 bytes in 0.0 seconds [6306 bit/s]
+$ cat textfile.txt
+Hello, World!
+```
 
 Back in *U-Boot* run `bdinfo`, which allows finding out that the RAM starts at `0x60000000`.
 
@@ -548,13 +561,7 @@ Early malloc usage: 370 / 400
 
 Therefore, we will use the `0x61000000` address to test `tftp`.
 
-To test the TFTP connection, put a small text file in the directory exported through TFTP on your development workstation:
-
-```console
-$ echo "Hello, World!" > /srv/tftp/textfile.txt
-```
-
-Then, from the *U-Boot* prompt, ask the server that file:
+From the *U-Boot* prompt, ask the TFTP server that file:
 
 ``` title="QEMU - U-Boot" hl_lines="1-2"
 => setenv ram_app_start 0x61000000

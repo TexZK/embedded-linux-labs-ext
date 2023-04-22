@@ -81,7 +81,7 @@ $ mv crosstool-ng*/ crosstool-ng
 Now that the source code is available, its content requires some initial setup to become available. The local `bootstrap` executable takes care of this initial setup.
 
 ```console
-$ cd $LAB_PATH/crosstool-ng
+$ cd $LAB_PATH/crosstool-ng/
 $ ./bootstrap
 ```
 
@@ -128,6 +128,7 @@ $ ./ct-ng menuconfig
 ```
 
 > See: [`menuconfig`](../kb/menuconfig.md)
+
 
 In `Path and misc options`:
 
@@ -196,6 +197,13 @@ It's best to save a back-up copy as well:
 
 ```console
 $ cp .config ../crosstool-ng.config
+```
+
+You'd better also create the `~/src/` folder, where *crosstool-NG* stores the downloaded tarballs by default.
+It's handy to store them in case of any errors or cleanup, to avoid repeated downloads.
+
+```console
+$ mkdir -p ~/src/
 ```
 
 

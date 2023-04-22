@@ -71,9 +71,10 @@ nodev   9p
 nodev   ubifs
 ```
 
+
 ## Format the third partition
 
-We are going to format the third partition of the SD card image with the EXT4 filesystem, so that it can contain uploaded images.
+We are going to format the third partition of the SD card image with the *EXT4* filesystem, so that it can contain uploaded images.
 
 Setup the loop device again and format the third partition:
 
@@ -104,7 +105,7 @@ $ sudo rmdir $mnt_path
 $ sudo losetup -d $LOOP_DEV
 ```
 
-Now, restart *QEMU* and from the Linux command line and mount this third partition on `/www/upload/files`.
+Now, restart *QEMU* and from the Linux command line mount this third partition on `/www/upload/files`.
 
 ```console title="QEMU - BusyBox" hl_lines="7 11"
 # ls /www/upload/files/
@@ -122,7 +123,8 @@ linux-blackfin.jpg         lost+found
 
 Once this works, modify the startup scripts in your root filesystem to do it automatically at boot time.
 
-```console
+```console hl_lines="6"
+$ cd "$LAB_PATH/nfsroot/"
 $ cat > etc/init.d/rcS <<'EOF'
 #!/bin/sh
 mount -t proc proc /proc
@@ -155,8 +157,6 @@ gohome.png                 lost+found
 linux-blackfin.jpg         upload.log
 ```
 
-You can now `halt` and quit *QEMU*.
-
 ![*gohome.png* uploaded](blockfs_uploaded_file.png)
 
 ![Updated gallery](blockfs_uploaded_list.png)
@@ -170,7 +170,7 @@ To avoid seeing this log file in the directory containing uploaded files, let’
 Add the `/var/log/` directory to your *root* filesystem, and modify the startup script to mount a `tmpfs` filesystem to this directory.<br/>
 You can test your `tmpfs` mount command line on the system before adding it to the startup script, in order to be sure that it works properly. Note that for types of `tmpfs` and `sysfs` the device name is just ignored, so we can just name them after the type.
 
-```console
+```console hl_lines="7"
 $ cd "$LAB_PATH/nfsroot/"
 $ mkdir -p var/log/
 $ cat > etc/init.d/rcS <<'EOF'
@@ -242,7 +242,13 @@ In order to create *SquashFS* images on your *host*, you need to install the `sq
 $ sudo apt install squashfs-tools
 ```
 
-Then, create a *SquashFS* image of your NFS *root* directory with `mksquashfs`.<br/>
+Then, create a *SquashFS* image of your NFS *root* directory with `mksquashfs`.
+
+```console
+$ cd "$LAB_PATH/nfsroot/"
+$ mksquashfs * ../nfsroot.sqsh
+```
+
 Setup the *loop* device again. Using the `dd` command, copy the filesystem image to the second partition (named `image`) in the SD card image. Finally, unmount and cleanup.
 
 ```console
@@ -265,7 +271,9 @@ Also add the `rootwait` boot argument, to wait for the SD card to be properly in
 Since the SD cards are detected asynchronously by the kernel, the kernel might try to mount the *root* filesystem too early without `rootwait`.<br/>
 Check that your system still works. Congratulations if it does!
 
-``` title="QEMU - U-Boot" hl_lines="5"
+``` title="QEMU - U-Boot" hl_lines="7"
+    ...
+Hit any key to stop autoboot:  0
 => setenv bootargs console=ttyAMA0 root=/dev/mmcblk0p2 rootwait ip=${ipaddr}::${serverip}:${netmask}::
 => saveenv
 => reset
@@ -292,7 +300,7 @@ $ sudo mkdir -p $mnt_path
 $ sudo mount -t vfat "${LOOP_DEV}p1" $mnt_path
 $ ls /mnt/sd_boot/
 uboot.env
-$ sudo cp /srv/tftp/zImage /srv/tftp/*.dtb $mnt_path
+$ sudo cp /srv/tftp/zImage /srv/tftp/vexpress-v2p-ca9.dtb $mnt_path
 $ ls /mnt/sd_boot/
 uboot.env  vexpress-v2p-ca9.dtb  zImage
 $ sudo umount $mnt_path
@@ -304,14 +312,15 @@ You now need to adjust the `bootcmd` of *U-Boot* so that it loads kernel and fro
 In *U-boot*, you can load a file from a FAT filesystem using the `fatload` command, which expects: the device, the partition, the load address, and the source filename.<br/>
 Compare the previous and the new `bootcmd`. Finally, `reset` to reboot the board and make sure that your system still boots fine.
 
-``` title="QEMU - U-Boot" hl_lines="3 8 9"
+``` title="QEMU - U-Boot" hl_lines="5 9-10"
+    ...
+Hit any key to stop autoboot:  0
 => printenv bootcmd
 bootcmd=tftp 0x61000000 zImage;  tftp 0x62000000 vexpress-v2p-ca9.dtb;  bootz 0x61000000 - 0x62000000
 => setenv bootcmd "fatload mmc 0:1 0x61000000 zImage;  fatload mmc 0:1 0x62000000 vexpress-v2p-ca9.dtb;  bootz 0x61000000 - 0x62000000"
 => saveenv
 => reset
     ...
-Hit any key to stop autoboot:  0
 5018272 bytes read in 1665 ms (2.9 MiB/s)
 14081 bytes read in 19 ms (723.6 KiB/s)
 Kernel image @ 0x61000000 [ 0x000000 - 0x4c92a0 ]
