@@ -5,7 +5,6 @@
 
 * discover how a build system is used and how it works, with the example of the Buildroot build system.
 
-
 Compared to the previous lab, we are going to build a more elaborate system, still containing `alsa-utils` (and of course its `alsa-lib` dependency), but this time using *Buildroot*, an automated build system.
 
 The automated build system will also allow us to add more packages and play real audio on our system, thanks to the [*Music Player Daemon* (`mpd`)](https://www.musicpd.org/) and its `mpc` client.
@@ -119,24 +118,13 @@ In `Target options`:
 * `Floating point strategy` = `VFPv3-D16`.
 
 
-In `Kernel`:
-
-* Enable `Linux Kernel`.
-
-* `Defconfig name` = `vexpress`.
-
-* Enable `Build a Device Tree Blob (DTB)`.
-
-* `In-tree Device Tree Source file names` = `vexpress-v2p-ca9`.
-
-
 In `Toolchain`:
 
 * `Toolchain type` = `External toolchain`.
 
 * `Toolchain` = `Custom toolchain`.
 
-* `Toolchain path` = `$(HOME)/x-tools/arm-traininglinux-uclibcgnueabihf`, which is the one we built.
+* `Toolchain path` = `$(HOME)/x-tools/arm-training-linux-uclibcgnueabihf`, which is the one we built.
 
 * `External toolchain gcc version` = `11.x`.
 
@@ -149,6 +137,19 @@ In `Toolchain`:
 * Enable `Toolchain has SSP support?`.
 
 * Enable `Toolchain has C++ support?`.
+
+
+In `Kernel`:
+
+* Enable `Linux Kernel`.
+
+* `Kernel version` = `Latest version (5.15)`.
+
+* `Defconfig name` = `vexpress`.
+
+* Enable `Build a Device Tree Blob (DTB)`.
+
+* `In-tree Device Tree Source file names` = `vexpress-v2p-ca9`.
 
 
 In `Target packages`:
@@ -167,7 +168,7 @@ In `Target packages`:
 
         * Keep only `alsa`, `vorbis` and `tcp sockets`.
 
-    * Enable* `mpd-mpc`.
+    * Enable `mpd-mpc`.
 
 
 In `Filesystem images`:
@@ -245,15 +246,22 @@ $ cp images/zImage /srv/tftp/zImage
 $ cp $(find . -name "vexpress-v2p-ca9.dtb") /srv/tftp/
 ```
 
-You should restore *U-Boot* to work with TFTP and NFS. Run *QEMU*, press a key to reach the *U-Boot* prompt, and restore the environment variables. Finally, reset the board.
+You should restore *U-Boot* to work with TFTP and NFS. Run *QEMU*, press a key to reach the *U-Boot* prompt, and restore the environment variables. Finally, reset the board.<br/>
+You should now be able to log in (`root` account, no password) to reach a shell.
 
-```console title="QEMU - Buildroot"
+```console title="QEMU - U-Boot"
+    ...
+Hit any key to stop autoboot:  0
 => setenv bootcmd "tftp 0x61000000 zImage;  tftp 0x62000000 vexpress-v2p-ca9.dtb;  bootz 0x61000000 - 0x62000000"
 => setenv bootargs console=ttyAMA0 root=/dev/nfs ip=${ipaddr}::${serverip}:${netmask}:: nfsroot=${serverip}:${servernfs},nfsvers=3,tcp rw
+=> saveenv
 => reset
-```
+    ...
 
-You should now be able to log in (`root` account, no password) to reach a shell.<br/>
+Welcome to Buildroot
+buildroot login: root
+#
+```
 
 You can run `speaker-test` to check that this application works; note that the sound might stutter within *QEMU*.
 
@@ -352,7 +360,7 @@ $ tar cfJv "$LAB_PATH/buildroot-sd.img.tar.xz" sd.img
 $ cd "$LAB_PATH/nfsroot/"
 $ find . -depth -print0 | cpio -ocv0 | xz > "$LAB_PATH/nfsroot-buildroot.cpio.xz"
 $ cd "$LAB_PATH/buildroot/output/images/"
-$ tar cfJv "$LAB_PATH/rootfs-buildroot.tar.xz" rootfs.tar
+$ tar cfJv "$LAB_PATH/buildroot-rootfs.tar.xz" rootfs.tar
 $ cd /srv/tftp/
 $ tar cfJv "$LAB_PATH/buildroot-tftp.tar.xz" zImage vexpress-v2p-ca9.dtb
 ```
