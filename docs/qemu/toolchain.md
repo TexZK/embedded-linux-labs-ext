@@ -130,6 +130,13 @@ $ ./ct-ng menuconfig
 > See: [`menuconfig`](../kb/menuconfig.md)
 
 
+In `Debug facilities`:
+
+* Remove all the options here.
+  Some debugging tools can be provided in the toolchain, but they can also be built by filesystem building tools.<br/>
+  **Do this before anything else**: removing features often messes up elsewhere (*IPv6* and *WCHAR* for example)!
+
+
 In `Path and misc options`:
 
 * To resume a failed compilation, enable the following options.
@@ -186,9 +193,20 @@ In `C compiler`:
 * Enable `C++` (`CC_LANG_CXX`).
 
 
-In `Debug facilities`:
-
-* Remove all the options here. Some debugging tools can be provided in the toolchain, but they can also be built by filesystem building tools.
+> **Do cross-check everything now!**<br/>
+> It can happen that, when changing feature states, some overlooked dependency chains mess up with the configuration!<br/>
+> For example:
+>
+> *defconfig* `arm-cortex_a8-linux-gnueabi` &rArr; `DEBUG_GDB=y` &rArr; `LIBC_UCLIBC_IPV6=y`
+>
+> So, it looked like *IPv6* support was ok.<br/>
+> But, after removing `gdb` (`DEBUG_GDB=n`) from the `Debug facilities`:
+>
+> `DEBUG_GDB=n` &rArr; `LIBC_UCLIBC_IPV6=n`
+>
+> We could have forced `LIBC_UCLIBC_IPV6=y` by pressing ++y++ even if it looked automatically enabled (marked with `-*-`), but I've found no easy visual feedback to ensure that.<br/>
+> So, cross-checking before leaving is strongly encouraged!
+> I've lost a lot of time re-building the toolchain because of overlooking these naiveities, just because *Buildroot* slammed errors in my face so late!
 
 
 You can now `<Save>` this configuration to the default `.config` file.
