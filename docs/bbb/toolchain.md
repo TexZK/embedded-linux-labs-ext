@@ -147,6 +147,13 @@ In `Path and misc options`:
   This isn't strictly required, and might produce too many messages. I'm keeping it to `EXTRA` actually.
 
 
+In `Debug facilities`:
+
+* Remove all the options here.
+  Some debugging tools can be provided in the toolchain, but they can also be built by filesystem building tools.<br/>
+  **Do this before anything else**: removing features often messes up elsewhere (*IPv6* and *WCHAR* for example)!
+
+
 In `Target options`:
 
 * Set `Use specific FPU` (`ARCH_FPU`) = `vfpv3`.
@@ -176,12 +183,11 @@ In `C-library`:
 
 * Keep the default version that is proposed.
 
-* Enable `Add support for IPv6` (`LIBC_UCLIBC_IPV6`).<br/>
-  That’s needed to use the toolchain in *Buildroot*, which only accepts toolchains with IPv6 support.
+* Enable `Add support for IPv6` (`LIBC_UCLIBC_IPV6`), required by [*Buildroot*](buildroot.md).
 
-* Enable `Add support for WCHAR` (`LIBC_UCLIBC_WCHAR`).
+* Enable `Add support for WCHAR` (`LIBC_UCLIBC_WCHAR`), required by [*Buildroot*](buildroot.md).
 
-* Enable `Support stack smashing protection (SSP)` (`LIBC_UCLIBC_HAS_SSP`).
+* Enable `Support stack smashing protection (SSP)` (`LIBC_UCLIBC_HAS_SSP`), required by [*Buildroot*](buildroot.md).
 
 
 In `C compiler`:
@@ -192,9 +198,20 @@ In `C compiler`:
 * Enable `C++` (`CC_LANG_CXX`).
 
 
-In `Debug facilities`:
-
-* Remove all the options here. Some debugging tools can be provided in the toolchain, but they can also be built by filesystem building tools.
+> **Do cross-check everything now!**<br/>
+> It can happen that, when changing feature states, some overlooked dependency chains mess up with the configuration!<br/>
+> For example:
+>
+> *defconfig* `arm-cortex_a8-linux-gnueabi` &rArr; `DEBUG_GDB=y` &rArr; `LIBC_UCLIBC_IPV6=y`
+>
+> So, it looked like *IPv6* support was ok.<br/>
+> But, after removing `gdb` (`DEBUG_GDB=n`) from the `Debug facilities`:
+>
+> `DEBUG_GDB=n` &rArr; `LIBC_UCLIBC_IPV6=n`
+>
+> We could have forced `LIBC_UCLIBC_IPV6=y` by pressing ++y++ even if it looked automatically enabled (marked with `-*-`), but I've found no easy visual feedback to ensure that.<br/>
+> So, cross-checking before leaving is strongly encouraged!
+> I've lost a lot of time re-building the toolchain because of overlooking these naiveities, just because *Buildroot* slammed errors in my face so late!
 
 
 You can now `<Save>` this configuration to the default `.config` file.
