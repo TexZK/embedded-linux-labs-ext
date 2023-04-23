@@ -149,7 +149,7 @@ In `Kernel`:
 
 * `Kernel version` = `Latest version (5.15)`.
 
-* `Custom kernel patches` = `board/bootlin/training/0001-Custom-DTS-for-Bootlinlab.patch`,
+* `Custom kernel patches` = `board/bootlin/training/0001-Custom-DTS-for-Bootlin-lab.patch`,
   our hand-made patch.
 
 * `Kernel configuration` = `Using a custom (def)config file`.
