@@ -259,7 +259,7 @@ $ cp images/zImage /srv/tftp/zImage
 $ cp $(find images -name "am335x-boneblack-custom.dtb") /srv/tftp/
 ```
 
-You should restore *U-Boot* to work with TFTP and NFS. Run *QEMU*, press a key to reach the *U-Boot* prompt, and restore the environment variables. Finally, reset the board.<br/>
+You should restore *U-Boot* to work with TFTP and NFS. Run the board, press a key to reach the *U-Boot* prompt, and restore the environment variables. Finally, reset the board.<br/>
 You should now be able to log in (`root` account, no password) to reach a shell.
 
 ```console title="picocomBBB - U-Boot"
@@ -415,7 +415,7 @@ You can run `speaker-test` to check that this application works with the USB hea
 The next thing we want to do is play real sound samples with the *Music Player Daemon* (*MPD*).<br/>
 So, let's add music files for *MPD* to play. Update your *root* filesystem, and restart your system.
 
-```console
+```console hl_lines="3"
 $ cd "$LAB_PATH/buildroot/"
 $ mkdir -p board/bootlin/training/rootfs-overlay/var/lib/mpd/music
 $ cp ../data/music/* board/bootlin/training/rootfs-overlay/var/lib/mpd/music
@@ -448,7 +448,56 @@ You should see the files getting indexed by displaying the contents of the `/var
   **TODO**
 ```
 
-**TODO**
+You can also check the list of available files:
+
+```console title="picocomBBB - Buildroot"
+# mpc listall
+1-sample.ogg
+2-arpent.ogg
+5-ukulele-song.ogg
+3-chronos.ogg
+7-fireworks.ogg
+6-le-baguette.ogg
+4-land-of-pirates.ogg
+```
+
+To play files, you first need to create a playlist.
+Let's create a playlist by adding all music files to it, then you should be able to start playing its songs.
+
+```console title="picocomBBB - Buildroot"
+# mpc add /
+# mpc play
+```
+
+Here are a few further commands for controlling playback:
+
+* `mpc volume +5`: increase the volume by 5%.
+* `mpc volume -5`: reduce the volume by 5%.
+* `mpc prev`: switch to the previous song in the playlist.
+* `mpc next`: switch to the next song in the playlist.
+* `mpc toggle`: toggle between pause and playback modes.
+
+If you find that changing the volume is not available, you can add a custom configuration for *MPD*, as the standard one provided by *Buildroot* doesn't support allowing to change the audio playback volume with all sound cards we have tested.<br/>
+We can simply add a custom *MPD* configuration file to our overlay.<br/>
+Run *Buildroot* again, update your *root* filesystem, reboot (to get *MPD* restarted with the new configuration file), and make sure modifying the volume now works.
+
+```console hl_lines="2"
+$ cd "$LAB_PATH/buildroot/"
+$ cp ../data/mpd.conf board/bootlin/training/rootfs-overlay/etc/
+$ make
+$ cd "$LAB_PATH/nfsroot/"
+$ rm -rf *
+$ tar xfv "../buildroot/output/images/rootfs.tar"
+```
+
+```console title="picocomBBB - Buildroot"
+# mpc add /
+# mpc play
+# mpc volume -5
+# mpc volume +5
+```
+
+Later, we're going to compile and debug a custom *MPD* client application.
 
 
 ## Analyzing dependencies
@@ -469,6 +518,7 @@ dot  -Tpdf \
         -o /home/me/embedded-linux-bbb-labs/buildroot/buildroot/output/graphs/graph-depends.pdf \
         /home/me/embedded-linux-bbb-labs/buildroot/buildroot/output/graphs/graph-depends.dot
 $ evince output/graphs/graph-depends.pdf
+$ cp output/graphs/graph-depends.pdf ../graph-depends.pdf
 ```
 
 In particular, you can see that adding *MPD* and its client required to compile *Meson* for the
@@ -477,11 +527,198 @@ host, and in turn, *Python 3* for the host too. This substantially contributed t
 ![graph-depends.pdf viewed through evince](buildroot_graph-depends_evince.png)
 
 
+## Adding a package
+
+We would also like to build our *Nunchuk* external module with *Buildroot*.
+Fortunately, *Buildroot* has a `kernel-module` infrastructure to build kernel modules.
+
+First, create a `nunchuk-driver` subdirectory under package in *Buildroot* sources.
+
+The first thing is to create a `package/nunchuk-driver/Config.in` file for *Buildroot*'s configuration:
+
+``` title="File: package/nunchuk-driver/Config.in"
+config BR2_PACKAGE_NUNCHUK_DRIVER
+        bool "nunchuk-driver"
+        depends on BR2_LINUX_KERNEL
+        help
+                Linux Kernel module for the I2C Nunchuk.
+```
+
+```console
+$ mkdir -p package/nunchuk-driver/
+$ cat > package/nunchuk-driver/Config.in <<'EOF'
+config BR2_PACKAGE_NUNCHUK_DRIVER
+        bool "nunchuk-driver"
+        depends on BR2_LINUX_KERNEL
+        help
+                Linux Kernel module for the I2C Nunchuk.
+EOF
+$ cp package/nunchuk-driver/Config.in ../nunchuk-driver-Config.in
+```
+
+Then add a line to `package/Config.in` to include this file, for example right before the line including `package/nvidia-driver/Config.in`, so that the alphabetic order of configuration options is preserved:
+
+``` title="File: package/Config.in" hl_lines="7"
+    ...
+menu "Hardware handling"
+    ...
+        source "package/msr-tools/Config.in"
+        source "package/nanocom/Config.in"
+        source "package/neard/Config.in"
+        source "package/nunchuk-driver/Config.in"
+        source "package/nvidia-driver/Config.in"
+        source "package/nvidia-modprobe/Config.in"
+        source "package/nvme/Config.in"
+    ...
+```
+
+```console
+$ nano package/Config.in
+$ cp package/Config.in ../package-nunchuk-Config.in
+```
+
+Then, the next and last thing you need to do is to create `package/nunchuk-driver/nunchukdriver.mk` describing how to build the package.<br/>
+You can see that we're sourcing files from our [*hardware lab*](hardware.md).
+
+```sh title="File: package/nunchuk-driver/nunchukdriver.mk"
+NUNCHUK_DRIVER_VERSION = 1.0
+NUNCHUK_DRIVER_SITE = $(HOME)/embedded-linux-bbb-labs/hardware/data/nunchuk
+NUNCHUK_DRIVER_SITE_METHOD = local
+NUNCHUK_DRIVER_LICENSE = GPL-2.0
+
+$(eval $(kernel-module))
+$(eval $(generic-package))
+```
+
+```console
+$ cat > package/nunchuk-driver/nunchukdriver.mk <<'EOF'
+NUNCHUK_DRIVER_VERSION = 1.0
+NUNCHUK_DRIVER_SITE = $(HOME)/embedded-linux-bbb-labs/hardware/data/nunchuk
+NUNCHUK_DRIVER_SITE_METHOD = local
+NUNCHUK_DRIVER_LICENSE = GPL-2.0
+
+$(eval $(kernel-module))
+$(eval $(generic-package))
+EOF
+$ cp package/nunchuk-driver/nunchukdriver.mk ../nunchukdriver.mk
+```
+
+Then, configure *Buildroot* to build your package.
+Just follow the menus as described in the configuration file we added before.
+
+```console
+$ cd "$LAB_PATH/buildroot/"
+$ make menuconfig
+$ cp .config ../buildroot-nunchuk.config
+```
+
+In `Target packages` &rarr; `Hardware handling`:
+
+* Enable `nunchuk-driver (NEW)`.
+
+Now run *Buildroot* and update your *root* filesystem.
+
+```console
+$ cd "$LAB_PATH/buildroot/"
+$ make
+  ...
+>>> nunchuk-driver 1.0 Syncing from source dir /home/me/embedded-linux-bbb-labs/hardware/data/nunchuk
+>>> nunchuk-driver 1.0 Configuring
+>>> nunchuk-driver 1.0 Building
+>>> nunchuk-driver 1.0 Building kernel module(s)
+>>> nunchuk-driver 1.0 Installing to target
+>>> nunchuk-driver 1.0 Installing kernel module(s)
+  ...
+$ cd "$LAB_PATH/nfsroot/"
+$ rm -rf *
+$ tar xfv "../buildroot/output/images/rootfs.tar"
+```
+
+Check that you can load the *Nunchuk* module now.
+
+```console title="picocomBBB - Buildroot"
+# modprobe nunchuk
+  **TODO**
+```
+
+If everything's fine, add a line to `/etc/init.d/S03modprobe` for this driver, and update your *root* filesystem once again.
+
+```console
+$ cd "$LAB_PATH/buildroot/"
+$ cd board/bootlin/training/rootfs-overlay/
+$ echo "modprobe nunchuk" >> etc/init.d/S03modprobe
+$ cd "$LAB_PATH/buildroot/"
+$ make
+$ cd "$LAB_PATH/nfsroot/"
+$ rm -rf *
+$ tar xfv "../buildroot/output/images/rootfs.tar"
+```
+
+
+## Testing the Nunchuk
+
+Now that we have the *Nunchuk* driver loaded and that *Buildroot* compiled `evtest` for the target, thanks to *Buildroot*, we can now test the input events coming from the *Nunchuk*.
+
+```console title="picocomBBB - Buildroot"
+  **TODO**
+# evtest
+No device specified, trying to scan all of /dev/input/event*
+Available devices:
+/dev/input/event0: pmic_onkey
+/dev/input/event1: Logitech Inc. Logitech USB Headset H340 Consumer Control
+/dev/input/event2: Logitech Inc. Logitech USB Headset H340
+/dev/input/event3: Wii Nunchuk
+Select the device event number [0-3]:
+```
+
+Enter the number corresponding to the *Nunchuk* device (**TODO**).
+
+You can now press the *Nunchuk* buttons, use the joypad, and see which input events are emitted.
+
+By the way, you can also test which input events are exposed by the driver for your audio headset (if any), which doesn't mean that they physically exist.
+
+
+## Commit your changes
+
+As we are going to reuse our *Buildroot* changes in the next labs, let's commit them into the dedicated *Buildroot* branch we created (`embedded-linux-bbb`):
+
+```console hl_lines="3 7 11 12"
+$ cd "$LAB_PATH/buildroot/"
+$ git status
+On branch embedded-linux-bbb
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   package/Config.in
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        board/bootlin/
+        package/nunchuk-driver/
+
+no changes added to commit (use "git add" and/or "git commit -a")
+$ git add  board/bootlin/  package/nunchuk-driver/  package/Config.in
+$ git commit -as -m "Bootlin lab changes"
+```
+
+## Going further
+
+For more music playing fun, you can install the `ario` or `cantata` *MPD* client on your *host* machine, configure to connect to the IP address of your *target* system with the default port, and you will also be able to control playback from your *host* machine.
+
+```console
+$ sudo apt install ario cantata
+```
+
+**TODO**
+
+
 ## Backup and restore
 
 ```console
 $ cd "$LAB_PATH/nfsroot/"
 $ find . -depth -print0 | cpio -ocv0 | xz > "$LAB_PATH/nfsroot-buildroot.cpio.xz"
+$ cd "$LAB_PATH/buildroot/"
+$ tar cfJv "$LAB_PATH/buildroot-patch.tar.xz" board/bootlin/ package/nunchuk-driver/ package/Config.in
 $ cd "$LAB_PATH/buildroot/output/images/"
 $ tar cfJv "$LAB_PATH/buildroot-rootfs.tar.xz" rootfs.tar
 $ cd /srv/tftp/
