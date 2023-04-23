@@ -26,6 +26,7 @@ nav:
     - bbb/blockfs.md
     - bbb/thirdparty.md
     - bbb/buildroot.md
+    - bbb/integration.md
     - bbb/appdev.md
     - bbb/debugging.md
 
