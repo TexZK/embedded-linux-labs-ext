@@ -536,7 +536,7 @@ First, create a `nunchuk-driver` subdirectory under package in *Buildroot* sourc
 
 The first thing is to create a `package/nunchuk-driver/Config.in` file for *Buildroot*'s configuration:
 
-``` title="File: package/nunchuk-driver/Config.in"
+```kconfig title="File: package/nunchuk-driver/Config.in"
 config BR2_PACKAGE_NUNCHUK_DRIVER
         bool "nunchuk-driver"
         depends on BR2_LINUX_KERNEL
@@ -558,7 +558,7 @@ $ cp package/nunchuk-driver/Config.in ../nunchuk-driver-Config.in
 
 Then add a line to `package/Config.in` to include this file, for example right before the line including `package/nvidia-driver/Config.in`, so that the alphabetic order of configuration options is preserved:
 
-``` title="File: package/Config.in" hl_lines="7"
+```kconfig title="File: package/Config.in" hl_lines="7"
     ...
 menu "Hardware handling"
     ...
