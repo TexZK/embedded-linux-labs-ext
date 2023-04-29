@@ -161,39 +161,38 @@ $ sudo systemctl restart nfs-kernel-server
 You should see the system booting through *systemd*, with all the *systemd* targets and system services starting one by one, with a total boot time which looks slower than before.<br/>
 That's because the system configuration is more complex, but also more versatile, being ready to run more complex services and applications.
 
-You can ask systemd to show you the various services which were started:
-**FIXME USB AUDIO**
+You can ask *systemd* to show you the various running services:
 
-```console
-$ systemctl status
+```console title="picocomBBB - systemd"
+# systemctl status
 ●
     State: degraded
      Jobs: 0 queued
    Failed: 1 units
-    Since: Thu 1970-01-01 00:00:05 UTC; 52 years 0 months ago
+    Since: Thu 1970-01-01 00:00:06 UTC; 52 years 0 months ago
    CGroup: /
            ├─init.scope
            │ └─1 /sbin/init
            └─system.slice
              ├─dbus.service
-             │ └─165 /usr/bin/dbus-daemon --system --address=systemd: --no
+             │ └─164 /usr/bin/dbus-daemon --system --address=systemd: --no
              ├─dropbear.service
-             │ └─172 /usr/sbin/dropbear -F -R
+             │ └─171 /usr/sbin/dropbear -F -R
              ├─mpd.service
-             │ └─167 /usr/bin/mpd --systemd
+             │ └─166 /usr/bin/mpd --systemd
              ├─system-serial\x2dgetty.slice
              │ └─serial-getty@ttyS0.service
-             │   ├─168 -sh
-             │   ├─181 systemctl status
-             │   └─182 less
+             │   ├─167 -sh
+             │   ├─182 systemctl status
+             │   └─183 less
              ├─systemd-journald.service
              │ └─92 /usr/lib/systemd/systemd-journald
              ├─systemd-networkd.service
-             │ └─112 /usr/lib/systemd/systemd-networkd
+             │ └─111 /usr/lib/systemd/systemd-networkd
              ├─systemd-resolved.service
-             │ └─162 /usr/lib/systemd/systemd-resolved
+             │ └─129 /usr/lib/systemd/systemd-resolved
              ├─systemd-timesyncd.service
-             │ └─163 /usr/lib/systemd/systemd-timesyncd
+             │ └─125 /usr/lib/systemd/systemd-timesyncd
              └─systemd-udevd.service
                └─104 /usr/lib/systemd/systemd-udevd
 
@@ -320,57 +319,64 @@ WantedBy=default.target
 ## Automatic module loading
 
 Check the currently loaded modules on your system.
-**FIXME USB AUDIO**
 
-```console title="picocomBBB - systemd" hl_lines="25"
+```console title="picocomBBB - systemd"
 # lsmod
 Module                  Size  Used by
+input_leds             16384  0
 snd_soc_hdmi_codec     16384  1
+hid_generic            16384  0
 snd_soc_simple_card    16384  0
-snd_soc_davinci_mcasp    28672  2
-snd_soc_ti_udma        16384  1 snd_soc_davinci_mcasp
 snd_soc_simple_card_utils    20480  1 snd_soc_simple_card
-snd_soc_ti_edma        16384  1 snd_soc_davinci_mcasp
-snd_soc_ti_sdma        16384  1 snd_soc_davinci_mcasp
-snd_soc_core          172032  7 snd_soc_davinci_mcasp,snd_soc_hdmi_codec,snd_soc_simple_card_utils,snd_soc_ti_sdma,snd_soc_ti_edma,snd_soc_ti_udma,snd_soc_simple_card
 omap_aes_driver        24576  0
-snd_pcm_dmaengine      16384  1 snd_soc_core
 omap_crypto            16384  1 omap_aes_driver
-snd_pcm               106496  4 snd_soc_davinci_mcasp,snd_pcm_dmaengine,snd_soc_hdmi_codec,snd_soc_core
-pm33xx                 16384  0
 libaes                 16384  1 omap_aes_driver
 omap_sham              28672  0
-ti_emif_sram           16384  1 pm33xx
+pm33xx                 16384  0
 crypto_engine          16384  2 omap_aes_driver,omap_sham
-snd_timer              28672  1 snd_pcm
-snd                    61440  4 snd_soc_hdmi_codec,snd_timer,snd_soc_core,snd_pcm
-soundcore              16384  1 snd
+ti_emif_sram           16384  1 pm33xx
 tilcdc                 32768  0
+snd_soc_davinci_mcasp    28672  2
+snd_usb_audio         217088  2
+snd_soc_ti_udma        16384  1 snd_soc_davinci_mcasp
+snd_soc_ti_edma        16384  1 snd_soc_davinci_mcasp
+snd_hwdep              16384  1 snd_usb_audio
+snd_soc_ti_sdma        16384  1 snd_soc_davinci_mcasp
+snd_usbmidi_lib        28672  1 snd_usb_audio
+snd_soc_core          172032  7 snd_soc_davinci_mcasp,snd_soc_hdmi_codec,snd_soc_simple_card_utils,snd_soc_ti_sdma,snd_soc_ti_edma,snd_soc_ti_udma,snd_soc_simple_card
+mc                     36864  1 snd_usb_audio
+snd_pcm_dmaengine      16384  1 snd_soc_core
+snd_rawmidi            28672  1 snd_usbmidi_lib
+snd_pcm               106496  6 snd_soc_davinci_mcasp,snd_usb_audio,snd_pcm_dmaengine,snd_soc_hdmi_codec,snd_soc_core
+snd_timer              28672  2 snd_pcm
+snd                    61440  10 snd_hwdep,snd_usb_audio,snd_soc_hdmi_codec,snd_timer,snd_rawmidi,snd_usbmidi_lib,snd_soc_core,snd_pcm
+soundcore              16384  1 snd
 omap_mailbox           20480  1
+usbhid                 32768  0
 nunchuk                16384  0
 tda998x                28672  0
+rtc_omap               20480  2 pm33xx
 drm_kms_helper        192512  3 tda998x,tilcdc
 cfbfillrect            16384  1 drm_kms_helper
-sha256_generic         16384  0
 syscopyarea            16384  1 drm_kms_helper
 cfbimgblt              16384  1 drm_kms_helper
-libsha256              16384  1 sha256_generic
 sysfillrect            16384  1 drm_kms_helper
-omap_wdt               16384  0
 sysimgblt              16384  1 drm_kms_helper
-sha256_arm             24576  0
-fb_sys_fops            16384  1 drm_kms_helper
-watchdog               20480  1 omap_wdt
-rtc_omap               20480  2 pm33xx
 wkup_m3_ipc            16384  1 pm33xx
-tps65218_pwrbutton     16384  0
+fb_sys_fops            16384  1 drm_kms_helper
+omap_wdt               16384  0
 cfbcopyarea            16384  1 drm_kms_helper
+watchdog               20480  1 omap_wdt
+tps65218_pwrbutton     16384  0
 drm                   385024  4 tda998x,tilcdc,drm_kms_helper
 drm_panel_orientation_quirks    16384  1 drm
 at24                   20480  0
 wkup_m3_rproc          16384  1
-cfg80211              643072  0
 cpufreq_dt             16384  0
+sha256_generic         16384  0
+libsha256              16384  1 sha256_generic
+sha256_arm             24576  0
+cfg80211              643072  0
 ```
 
 Surprise: both the *Nunchuk* and USB audio modules are already loaded.
@@ -425,7 +431,6 @@ We already explained that [in the lectures](hardware.md) when talking about the 
 
 Find where the `modules.alias` file is located, and you will find the two lines that allowed to load
 our `snd_usb_audio` and `nunchuk` modules:
-**FIXME**
 
 ```console title="picocomBBB - systemd"
 # modules_alias_path=$(find / -name modules.alias)
@@ -434,7 +439,7 @@ our `snd_usb_audio` and `nunchuk` modules:
 # cat $modules_alias_path | grep snd_usb_audio
     ...
 alias usb:v*p*d*dc*dsc*dp*ic01isc01ip*in* snd_usb_audio
-alias usb:v2B53p0031d*dc*dsc*dp*ic*isc*ip*in* snd_usb_audio
+alias usb:v046Dp0A38d*dc*dsc*dp*ic*isc*ip*in* snd_usb_audio
     ...
 # cat $modules_alias_path | grep nunchuk
 alias of:N*T*Cnintendo,nunchukC* nunchuk
@@ -445,44 +450,139 @@ For `snd_usb_audio`, there are many possible matching values, so it isn't straig
 sure which matched your particular device.
 
 However, you can find in *sysfs* which `MODALIAS` was emitted for your device:
-**FIXME**
 
-```console title="picocomBBB - systemd"
+```console title="picocomBBB - systemd" hl_lines="14"
 # cd /sys/class/sound/card0/device/
 # ls -la
+total 0
+drwxr-xr-x    4 root     root             0 Jan 18 11:35 .
+drwxr-xr-x    8 root     root             0 Jan 18 11:35 ..
+-rw-r--r--    1 root     root          4096 Jan 18 11:43 authorized
+-r--r--r--    1 root     root          4096 Jan 18 11:43 bAlternateSetting
+-r--r--r--    1 root     root          4096 Jan 18 11:35 bInterfaceClass
+-r--r--r--    1 root     root          4096 Jan 18 11:35 bInterfaceNumber
+-r--r--r--    1 root     root          4096 Jan 18 11:43 bInterfaceProtocol
+-r--r--r--    1 root     root          4096 Jan 18 11:43 bInterfaceSubClass
+-r--r--r--    1 root     root          4096 Jan 18 11:43 bNumEndpoints
+lrwxrwxrwx    1 root     root             0 Jan 18 11:35 driver -> ../../../../../../../../../bus/usb/drivers/snd-usb-audio
+-r--r--r--    1 root     root          4096 Jan 18 11:43 modalias
+drwxr-xr-x    2 root     root             0 Jan 18 11:43 power
+drwxr-xr-x    3 root     root             0 Jan 18 11:35 sound
+lrwxrwxrwx    1 root     root             0 Jan 18 11:35 subsystem -> ../../../../../../../../../bus/usb
+-r--r--r--    1 root     root          4096 Jan 18 11:43 supports_autosuspend
+-rw-r--r--    1 root     root          4096 Jan 18 11:35 uevent
 # cat modalias
-usb:v1B3Fp2008d0100dc00dsc00dp00ic01isc01ip00in00
+usb:v046Dp0A38d0115dc00dsc00dp00ic01isc01ip00in00
 ```
 
 With a bit of patience, you could find the matching linewithin the `modules.alias` file.
 
 If you want to see the information sent to Udev* by the kernel when a new device is plugged in, here are a few debugging commands.
 
-First unplug your device and run:
-**TODO**
+First unplug your device and run `udevadm monitor`.<br/>
+Then plug in your headset again. You will find all the events emitted by the kernel, and with the same string (with `UDEV` instead of `KERNEL`), the time when *Udev* finished processing each event.
 
 ```console title="picocomBBB - systemd"
 # udevadm monitor
-    **TOD**
+monitor will print the received events for:
+UDEV - the event which udev sends out after rule processing
+KERNEL - the kernel uevent
+
+[ 1602.288834] usb 1-1: new full-speed USB device number 5 using musb-hdrc
+[ 1602.670092] usb 1-1: New USB device found, idVendor=046d, idProduct=0a38, bcdDevice= 1.15
+[ 1602.678406] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[ 1602.685741] usb 1-1: Product: Logitech USB Headset H340
+[ 1602.691101] usb 1-1: Manufacturer: Logitech Inc.
+KERNEL[1602.716705] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1 (usb)
+KERNEL[1602.722002] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0 (usb)
+KERNEL[1602.849792] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0 (sound)
+KERNEL[1602.853994] add      /devices/platform/ocp/4740[ 1602.870857] PM: Cannot get wkup_m3_ipc handle
+0000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0/pcmC0D0p (sound)
+KERNEL[1602.858805] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0/pcmC0D0c (sound)
+KERNEL[1602.872313] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0/controlC0 (sound)
+KERNEL[1602.873192] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0 (usb)
+KERNEL[1602.873919] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.1 (usb)
+KERNEL[1602.874634] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.1 (usb)
+KERNEL[1602.875370] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.2 (usb)
+KERNEL[1602.876096] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.2 (usb)
+KERNEL[1602.876771] add  [ 1602.964976] input: Logitech Inc. Logitech USB Headset H340 Consumer Control as /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input7
+    /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3 (usb)
+KERNEL[1602.949111] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004 (hid)
+KERNEL[1602.980402] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input7 (input)
+[ 1603.049480] input: Logitech Inc. Logitech USB Headset H340 as /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8
+KERNEL[1603.057724] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A[ 1603.076705] hid-generic 0003:046D:0A38.0004: input,hiddev96: USB HID v1.11 Device [Logitech Inc. Logitech USB Headset H340] on usb-musb-hdrc.1-1/input3
+38.0004/input/input7/event1 (input)
+KERNEL[1603.058370] add    [ 1603.094087] PM: Cannot get wkup_m3_ipc handle
+  /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8 (input)
+KERNEL[1603.063218] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8/event2 (input)
+KERNEL[1603.063593] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8/input8::mute (leds)
+KERNEL[1603.063797] add      /class/usbmisc (class)
+KERNEL[1603.083788] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/usbmisc/hiddev0 (usbmisc)
+KERNEL[1603.084236] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004 (hid)
+KERNEL[1603.084543] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3 (usb)
+KERNEL[1603.084907] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1 (usb)
+UDEV  [1603.110810] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1 (usb)
+UDEV  [1603.118580] add      /class/usbmisc (class)
+UDEV  [1603.129548] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0 (usb)
+UDEV  [1603.163585] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0 (sound)
+UDEV  [1603.177859] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0/pcmC0D0c (sound)
+UDEV  [1603.183681] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0/pcmC0D0p (sound)
+UDEV  [1603.195790] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.2 (usb)
+UDEV  [1603.203962] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.1 (usb)
+UDEV  [1603.218135] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.1 (usb)
+UDEV  [1603.221134] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3 (usb)
+UDEV  [1603.227523] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004 (hid)
+UDEV  [1603.236292] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.2 (usb)
+UDEV  [1603.251374] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/usbmisc/hiddev0 (usbmisc)
+KERNEL[1603.267946] change   /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0 (sound)
+UDEV  [1603.293198] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8 (input)
+UDEV  [1603.300618] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input7 (input)
+UDEV  [1603.301505] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0/controlC0 (sound)
+UDEV  [1603.317818] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0 (usb)
+UDEV  [1603.332349] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8/input8::mute (leds)
+UDEV  [1603.387225] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input7/event1 (input)
+UDEV  [1603.396360] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8/event2 (input)
+UDEV  [1603.396747] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004 (hid)
+UDEV  [1603.407306] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3 (usb)
+UDEV  [1603.417180] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1 (usb)
+UDEV  [1603.427970] change   /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0 (sound)
 ```
 
-Then plug in your headset again. You will find all the events emitted by the kernel, and with the
-same string (with `UDEV` instead of `KERNEL`), the time when *Udev* finished processing each event.
-**TODO**
-
-```console title="picocomBBB - systemd"
-    **TODO**
-```
-
-You can also see the MODALIAS values carried by these events:
+You can also see the `MODALIAS` values carried by these events:
 
 ```console title="picocomBBB - systemd"
 # udevadm monitor --env
-    **TODO**
+    ...
+
+UDEV  [1763.405675] change   /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0 (sound)
+ACTION=change
+DEVPATH=/devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0
+SUBSYSTEM=sound
+SYNTH_UUID=0
+SEQNUM=2433
+USEC_INITIALIZED=1761986039
+SOUND_INITIALIZED=1
+ID_VENDOR=Logitech_Inc.
+ID_VENDOR_ENC=Logitech\x20Inc.
+ID_VENDOR_ID=046d
+ID_MODEL=Logitech_USB_Headset_H340
+ID_MODEL_ENC=Logitech\x20USB\x20Headset\x20H340
+ID_MODEL_ID=0a38
+ID_REVISION=0115
+ID_SERIAL=Logitech_Inc._Logitech_USB_Headset_H340
+ID_TYPE=audio
+ID_BUS=usb
+ID_USB_INTERFACES=:010100:010200:030000:
+ID_USB_INTERFACE_NUM=00
+ID_USB_DRIVER=snd-usb-audio
+ID_ID=usb-Logitech_Inc._Logitech_USB_Headset_H340-00
+ID_PATH=platform-musb-hdrc.1-usb-0:1:1.0
+ID_PATH_TAG=platform-musb-hdrc_1-usb-0_1_1_0
+SOUND_FORM_FACTOR=headset
 ```
 
 As far as the *Nunchuk* is concerned, we cannot easily remove it from the *Device Tree* and add it back, but it's easier to find its `MODALIAS` value:
-**TODO**
+> **TODO**
 
 ```console title="picocomBBB - systemd"
 # cd /sys/bus/i2c/devices/
@@ -491,7 +591,7 @@ As far as the *Nunchuk* is concerned, we cannot easily remove it from the *Devic
 ```
 
 Here you will recognize our *Nunchuk* device through its `0x52` address.
-**TODO**
+> **TODO**
 
 ```console title="picocomBBB - systemd"
 # cd 1-0052
@@ -504,7 +604,7 @@ Here the bus is `of`, meaning *Open Firmware*, which was the former name of the 
 When an event was emitted by the kernel with this `MODALIAS` string, the `nunchuk` module got loaded by *Udev* thanks to the matching alias.
 
 This actually happened when *systemd* ran the *coldplugging* operation: at system startup, it asked the kernel to emit *hotplug* events for devices already present when the system booted:
-**TODO**
+> **TODO**
 
 ```
 [ OK ] Finished Coldplug All udev Devices.
@@ -517,13 +617,26 @@ This way, both *static* and *hotplugged* devices can be handled in the same way,
 ## Testing
 
 Make sure that audio playback still works on your system:
-**TODO**
 
 ```console title="picocomBBB - systemd"
 # mpc update
+Updating DB (#2) ...
+volume:100%   repeat: off   random: off   single: off   consume: off
 # mpc add /
+
 # mpc play
+1-sample.ogg
+[playing] #1/7   0:00/0:19 (0%)
+volume:100%   repeat: off   random: off   single: off   consume: off
 ```
 
 If it doesn't, look at the *systemd* logs in your serial console history (`dmesg`).
 *systemd* should let you know about the failing services and the commands to run to get more details.
+
+
+## Backup and restore
+
+```console
+$ cd "$LAB_PATH/buildroot/output/images/"
+$ tar cfJv "$LAB_PATH/integration-rootfs.tar.xz" rootfs.tar
+```

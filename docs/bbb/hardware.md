@@ -692,10 +692,10 @@ Now, when you plug the USB headset, a number of messages should appear on the co
 ```console title="picocomBBB - BusyBox"
 # lsusb
 Bus 001 Device 001: ID 1d6b:0002
-Bus 001 Device 004: ID 1b3f:2008
+Bus 001 Device 002: ID 046d:0a38
 ```
 
-The device of vendor ID `1b3f` and product ID `2008` has appeared.
+The device of *vendor ID* `046d` and *product ID* `0a38` has appeared.
 Of course, this depends on the actual USB audio device that you used.
 
 The device also appears in `/sys/bus/usb/devices/`, in a directory whose name depends on the topology of the USB bus.
@@ -704,11 +704,11 @@ When the device is plugged in the kernel messages show:
 ```console title="picocomBBB - BusyBox"
 # dmesg
     ...
-usb 1-1: new full-speed USB device number 4 using musb-hdrc
-usb 1-1: New USB device found, idVendor=1b3f, idProduct=2008, bcdDevice= 1.00
+usb 1-1: new full-speed USB device number 2 using musb-hdrc
+usb 1-1: New USB device found, idVendor=046d, idProduct=0a38, bcdDevice= 1.15
 usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-usb 1-1: Product: USB Audio Device
-usb 1-1: Manufacturer: GeneralPlus
+usb 1-1: Product: Logitech USB Headset H340
+usb 1-1: Manufacturer: Logitech Inc.
     ...
 ```
 
@@ -716,16 +716,12 @@ So if we go in `/sys/bus/usb/devices/1-1/`, we get the sysfs representation of t
 
 ```console title="picocomBBB - BusyBox"
 # cd /sys/bus/usb/devices/1-1/
-# cat idVendor
-1b3f
-# cat idProduct
-2008
-# cat busnum
+# cat idVendor idProduct busnum devnum product
+046d
+0a38
 1
-# cat devnum
-4
-# cat product
-USB Audio Device
+2
+Logitech USB Headset H340
 ```
 
 However, while the USB device is detected, we currently do not have any driver for this device, so no actual sound card is detected.
@@ -771,8 +767,6 @@ You can also see that a new USB device driver in `/sys/bus/usb/drivers/snd-usb-a
 # uname -r
 5.15.104-dirty
 # modprobe snd-usb-audio
-mc: Linux media interface: v0.10
-usbcore: registered new interface driver snd-usb-audio
 # lsmod
 Module                  Size  Used by
 snd_usb_audio         217088  0
@@ -788,12 +782,21 @@ soundcore              16384  1 snd
 
 You can check that `/proc/asound/` now exists (thanks to loading modules for *ALSA*, the Linux sound subsystem), and that one sound card is available:
 
-```console
-# ls /proc/asound/
-cards    devices  hwdep    modules  oss      pcm      timers   version
+```console hl_lines="2 3"
+# ls -1 /proc/asound/
+H340
+card0
+cards
+devices
+hwdep
+modules
+oss
+pcm
+timers
+version
 # cat /proc/asound/cards
-**TODO**
---- no soundcards ---
+ 0 [H340           ]: USB-Audio - Logitech USB Headset H340
+                      Logitech Inc. Logitech USB Headset H340 at usb-musb-hdrc.1-1, full speed
 ```
 
 Check also the `/dev/snd/` directory, which should now contain some character device files.
@@ -801,8 +804,7 @@ These will be used by the user-space libraries and applications to access the au
 
 ```console
 # ls /dev/snd/
-**TODO**
-timer
+controlC0  pcmC0D0c   pcmC0D0p   timer
 ```
 
 Modify your startup scripts so that the `snd-usb-audio` module is always loaded at startup.
@@ -1145,6 +1147,16 @@ Reboot your board and make sure everything's alright!
 # uname -r
 5.15.104-00001-gf60b5016b3b3
 # modprobe nunchuk
+```
+
+
+## Backup and restore
+
+```console
+$ cd "$LAB_PATH/../tinysystem/nfsroot/"
+$ find . -depth -print0 | cpio -ocv0 | xz > "$LAB_PATH/nfsroot-hardware.cpio.xz"
+$ cd /srv/tftp/
+$ tar cfJv "$LAB_PATH/hardware-tftp.tar.xz" zImage am335x-boneblack-custom.dtb
 ```
 
 

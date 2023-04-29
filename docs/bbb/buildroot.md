@@ -42,18 +42,6 @@ $ cd buildroot/
 $ git checkout -b embedded-linux-bbb $label
 ```
 
-Alternatively, you can download an archived version.
-
-```console
-$ LAB_PATH="$HOME/embedded-linux-bbb-labs/buildroot"
-$ cd $LAB_PATH
-$ label="2022.02"
-$ wget "https://git.buildroot.net/buildroot/snapshot/buildroot-${label}.tar.bz2"
-$ tar xfv "buildroot-${label}.tar.bz2"
-$ mv buildroot*/ buildroot
-$ cd buildroot/
-```
-
 Several subdirectories or files are visible. The most important ones are:
 
 * `boot` contains the *Makefiles* and configuration items related to the compilation of common bootloaders (*GRUB*, *U-Boot*, *Barebox*, etc.)
@@ -406,7 +394,21 @@ You can run `speaker-test` to check that this application works with the USB hea
 
 ```console title="picocomBBB - Buildroot"
 # speaker-test -t sine -l 1
-  **TODO**
+
+speaker-test 1.2.6
+
+Playback device is default
+Stream parameters are 48000Hz, S16_LE, 1 channels
+Sine wave rate is 440.0000Hz
+Rate set to 48000Hz (requested 48000Hz)
+Buffer size range from 2229 to 17832
+Period size range from 1114 to 1115
+Using max buffer size 17832
+Periods = 4
+was set period_size = 1114
+was set buffer_size = 17832
+ 0 - Front Left
+Time per period = 2.647185
 ```
 
 
@@ -429,7 +431,8 @@ Using the `ps` command, check that the `mpd` server was started by the system, a
 
 ```console title="picocomBBB - Buildroot" hl_lines="2"
 # ps | grep mpd
-  **TODO**
+  126 root     /usr/bin/mpd
+  134 root     grep mpd
 ```
 
 If that's the case, you are now ready to run `mpc` client commands to control music playback.
@@ -438,14 +441,21 @@ Run `mpc update` on the target:
 
 ```console title="picocomBBB - Buildroot"
 # mpc update
-  **TODO**
+Updating DB (#2) ...
+volume:100%   repeat: off   random: off   single: off   consume: off
 ```
 
 You should see the files getting indexed by displaying the contents of the `/var/log/mpd.log` file.
 
 ```console title="picocomBBB - Buildroot"
 # cat /var/log/mpd.log
-  **TODO**
+Jan 01 00:00 : update: added /6-le-baguette.ogg
+Jan 01 00:00 : update: added /7-fireworks.ogg
+Jan 01 00:00 : update: added /1-sample.ogg
+Jan 01 00:00 : update: added /3-chronos.ogg
+Jan 01 00:00 : update: added /4-land-of-pirates.ogg
+Jan 01 00:00 : update: added /2-arpent.ogg
+Jan 01 00:00 : update: added /5-ukulele-song.ogg
 ```
 
 You can also check the list of available files:
@@ -467,10 +477,14 @@ Let's create a playlist by adding all music files to it, then you should be able
 ```console title="picocomBBB - Buildroot"
 # mpc add /
 # mpc play
+1-sample.ogg
+[playing] #1/7   0:00/0:19 (0%)
+volume:100%   repeat: off   random: off   single: off   consume: off
 ```
 
 Here are a few further commands for controlling playback:
 
+* `mpc stop`: stop playing.
 * `mpc volume +5`: increase the volume by 5%.
 * `mpc volume -5`: reduce the volume by 5%.
 * `mpc prev`: switch to the previous song in the playlist.
