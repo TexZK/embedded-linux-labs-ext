@@ -518,7 +518,7 @@ dtb-$(CONFIG_SOC_AM33XX) += \
 Reboot your board with the update.
 
 ```console hl_lines="2"
-$ make
+$ make dtbs
   DTC     arch/arm/boot/dts/am335x-boneblack-custom.dtb
     ...
 $ cp arch/arm/boot/dts/am335x-boneblack-custom.dtb /srv/tftp/
@@ -534,7 +534,7 @@ Hit any key to stop autoboot:  0
 
 Back to the running system, we can now see that there is one more I2C bus:
 
-```console title="picocomBBB - BusyBox"
+```console title="picocomBBB - BusyBox" hl_lines="2"
 # i2cdetect -l
 i2c-1   i2c             OMAP I2C adapter                        I2C adapter
 i2c-2   i2c             OMAP I2C adapter                        I2C adapter
@@ -939,8 +939,10 @@ To allow the kernel to manage our *Nunchuk* device, let's declare the device in 
 
 ```c title="arch/arm/boot/dts/am335x-boneblack-custom.dts - modified i2c1"
 &i2c1 {
+        pinctrl-names = "default";
+        pinctrl-0 = <&i2c1_pins>;
         status = "okay";
-        clock-frequency = <100000>;
+        clock-frequency = <50000>;
 
         nunchuk: joystick@52 {
                 compatible = "nintendo,nunchuk";
@@ -951,7 +953,8 @@ To allow the kernel to manage our *Nunchuk* device, let's declare the device in 
 
 Here are a few notes:
 
-* The `clock-frequency` property is used to configure the bus to operate at 100 KHz. This is supposed to be required for the *Nunchuk*.
+* The `clock-frequency` property is used to configure the bus to operate at 50 KHz.<br/>
+  Although the *Nunchuk* operates at 100 kHz, our prototyping wiring might degrade the signal, so we prefer to operate with a lower clock frequency.
 
 * The *Nunchuk* device is added through a child node in the I2C controller node.
 
@@ -997,25 +1000,28 @@ Follow the *symbolic link* and you should see a *symbolic link* back to the *Nun
 
 ```console title="picocomBBB - BusyBox" hl_lines="5"
 # ls -l /sys/bus/i2c/devices/
-**FIXME**
-lrwxrwxrwx    1         0 Jan  1 00:03 0-0024 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0024
-lrwxrwxrwx    1         0 Jan  1 00:03 0-0050 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0050
-lrwxrwxrwx    1         0 Jan  1 00:03 0-0070 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0070
-lrwxrwxrwx    1         0 Jan  1 00:03 2-0054 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0054
-lrwxrwxrwx    1         0 Jan  1 00:03 2-0055 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0055
-lrwxrwxrwx    1         0 Jan  1 00:03 2-0056 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0056
-lrwxrwxrwx    1         0 Jan  1 00:03 2-0057 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0057
-lrwxrwxrwx    1         0 Jan  1 00:03 i2c-0 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0
-lrwxrwxrwx    1         0 Jan  1 00:03 i2c-1 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@0/4802a000.target-module/4802a000.i2c/i2c-1
-lrwxrwxrwx    1         0 Jan  1 00:03 i2c-2 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2
+lrwxrwxrwx    1         0 Jan  1 00:14 0-0024 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0024
+lrwxrwxrwx    1         0 Jan  1 00:14 0-0050 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0050
+lrwxrwxrwx    1         0 Jan  1 00:14 0-0070 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0070
+lrwxrwxrwx    1         0 Jan  1 00:14 1-0052 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@0/4802a000.target-module/4802a000.i2c/i2c-1/1-0052
+lrwxrwxrwx    1         0 Jan  1 00:14 2-0054 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0054
+lrwxrwxrwx    1         0 Jan  1 00:14 2-0055 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0055
+lrwxrwxrwx    1         0 Jan  1 00:14 2-0056 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0056
+lrwxrwxrwx    1         0 Jan  1 00:14 2-0057 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0057
+lrwxrwxrwx    1         0 Jan  1 00:14 i2c-0 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0
+lrwxrwxrwx    1         0 Jan  1 00:00 i2c-1 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@0/4802a000.target-module/4802a000.i2c/i2c-1
+lrwxrwxrwx    1         0 Jan  1 00:14 i2c-2 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2
 ```
 
 We are not ready to use this input device yet, but at least we can test that we get bytes when buttons or the joypad are used.
 In the below command, use the same number as in the message you got in the console (`event0` for `input0` for example):
 
-```console title="picocomBBB - BusyBox"
+```console title="picocomBBB - BusyBox - Nunchuk Z pressed then released"
 # od -x /dev/input/event0
-**TODO**
+0000000     02dd    0000    913f    0008    0001    0135    0001    0000
+0000020     02dd    0000    913f    0008    0000    0000    0000    0000
+0000040     02dd    0000    17bb    000a    0001    0135    0000    0000
+0000060     02dd    0000    17bb    000a    0000    0000    0000    0000
 ```
 
 We will use the *Nunchuk* to control audio playback in an upcoming lab.
