@@ -276,7 +276,8 @@ You can now automate all of this every time the board is booted or reset.<br/>
 Reset the board (`S1` button), enter *U-Boot* prompt, and set the `bootcmd` environment variable, chaining the previous commands in sequence in a long line.
 
 ``` title="picocomBBB - U-Boot"
-=> setenv bootcmd "tftp 0x81000000 zImage;  tftp 0x82000000 am335x-boneblack.dtb;  bootz 0x81000000 - 0x82000000"
+=> setenv bootcmd_tftp "tftp 0x81000000 zImage;  tftp 0x82000000 am335x-boneblack.dtb;  bootz 0x81000000 - 0x82000000"
+=> setenv bootcmd $bootcmd_tftp
 => saveenv
 ```
 

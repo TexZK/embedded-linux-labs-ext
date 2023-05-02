@@ -94,6 +94,7 @@ Instead, we can create a *symbolic link* at `/srv/nfs/`, and we can assign it th
 
 ```console
 $ mkdir -p "$LAB_PATH/nfsroot"
+$ sudo rm -rf /srv/nfs
 $ sudo ln -snv "$LAB_PATH/nfsroot" /srv/nfs
 '/srv/nfs' -> '/home/me/embedded-linux-bbb-labs/tinysystem/nfsroot'
 $ sudo chown -R tftp:tftp /srv/nfs
@@ -149,7 +150,8 @@ So, add the required settings to the `bootargs` environment variable (on a singl
 => setenv netmask 255.255.255.0
 => setenv servernfs /srv/nfs
 => setenv netif eth0
-=> setenv bootargs console=ttyS0,115200n8 root=/dev/nfs ip=${ipaddr}::${serverip}:${netmask}::${netif} nfsroot=${serverip}:${servernfs},nfsvers=3,tcp rw
+=> setenv bootargs_nfs "console=ttyS0,115200n8  root=/dev/nfs  ip=$ipaddr::$serverip:$netmask::$netif  nfsroot=$serverip:$servernfs,nfsvers=3,tcp  rw"
+=> setenv bootargs $bootargs_nfs
 => printenv bootargs
 bootargs=console=ttyS0,115200n8 root=/dev/nfs ip=192.168.0.69::192.168.0.15:255.255.255.0::eth0 nfsroot=192.168.0.15:/srv/nfs,nfsvers=3,tcp rw
 => saveenv

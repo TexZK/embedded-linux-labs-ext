@@ -25,41 +25,42 @@ Start by exploring `/dev/` on your target system.
 
 ```console title="picocomBBB - BusyBox"
 # ls /dev/
-bus              ram10            tty26            tty58
-console          ram11            tty27            tty59
-cpu_dma_latency  ram12            tty28            tty6
-full             ram13            tty29            tty60
-gpiochip0        ram14            tty3             tty61
-gpiochip1        ram15            tty30            tty62
-gpiochip2        ram2             tty31            tty63
-gpiochip3        ram3             tty32            tty7
-hwrng            ram4             tty33            tty8
-i2c-0            ram5             tty34            tty9
-i2c-2            ram6             tty35            ttyS0
-kmsg             ram7             tty36            ttyS1
-loop-control     ram8             tty37            ttyS2
-loop0            ram9             tty38            ttyS3
-loop1            random           tty39            ttyS4
-loop2            tty              tty4             ttyS5
-loop3            tty0             tty40            ubi_ctrl
-loop4            tty1             tty41            urandom
-loop5            tty10            tty42            vcs
-loop6            tty11            tty43            vcs1
-loop7            tty12            tty44            vcs2
-mem              tty13            tty45            vcs3
-mmcblk0          tty14            tty46            vcs4
-mmcblk0p1        tty15            tty47            vcsa
-mmcblk1          tty16            tty48            vcsa1
-mmcblk1boot0     tty17            tty49            vcsa2
-mmcblk1boot1     tty18            tty5             vcsa3
-mmcblk1p1        tty19            tty50            vcsa4
-mmcblk1rpmb      tty2             tty51            vcsu
-null             tty20            tty52            vcsu1
-port             tty21            tty53            vcsu2
-ptmx             tty22            tty54            vcsu3
-ptp0             tty23            tty55            vcsu4
-ram0             tty24            tty56            vga_arbiter
-ram1             tty25            tty57            zero
+bus              ram1             tty26            tty59
+console          ram10            tty27            tty6
+cpu_dma_latency  ram11            tty28            tty60
+full             ram12            tty29            tty61
+gpiochip0        ram13            tty3             tty62
+gpiochip1        ram14            tty30            tty63
+gpiochip2        ram15            tty31            tty7
+gpiochip3        ram2             tty32            tty8
+hwrng            ram3             tty33            tty9
+i2c-0            ram4             tty34            ttyS0
+i2c-2            ram5             tty35            ttyS1
+kmsg             ram6             tty36            ttyS2
+loop-control     ram7             tty37            ttyS3
+loop0            ram8             tty38            ttyS4
+loop1            ram9             tty39            ttyS5
+loop2            random           tty4             ubi_ctrl
+loop3            tty              tty40            urandom
+loop4            tty0             tty41            vcs
+loop5            tty1             tty42            vcs1
+loop6            tty10            tty43            vcs2
+loop7            tty11            tty44            vcs3
+mem              tty12            tty45            vcs4
+mmcblk0          tty13            tty46            vcsa
+mmcblk0p1        tty14            tty47            vcsa1
+mmcblk0p2        tty15            tty48            vcsa2
+mmcblk0p3        tty16            tty49            vcsa3
+mmcblk1          tty17            tty5             vcsa4
+mmcblk1boot0     tty18            tty50            vcsu
+mmcblk1boot1     tty19            tty51            vcsu1
+mmcblk1p1        tty2             tty52            vcsu2
+mmcblk1rpmb      tty20            tty53            vcsu3
+null             tty21            tty54            vcsu4
+port             tty22            tty55            vga_arbiter
+ptmx             tty23            tty56            zero
+ptp0             tty24            tty57
+ram0             tty25            tty58
 ```
 
 Here are a few noteworthy device files that you will see:
@@ -515,7 +516,7 @@ dtb-$(CONFIG_SOC_AM33XX) += \
     ...
 ```
 
-Reboot your board with the update.
+Update the board and reboot.
 
 ```console hl_lines="2"
 $ make dtbs
@@ -527,7 +528,8 @@ $ cp arch/arm/boot/dts/am335x-boneblack-custom.dtb /srv/tftp/
 ```console title="picocomBBB - U-Boot"
     ...
 Hit any key to stop autoboot:  0
-=> setenv bootcmd "tftp 0x81000000 zImage;  tftp 0x82000000 am335x-boneblack-custom.dtb;  bootz 0x81000000 - 0x82000000"
+=> setenv bootcmd_tftp "tftp 0x81000000 zImage;  tftp 0x82000000 am335x-boneblack-custom.dtb;  bootz 0x81000000 - 0x82000000"
+=> setenv bootcmd $bootcmd_tftp
 => saveenv
 => reset
 ```
