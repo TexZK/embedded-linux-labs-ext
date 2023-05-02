@@ -339,18 +339,18 @@ $ SDCARD_DEVP="${SDCARD_DEV}p"
 > Bus 002 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
 > $ sudo dmesg
 >     ...
-> [ 6793.824496] usb 1-1: new high-speed USB device number 4 using ehci-pci
-> [ 6794.202112] usb 1-1: New USB device found, idVendor=14cd, idProduct=1212, bcdDevice= 1.00
-> [ 6794.202116] usb 1-1: New USB device strings: Mfr=1, Product=3, SerialNumber=2
-> [ 6794.202117] usb 1-1: Product: Mass Storage Device
-> [ 6794.202119] usb 1-1: Manufacturer: Generic
-> [ 6794.202120] usb 1-1: SerialNumber: 121220160204
-> [ 6794.205731] usb-storage 1-1:1.0: USB Mass Storage device detected
-> [ 6794.205991] scsi host5: usb-storage 1-1:1.0
-> [ 6795.232504] scsi 5:0:0:0: Direct-Access     Mass     Storage Device   1.00 PQ: 0 ANSI: 0 CCS
-> [ 6795.233040] sd 5:0:0:0: Attached scsi generic sg4 type 0
-> [ 6795.252766] sd 5:0:0:0: [sdd] Media removed, stopped polling
-> [ 6795.272180] sd 5:0:0:0: [sdd] Attached SCSI removable disk
+> usb 1-1: new high-speed USB device number 4 using ehci-pci
+> usb 1-1: New USB device found, idVendor=14cd, idProduct=1212, bcdDevice= 1.00
+> usb 1-1: New USB device strings: Mfr=1, Product=3, SerialNumber=2
+> usb 1-1: Product: Mass Storage Device
+> usb 1-1: Manufacturer: Generic
+> usb 1-1: SerialNumber: 121220160204
+> usb-storage 1-1:1.0: USB Mass Storage device detected
+> scsi host5: usb-storage 1-1:1.0
+> scsi 5:0:0:0: Direct-Access     Mass     Storage Device   1.00 PQ: 0 ANSI: 0 CCS
+> sd 5:0:0:0: Attached scsi generic sg4 type 0
+> sd 5:0:0:0: [sdd] Media removed, stopped polling
+> sd 5:0:0:0: [sdd] Attached SCSI removable disk
 >     ...
 > $ SDCARD_DEV="/dev/sdd"
 > $ SDCARD_DEVP="${SDCARD_DEV}"
@@ -396,12 +396,23 @@ Select `Write` when you are done.
 > You could've done something similar with a single `parted` issue:
 >
 > ```console
-> $ parted $SDCARD_DEV --  \
+> $ sudo parted -s $SDCARD_DEV --  \
 >     mklabel msdos  \
->     mkpart primary boot fat32 1m 64m  \
->     mkpart primary root ext4 64m 96m  \
->     mkpart primary data ext4 96m -1s  \
->     set 1 boot on
+>     mkpart primary fat32 1m 64m  \
+>     mkpart primary ext4 64m 96m  \
+>     mkpart primary ext4 96m -1s  \
+>     set 1 boot on  \
+>     print
+> Model: Mass Storage Device (scsi)
+> Disk /dev/sdd: 31.6GB
+> Sector size (logical/physical): 512B/512B
+> Partition Table: msdos
+> Disk Flags:
+>
+> Number  Start   End     Size    Type     File system  Flags
+>  1      1049kB  64.0MB  62.9MB  primary  fat32        boot, lba
+>  2      64.0MB  96.5MB  32.5MB  primary  ext4         lba
+>  3      96.5MB  31.6GB  31.5GB  primary  ext4         lba
 > ```
 
 We will create further partitions in a later lab, when we need them.<br/>
@@ -425,7 +436,7 @@ Now, copy the `MLO` and `u-boot.img` files to the SD card:
 
 ```console
 $ cd "$LAB_PATH/u-boot/"
-$ sdcard_mnt="/media/$USER/boot/"
+$ sdcard_mnt="/mnt/sdcard_boot/"
 $ sudo mkdir -p $sdcard_mnt
 $ sudo mount -t vfat "${SDCARD_DEVP}1" $sdcard_mnt
 $ sudo cp MLO u-boot.img $sdcard_mnt
@@ -550,7 +561,7 @@ You should update the bootloader on the SD card, so you can test that the comman
 ```console
 $ sudo umount ${SDCARD_DEVP}*
 $ cd "$LAB_PATH/u-boot/"
-$ sdcard_mnt="/media/$USER/boot/"
+$ sdcard_mnt="/mnt/sdcard_boot/"
 $ sudo mkdir -p $sdcard_mnt
 $ sudo mount -t vfat "${SDCARD_DEVP}1" $sdcard_mnt
 $ sudo cp MLO u-boot.img $sdcard_mnt
