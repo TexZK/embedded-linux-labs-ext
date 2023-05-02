@@ -556,9 +556,7 @@ Now, let's use `i2cdetect`'s capability to probe a bus for devices.
 Let's start by the bus associated to `i2c-0`:
 
 ```console title="picocomBBB - BusyBox"
-# i2cdetect -r 0
-i2cdetect: WARNING! This program can confuse your I2C bus
-Continue? [y/N] y
+# i2cdetect -y -r 0
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 00:          -- -- -- -- -- -- -- -- -- -- -- -- --
 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
@@ -579,9 +577,7 @@ We can see three devices on this internal bus:
 Now try to probe *I2C1*:
 
 ```console title="picocomBBB - BusyBox" hl_lines="5"
-# i2cdetect -r 1
-i2cdetect: WARNING! This program can confuse your I2C bus
-Continue? [y/N] y
+# i2cdetect -y -r 1
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 00:          [  469.430509] omap_i2c 4802a000.i2c: timeout waiting for bus ready
     ...
@@ -622,10 +618,10 @@ You can understand the above values thanks to the pin muxing diagram for connect
 
 ![https://elinux.org/images/5/5f/H9Pinout.PNG](H9Pinout.png)
 
-Recompile your Device Tree and reboot.
+Recompile your *Device Tree* and reboot.
 
 ```console hl_lines="2"
-$ make
+$ make dtbs
   DTC     arch/arm/boot/dts/am335x-boneblack-custom.dtb
     ...
 $ cp arch/arm/boot/dts/am335x-boneblack-custom.dtb /srv/tftp/
@@ -634,9 +630,7 @@ $ cp arch/arm/boot/dts/am335x-boneblack-custom.dtb /srv/tftp/
 You should now be able to probe your bus:
 
 ```console title="picocomBBB - BusyBox"
-# i2cdetect -r 1
-i2cdetect: WARNING! This program can confuse your I2C bus
-Continue? [y/N] y
+# i2cdetect -y -r 1
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 00:          -- -- -- -- -- -- -- -- -- -- -- -- --
 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
@@ -661,9 +655,7 @@ Connections on the *Nunchuk* depend on the adapter you're using (if any); please
 If you didn't make any mistakes, your new device should be detected at address `0x52`:
 
 ```console title="picocomBBB - BusyBox"
-# i2cdetect -r 1
-i2cdetect: WARNING! This program can confuse your I2C bus
-Continue? [y/N] y
+# i2cdetect -y -r 1
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 00:          -- -- -- -- -- -- -- -- -- -- -- -- --
 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
