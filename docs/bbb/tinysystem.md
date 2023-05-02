@@ -366,7 +366,7 @@ Please press Enter to activate this console.
 starting pid 59, tty '': '-/bin/sh'
 
 
-BusyBox v1.35.0 (2023-04-17 22:30:38 CEST) built-in shell (ash)
+BusyBox v1.35.0 (2023-05-02 22:18:33 CEST) built-in shell (ash)
 Enter 'help' for a list of built-in commands.
 
 -/bin/sh: can't access tty; job control turned off
@@ -412,13 +412,13 @@ VFS: Mounted root (nfs filesystem) on device 0:16.
 devtmpfs: mounted
 Freeing unused kernel image (initmem) memory: 1024K
 Run /sbin/init as init process
-starting pid 60, tty '': '/etc/init.d/rcS'
+starting pid 77, tty '': '/etc/init.d/rcS'
 
 Please press Enter to activate this console.
-starting pid 63, tty '/dev/ttyAMA0': '-/bin/sh'
+starting pid 80, tty '/dev/ttyS0': '-/bin/sh'
 
 
-BusyBox v1.35.0 (2023-04-17 22:30:38 CEST) built-in shell (ash)
+BusyBox v1.35.0 (2023-05-02 22:25:02 CEST) built-in shell (ash)
 Enter 'help' for a list of built-in commands.
 
 #
@@ -511,7 +511,7 @@ Before doing that, measure the size of the busybox executable.
 ```console
 $ cd $LAB_PATH
 $ du -h nfsroot/bin/busybox
-344K    nfsroot/bin/busybox
+356K    nfsroot/bin/busybox
 $ cd busybox/
 $ make menuconfig
 ```
