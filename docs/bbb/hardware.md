@@ -487,6 +487,11 @@ The changes that you make could collide with future changes made by the maintain
 
 A more futureproof idea is to create a new Device Tree file which includes the standard one, and adds custom definitions. So, create a new `arch/arm/boot/dts/am335x-boneblack-custom.dts` file containing:
 
+```console
+$ cd "$LAB_PATH/../kernel/linux/"
+$ nano arch/arm/boot/dts/am335x-boneblack-custom.dts
+```
+
 ```c title="arch/arm/boot/dts/am335x-boneblack-custom.dts"
 /dts-v1/;
 #include "am335x-boneblack.dts"
@@ -518,10 +523,9 @@ dtb-$(CONFIG_SOC_AM33XX) += \
 
 Update the board and reboot.
 
-```console hl_lines="2"
+```console
 $ make dtbs
   DTC     arch/arm/boot/dts/am335x-boneblack-custom.dtb
-    ...
 $ cp arch/arm/boot/dts/am335x-boneblack-custom.dtb /srv/tftp/
 ```
 
@@ -588,6 +592,11 @@ signals are not exposed yet to the outside connectors through pin muxing.
 
 So, get back to your custom Device Tree and add pin muxing definitions for *I2C1* (we took them from a device tree from another board with the same CPU: `arch/arm/boot/dts/am335x-evm.dts`) and refer to these definitions in the `i2c1` node through the `pinctrl-names` and `pinctrl-0` properties:
 
+```console
+$ cd "$LAB_PATH/../kernel/linux/"
+$ nano arch/arm/boot/dts/am335x-boneblack-custom.dts
+```
+
 ```c title="arch/arm/boot/dts/am335x-boneblack-custom.dts"
 /dts-v1/;
 #include "am335x-boneblack.dts"
@@ -623,7 +632,6 @@ Recompile your *Device Tree* and reboot.
 ```console hl_lines="2"
 $ make dtbs
   DTC     arch/arm/boot/dts/am335x-boneblack-custom.dtb
-    ...
 $ cp arch/arm/boot/dts/am335x-boneblack-custom.dtb /srv/tftp/
 ```
 
@@ -743,6 +751,7 @@ Also make sure to update the kernel image (`make zImage`), and reboot the board.
 
 ```console
 $ export INSTALL_MOD_PATH="$LAB_PATH/../tinysystem/nfsroot"
+$ make
 $ make modules_install
     ...
   INSTALL /home/me/embedded-linux-bbb-labs/hardware/../tinysystem/nfsroot/lib/modules/5.15.104/kernel/sound/usb/snd-usbmidi-lib.ko
@@ -757,10 +766,12 @@ After rebooting, try to load the module that we need (`snd-usb-audio`).<br/>
 By running `lsmod`, see all the module dependencies that were loaded too..<br/>
 You can also see that a new USB device driver in `/sys/bus/usb/drivers/snd-usb-audio`. This directory shows which USB devices are bound to this driver.
 
-```console hl_lines="5 8"
+```console title="picocomBBB - BusyBox" hl_lines="5 8"
 # uname -r
 5.15.104-dirty
 # modprobe snd-usb-audio
+mc: Linux media interface: v0.10
+usbcore: registered new interface driver snd-usb-audio
 # lsmod
 Module                  Size  Used by
 snd_usb_audio         217088  0
@@ -776,7 +787,7 @@ soundcore              16384  1 snd
 
 You can check that `/proc/asound/` now exists (thanks to loading modules for *ALSA*, the Linux sound subsystem), and that one sound card is available:
 
-```console hl_lines="2 3"
+```console title="picocomBBB - BusyBox" hl_lines="2 3"
 # ls -1 /proc/asound/
 H340
 card0
@@ -796,7 +807,7 @@ version
 Check also the `/dev/snd/` directory, which should now contain some character device files.
 These will be used by the user-space libraries and applications to access the audio devices.
 
-```console
+```console title="picocomBBB - BusyBox"
 # ls /dev/snd/
 controlC0  pcmC0D0c   pcmC0D0p   timer
 ```
@@ -804,7 +815,8 @@ controlC0  pcmC0D0c   pcmC0D0p   timer
 Modify your startup scripts so that the `snd-usb-audio` module is always loaded at startup.
 
 ```console hl_lines="7"
-# cat > /etc/init.d/rcS <<'EOF'
+$ cd "$LAB_PATH/../tinysystem/nfsroot/"
+$ cat > etc/init.d/rcS <<'EOF'
 #!/bin/sh
 mount -t proc proc /proc
 mount -t sysfs sys /sys
@@ -860,7 +872,7 @@ Back on the target, you can now check that your custom module can be loaded:
 
 ```console title="picocomBBB - BusyBox"
 # modprobe nunchuk
-[ 4317.737978] nunchuk: loading out-of-tree module taints kernel.
+nunchuk: loading out-of-tree module taints kernel.
 ```
 
 See `kbuild/modules` in kernel documentation for details about building out-of-tree kernel modules.
@@ -868,9 +880,7 @@ See `kbuild/modules` in kernel documentation for details about building out-of-t
 However, run `i2cdetect -r 1` again. You will see that the *Nunchuk* is still detected, but still not driven by the kernel. Otherwise, it would be signaled by the `UU` placeholder.
 
 ```console title="picocomBBB - BusyBox"
-# i2cdetect -r 1
-i2cdetect: WARNING! This program can confuse your I2C bus
-Continue? [y/N] y
+# i2cdetect -y -r 1
      0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
 00:          -- -- -- -- -- -- -- -- -- -- -- -- --
 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
@@ -931,6 +941,11 @@ i2c-2
 
 To allow the kernel to manage our *Nunchuk* device, let's declare the device in the custom *Device Tree* for our board. The declaration of the *I2C1* bus will then look as follows:
 
+```console
+$ cd "$LAB_PATH/../kernel/linux/"
+$ nano arch/arm/boot/dts/am335x-boneblack-custom.dts
+```
+
 ```c title="arch/arm/boot/dts/am335x-boneblack-custom.dts - modified i2c1"
 &i2c1 {
         pinctrl-names = "default";
@@ -960,23 +975,19 @@ Recompile your *Device Tree* and reboot your kernel with the new binary.
 
 ```console
 $ cd "$LAB_PATH/../kernel/linux/"
-$ nano arch/arm/boot/dts/am335x-boneblack-custom.dts
-$ make
-    ...
+$ make dtbs
   DTC     arch/arm/boot/dts/am335x-boneblack-custom.dtb
-    ...
 $ cp arch/arm/boot/dts/am335x-boneblack-custom.dtb /srv/tftp/
 ```
 
-You can now load your module again, and this time, you should see that the `nunchuk` driver probed the *Nunchuk* device: **TBV**
+You can now load your module again, and this time, you should see that the `nunchuk` driver probed the *Nunchuk* device:
 
-```console title="picocomBBB - BusyBox" hl_lines="2 3 13"
+```console title="picocomBBB - BusyBox"
+# modprobe -r nunchuk
 # modprobe nunchuk
-[ 66.680455] nunchuk: loading out-of-tree module taints kernel.
-[ 66.687645] input: Wii Nunchuk as /devices/platform/ocp/48000000.interconnect/\
-48000000.interconnect:segment@0/4802a000.target-module/4802a000.i2c/\
-i2c-1/1-0052/input/input0
-[ 66.695421] Nunchuk device probed successfully
+nunchuk: loading out-of-tree module taints kernel.
+input: Wii Nunchuk as /devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@0/4802a000.target-module/4802a000.i2c/i2c-1/1-0052/input/input0
+Nunchuk device probed successfully
 ```
 
 List the contents of `/sys/bus/i2c/drivers/nunchuk` once again. You should now see a *symbolic link* corresponding to our new device.
@@ -1045,10 +1056,8 @@ $ cat arch/arm/boot/dts/am335x-boneblack-custom.dts
         model = "BeagleBone Black media player";
 };
     ...
-$ make
-    ...
+$ make dtbs
   DTC     arch/arm/boot/dts/am335x-boneblack-custom.dtb
-    ...
 $ cp arch/arm/boot/dts/am335x-boneblack-custom.dtb /srv/tftp/
 ```
 
@@ -1097,18 +1106,21 @@ Untracked files:
 no changes added to commit (use "git add" and/or "git commit -a")
 $ git add arch/arm/boot/dts/am335x-boneblack-custom.dts
 $ git commit -as -m "Custom DTS for Bootlin lab"
-[embedded-linux-bbb f60b5016b3b3] Custom DTS for Bootlin lab
- 2 files changed, 26 insertions(+)
+[embedded-linux-bbb bb7e1269527c] Custom DTS for Bootlin lab
+ 2 files changed, 28 insertions(+)
  create mode 100644 arch/arm/boot/dts/am335x-boneblack-custom.dts
+$ label="v5.15.104"
+$ git tag "$label-nunchuk"
 ```
 
 We can now create the patch with `git format-patch`.<br/>
 This should generate a `0001-Custom-DTS-for-Bootlin-lab.patch` file.
 
 ```console
-$ git format-patch v5.15.104
+$ label="v5.15.104"
+$ git format-patch $label
 0001-Custom-DTS-for-Bootlin-lab.patch
-$ cp 0001-Custom-DTS-for-Bootlin-lab.patch $LAB_PATH
+$ cp "0001-Custom-DTS-for-Bootlin-lab.patch" $LAB_PATH
 ```
 
 Creating the branch will impact the versions of the kernel and the modules.<br/>
@@ -1130,7 +1142,7 @@ $ cp arch/arm/boot/zImage /srv/tftp/zImage
 ```console hl_lines="3"
 $ cd "$LAB_PATH/../tinysystem/nfsroot/lib/modules/"
 $ ls -1
-5.15.104-00001-gf60b5016b3b3
+5.15.104-00001-gbb7e1269527c
 5.15.104-dirty
 $ rm -rf "5.15.104-dirty/"
 ```
@@ -1145,8 +1157,11 @@ Reboot your board and make sure everything's alright!
 
 ```console title="picocomBBB - BusyBox"
 # uname -r
-5.15.104-00001-gf60b5016b3b3
+5.15.104-00001-gbb7e1269527c
 # modprobe nunchuk
+nunchuk: loading out-of-tree module taints kernel.
+input: Wii Nunchuk as /devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@0/4802a000.target-module/4802a000.i2c/i2c-1/1-0052/input/input0
+Nunchuk device probed successfully
 ```
 
 
@@ -1157,6 +1172,36 @@ $ cd "$LAB_PATH/../tinysystem/nfsroot/"
 $ find . -depth -print0 | cpio -ocv0 | xz > "$LAB_PATH/nfsroot-hardware.cpio.xz"
 $ cd /srv/tftp/
 $ tar cfJv "$LAB_PATH/hardware-tftp.tar.xz" zImage am335x-boneblack-custom.dtb
+```
+
+### git bundle
+
+To create a *git bundle* with just our patch (to have consistent *git commit* naming):
+
+```console
+$ cd "$LAB_PATH/../kernel/linux/"
+$ label="v5.15.104"
+$ bundle="$LAB_PATH/kernel-linux-$label-nunchuk.bundle"
+$ git bundle create $bundle $label..
+```
+
+To restore the *git bundle*:
+
+```console
+$ cd "$LAB_PATH/../kernel/linux/"
+$ label="v5.15.104"
+$ bundle="$LAB_PATH/kernel-linux-$label-nunchuk.bundle"
+$ git bundle verify $bundle
+The bundle contains this ref:
+bb7e1269527c6b56c1c5b15b1b1a5c05a2f114f2 HEAD
+The bundle requires this ref:
+115472395b0a9ea522ba0e106d6dfd7a73df8ba6
+/home/me/embedded-linux-bbb-labs/hardware/kernel-linux-v5.15.104-nunchuk.bundle is okay
+$ git switch master
+    ...
+$ git bundle list-heads $bundle
+bb7e1269527c6b56c1c5b15b1b1a5c05a2f114f2 HEAD
+$ git pull $bundle
 ```
 
 
