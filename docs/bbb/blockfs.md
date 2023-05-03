@@ -171,7 +171,8 @@ EOF
 
 Reboot your target system again. With the `mount` command, check that `/www/upload/files` is now a mount point for the third SD card partition.
 
-Also make sure that you can still upload new images, and that these images are listed in the web interface.
+Also make sure that you can still upload new images, and that these images are listed in the
+[web interface](http://192.168.0.69/index.html).
 For example, upload the file `$LAB_PATH/nfsroot/www/gohome.png`.
 
 ```console title="picocomBBB - BusyBox" hl_lines="8 14"
@@ -261,7 +262,7 @@ brick.png                  lkn-small.jpg
 gohome.png                 lost+found
 linux-blackfin.jpg         upload.log
 # cat /var/log/upload.log
-Sat Apr  8 16:26:56 2023 File uploaded succesfully: gohome.png (888 bytes)
+Thu Jan  1 00:00:45 1970 File uploaded succesfully: gohome.png (888 bytes)
 # reboot
     ...
 # cat /var/log/upload.log
