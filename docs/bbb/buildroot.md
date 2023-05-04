@@ -253,8 +253,8 @@ You should now be able to log in (`root` account, no password) to reach a shell.
 ```console title="picocomBBB - U-Boot"
     ...
 Hit any key to stop autoboot:  0
-=> setenv bootcmd "tftp 0x81000000 zImage;  tftp 0x82000000 am335x-boneblack-custom.dtb;  bootz 0x81000000 - 0x82000000"
-=> setenv bootargs console=ttyS0,115200n8 root=/dev/nfs ip=${ipaddr}::${serverip}:${netmask}::${netif} nfsroot=${serverip}:${servernfs},nfsvers=3,tcp rw
+=> setenv bootcmd $bootcmd_tftp
+=> setenv bootargs $bootargs_nfs
 => saveenv
 => reset
     ...
@@ -274,8 +274,8 @@ Try to load the `snd_usb_audio` module from the command line.
 # lsmod
 Module                  Size  Used by    Not tainted
 # modprobe snd_usb_audio
-[  115.175571] mc: Linux media interface: v0.10
-[  115.281110] usbcore: registered new interface driver snd-usb-audio
+mc: Linux media interface: v0.10
+usbcore: registered new interface driver snd-usb-audio
 ```
 
 Check that *Buildroot* has deployed the modules for your kernel in `/lib/modules/`.
@@ -376,7 +376,9 @@ $ rm -rf *
 $ tar xfv "../buildroot/output/images/rootfs.tar"
 ```
 
-```console title="picocomBBB - Buildroot" hl_lines="3"
+```console title="picocomBBB - Buildroot" hl_lines="5"
+# reboot
+    ...
 # lsmod
 Module                  Size  Used by    Not tainted
 snd_usb_audio         217088  0
@@ -429,7 +431,9 @@ $ tar xfv "../buildroot/output/images/rootfs.tar"
 
 Using the `ps` command, check that the `mpd` server was started by the system, as implemented by the `/etc/init.d/S95mpd` script.
 
-```console title="picocomBBB - Buildroot" hl_lines="2"
+```console title="picocomBBB - Buildroot" hl_lines="4"
+# reboot
+    ...
 # ps | grep mpd
   126 root     /usr/bin/mpd
   134 root     grep mpd
@@ -505,6 +509,8 @@ $ tar xfv "../buildroot/output/images/rootfs.tar"
 ```
 
 ```console title="picocomBBB - Buildroot"
+# reboot
+    ...
 # mpc add /
 # mpc play
 # mpc volume -5
@@ -559,6 +565,7 @@ config BR2_PACKAGE_NUNCHUK_DRIVER
 ```
 
 ```console
+$ cd "$LAB_PATH/buildroot/"
 $ mkdir -p package/nunchuk-driver/
 $ cat > package/nunchuk-driver/Config.in <<'EOF'
 config BR2_PACKAGE_NUNCHUK_DRIVER
@@ -632,7 +639,7 @@ In `Target packages` &rarr; `Hardware handling`:
 
 Now run *Buildroot* and update your *root* filesystem.
 
-```console
+```console hl_lines="4-9"
 $ cd "$LAB_PATH/buildroot/"
 $ make
   ...
@@ -651,8 +658,12 @@ $ tar xfv "../buildroot/output/images/rootfs.tar"
 Check that you can load the *Nunchuk* module now.
 
 ```console title="picocomBBB - Buildroot"
+# reboot
+    ...
 # modprobe nunchuk
-  **TODO**
+nunchuk: loading out-of-tree module taints kernel.
+input: Wii Nunchuk as /devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@0/4802a000.target-module/4802a000.i2c/i2c-1/1-0052/input/input0
+Nunchuk device probed successfully
 ```
 
 If everything's fine, add a line to `/etc/init.d/S03modprobe` for this driver, and update your *root* filesystem once again.
@@ -673,19 +684,59 @@ $ tar xfv "../buildroot/output/images/rootfs.tar"
 
 Now that we have the *Nunchuk* driver loaded and that *Buildroot* compiled `evtest` for the target, thanks to *Buildroot*, we can now test the input events coming from the *Nunchuk*.
 
-```console title="picocomBBB - Buildroot"
-  **TODO**
+```console title="picocomBBB - Buildroot" hl_lines="6"
+# reboot
+    ...
 # evtest
 No device specified, trying to scan all of /dev/input/event*
 Available devices:
-/dev/input/event0: pmic_onkey
-/dev/input/event1: Logitech Inc. Logitech USB Headset H340 Consumer Control
-/dev/input/event2: Logitech Inc. Logitech USB Headset H340
-/dev/input/event3: Wii Nunchuk
-Select the device event number [0-3]:
+/dev/input/event0:      Wii Nunchuk
+Select the device event number [0-0]: 0
+Input driver version is 1.0.1
+Input device ID: bus 0x18 vendor 0x0 product 0x0 version 0x0
+Input device name: "Wii Nunchuk"
+Supported events:
+  Event type 0 (EV_SYN)
+  Event type 1 (EV_KEY)
+    Event code 304 (BTN_SOUTH)
+    Event code 305 (BTN_EAST)
+    Event code 306 (BTN_C)
+    Event code 307 (BTN_NORTH)
+    Event code 308 (BTN_WEST)
+    Event code 309 (BTN_Z)
+    Event code 310 (BTN_TL)
+    Event code 311 (BTN_TR)
+    Event code 312 (BTN_TL2)
+    Event code 313 (BTN_TR2)
+    Event code 314 (BTN_SELECT)
+    Event code 315 (BTN_START)
+    Event code 316 (BTN_MODE)
+  Event type 3 (EV_ABS)
+    Event code 0 (ABS_X)
+      Value    124
+      Min       30
+      Max      220
+      Fuzz       4
+      Flat       8
+    Event code 1 (ABS_Y)
+      Value    124
+      Min       40
+      Max      200
+      Fuzz       4
+      Flat       8
+Properties:
+Testing ... (interrupt to exit)
+Event: time 66.081447, type 1 (EV_KEY), code 309 (BTN_Z), value 1
+Event: time 66.081447, -------------- SYN_REPORT ------------
+Event: time 66.281432, type 1 (EV_KEY), code 309 (BTN_Z), value 0
+Event: time 66.281432, -------------- SYN_REPORT ------------
+Event: time 71.181449, type 1 (EV_KEY), code 306 (BTN_C), value 1
+Event: time 71.181449, -------------- SYN_REPORT ------------
+Event: time 71.281437, type 1 (EV_KEY), code 306 (BTN_C), value 0
+Event: time 71.281437, -------------- SYN_REPORT ------------
 ```
 
-Enter the number corresponding to the *Nunchuk* device (**TODO**).
+Enter the number corresponding to the *Nunchuk* device.
 
 You can now press the *Nunchuk* buttons, use the joypad, and see which input events are emitted.
 
@@ -737,6 +788,36 @@ $ cd "$LAB_PATH/buildroot/output/images/"
 $ tar cfJv "$LAB_PATH/buildroot-rootfs.tar.xz" rootfs.tar
 $ cd /srv/tftp/
 $ tar cfJv "$LAB_PATH/buildroot-tftp.tar.xz" zImage am335x-boneblack-custom.dtb
+```
+
+### git bundle
+
+To create a *git bundle* with just our patch (to have consistent *git commit* naming):
+
+```console
+$ cd "$LAB_PATH/buildroot/"
+$ label="2022.02"
+$ bundle="$LAB_PATH/buildroot-$label-bootlin.bundle"
+$ git bundle create $bundle $label..
+```
+
+To restore the *git bundle*:
+
+```console
+$ cd "$LAB_PATH/buildroot/"
+$ label="2022.02"
+$ bundle="$LAB_PATH/buildroot-$label-bootlin.bundle"
+$ git bundle verify $bundle
+The bundle contains this ref:
+1dcc6c688d2ecdd1ed3a579584bb6223c209d301 HEAD
+The bundle requires this ref:
+08967921c4a91eb7d966c31f755a0720914e8bff
+/home/me/embedded-linux-bbb-labs/buildroot/buildroot-2022.02-bootlin.bundle is okay
+$ git checkout -b embedded-linux-bbb $label
+    ...
+$ git bundle list-heads $bundle
+1dcc6c688d2ecdd1ed3a579584bb6223c209d301 HEAD
+$ git pull $bundle
 ```
 
 
