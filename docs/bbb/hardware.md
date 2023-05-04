@@ -1091,7 +1091,7 @@ This is necessary to create a commit with the `git commit -s` command, as requir
 
 Let’s create the branch and the patch now:
 
-```console hl_lines="6 10"
+```console hl_lines="2 6 10"
 $ git status
 On branch embedded-linux-bbb
 Changes not staged for commit:
@@ -1197,7 +1197,7 @@ bb7e1269527c6b56c1c5b15b1b1a5c05a2f114f2 HEAD
 The bundle requires this ref:
 115472395b0a9ea522ba0e106d6dfd7a73df8ba6
 /home/me/embedded-linux-bbb-labs/hardware/kernel-linux-v5.15.104-nunchuk.bundle is okay
-$ git switch master
+$ git checkout -b embedded-linux-bbb $label
     ...
 $ git bundle list-heads $bundle
 bb7e1269527c6b56c1c5b15b1b1a5c05a2f114f2 HEAD
