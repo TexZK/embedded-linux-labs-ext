@@ -296,9 +296,9 @@ $ sudo umount ${SDCARD_DEVP}*
 $ sudo mkfs.ext4 -L image "${SDCARD_DEVP}2"
     ...
 $ sudo dd if="$LAB_PATH/nfsroot.sqsh" of="${SDCARD_DEVP}2"
-50128+0 records in
-50128+0 records out
-25665536 bytes (26 MB, 24 MiB) copied, 74.038 s, 347 kB/s
+50168+0 records in
+50168+0 records out
+25686016 bytes (26 MB, 24 MiB) copied, 71.6355 s, 359 kB/s
 ```
 
 
@@ -309,10 +309,11 @@ Also add the `rootwait` boot argument, to wait for the SD card to be properly in
 Since the SD cards are detected asynchronously by the kernel, the kernel might try to mount the *root* filesystem too early without `rootwait`.<br/>
 Check that your system still works. Congratulations if it does!
 
-``` title="picocomBBB - U-Boot" hl_lines="7"
+``` title="picocomBBB - U-Boot" hl_lines="8"
     ...
 Hit any key to stop autoboot:  0
-=> setenv bootargs console=ttyS0,115200n8 root=/dev/mmcblk0p2 rootwait ip=${ipaddr}::${serverip}:${netmask}::${netif}
+=> setenv bootargs_mmcblk0p2 "console=ttyS0,115200n8  root=/dev/mmcblk0p2 rootwait  ip=${ipaddr}::${serverip}:${netmask}::${netif}"
+=> setenv bootargs $bootargs_mmcblk0p2
 => saveenv
 => reset
     ...
@@ -337,7 +338,7 @@ $ mnt_path="/mnt/sd_boot"
 $ sudo mkdir -p $mnt_path
 $ sudo mount -t vfat "${SDCARD_DEVP}1" $mnt_path
 $ ls /mnt/sd_boot/
-uboot.env
+MLO uboot.env uboot.img
 $ sudo cp /srv/tftp/zImage /srv/tftp/am335x-boneblack-custom.dtb $mnt_path
 $ ls /mnt/sd_boot/
 am335x-boneblack-custom.dtb  MLO  uboot.env  u-boot.img  zImage
@@ -349,12 +350,13 @@ You now need to adjust the `bootcmd` of *U-Boot* so that it loads kernel and fro
 In *U-boot*, you can load a file from a FAT filesystem using the `fatload` command, which expects: the device, the partition, the load address, and the source filename.<br/>
 Compare the previous and the new `bootcmd`. Finally, `reset` to reboot the board and make sure that your system still boots fine.
 
-``` title="picocomBBB - U-Boot" hl_lines="5 9-10"
+``` title="picocomBBB - U-Boot" hl_lines="10 11"
     ...
 Hit any key to stop autoboot:  0
 => printenv bootcmd
 bootcmd=tftp 0x81000000 zImage;  tftp 0x82000000 am335x-boneblack-custom.dtb;  bootz 0x81000000 - 0x82000000
-=> setenv bootcmd "fatload mmc 0:1 0x81000000 zImage;  fatload mmc 0:1 0x82000000 am335x-boneblack-custom.dtb;  bootz 0x81000000 - 0x82000000"
+=> setenv bootcmd_mmcblk0p1 "fatload mmc 0:1 0x81000000 zImage;  fatload mmc 0:1 0x82000000 am335x-boneblack-custom.dtb;  bootz 0x81000000 - 0x82000000"
+=> setenv bootcmd $bootcmd_mmcblk0p1
 => saveenv
 => reset
     ...
