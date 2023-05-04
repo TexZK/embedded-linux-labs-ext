@@ -105,8 +105,8 @@ Revert *U-Boot* to use TFTP and NFS:
 ``` title="picocomBBB - U-Boot"
     ...
 Hit any key to stop autoboot:  0
-=> setenv bootcmd "tftp 0x81000000 zImage;  tftp 0x82000000 am335x-boneblack-custom.dtb;  bootz 0x81000000 - 0x82000000"
-=> setenv bootargs console=ttyS0,115200n8 root=/dev/nfs ip=${ipaddr}::${serverip}:${netmask}::${netif} nfsroot=${serverip}:${servernfs},nfsvers=3,tcp rw
+=> setenv bootcmd $bootcmd_tftp
+=> setenv bootargs $bootargs_nfs
 => saveenv
 => reset
     ...
@@ -363,6 +363,7 @@ First, let's make the installation in the *staging* space:
 ```console
 $ make DESTDIR="$LAB_PATH/staging" install
 $ cd "$LAB_PATH/staging/"
+$ tree -C | less -R
 ```
 
 Now look at what has been installed by `alsa-lib`:
@@ -570,7 +571,7 @@ It allows to override the installation directory: instead of being installed in 
 Now, let's see what has been installed in `/tmp/alsa-utils/`;
 
 ```console
-$ tree /tmp/alsa-utils/
+$ tree -C /tmp/alsa-utils/ | less -R
 /tmp/alsa-utils/
 ├── lib
 │   ├── systemd
@@ -702,14 +703,14 @@ Playback device is default
 Stream parameters are 48000Hz, S16_LE, 1 channels
 Sine wave rate is 440.0000Hz
 Rate set to 48000Hz (requested 48000Hz)
-Buffer size range from 256 to 16384
-Period size range from 64 to 1024
-Using max buffer size 16384
+Buffer size range from 2229 to 17832
+Period size range from 1114 to 1115
+Using max buffer size 17832
 Periods = 4
-was set period_size = 1024
-was set buffer_size = 16384
+was set period_size = 1114
+was set buffer_size = 17832
  0 - Front Left
-Time per period = 2.577584
+Time per period = 2.642531
 ```
 
 There you are: you built and ran your first program depending on a library different from the C library!
@@ -989,9 +990,8 @@ Address space:  Private Use
 To finish this lab completely, and to be consistent with what we've done before, let's *strip* the *C library* and its *loader* too. Let's compare the size of the binaries to confirm.
 
 ```console
-$ du -hs target/lib/
+$ du -hs target/lib/ target/usr/lib/
 78M     target/lib/
-$ du -hs target/usr/lib/
 976K    target/usr/lib/
 $ so_files=$(find target -name "*.so*")
 $ chmod +w $so_files
@@ -999,9 +999,8 @@ $ arm-linux-strip $so_files
 $ ko_files=$(find target -name "*.ko")
 $ chmod +w $ko_files
 $ arm-linux-strip $ko_files
-$ du -hs target/lib/
+$ du -hs target/lib/ target/usr/lib/
 17M     target/lib/
-$ du -hs target/usr/lib/
 976K    target/usr/lib/
 ```
 
@@ -1009,6 +1008,7 @@ $ du -hs target/usr/lib/
 ## Backup and restore
 
 ```console
+$ cd $LAB_PATH
 $ tar cfJv thirdparty-staging.tar.xz staging/
 $ tar cfJv thirdparty-target.tar.xz target/
 $ cd target/
