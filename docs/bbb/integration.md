@@ -664,3 +664,8 @@ If it doesn't, look at the *systemd* logs in your serial console history (`dmesg
 $ cd "$LAB_PATH/buildroot/output/images/"
 $ tar cfJv "$LAB_PATH/integration-rootfs.tar.xz" rootfs.tar
 ```
+
+## Licensing
+
+This document is an extension to: [*Embedded Linux System Development - Practical Labs - BeagleBone Black Variant*](https://bootlin.com/doc/training/embedded-linux-bbb/)
+ &mdash; &copy; 2004-2023, *Bootlin* [https://bootlin.com/](https://bootlin.com), [`CC-BY-SA-3.0`]((https://creativecommons.org/licenses/by-sa/3.0/)) license.
