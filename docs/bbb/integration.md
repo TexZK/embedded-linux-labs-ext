@@ -147,6 +147,8 @@ $ cp output/graphs/graph-depends.pdf ../graph-depends.pdf
 To test the new system, create a new `nfsroot` directory, extract then new *root* filesystem into it, and boot your board on it through NFS.
 
 ```console
+$ cd "$LAB_PATH/buildroot/"
+$ cp output/images/zImage /srv/tftp/
 $ mkdir -p "$LAB_PATH/nfsroot/"
 $ cd "$LAB_PATH/nfsroot/"
 $ tar xfv "../buildroot/output/images/rootfs.tar"
@@ -662,7 +664,7 @@ If it doesn't, look at the *systemd* logs in your serial console history (`dmesg
 
 ```console
 $ cd "$LAB_PATH/buildroot/output/images/"
-$ tar cfJv "$LAB_PATH/integration-rootfs.tar.xz" rootfs.tar
+$ tar cfJv "$LAB_PATH/integration-images.tar.xz" *
 ```
 
 ## Licensing
