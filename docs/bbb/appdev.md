@@ -494,9 +494,10 @@ SHA256:MMNVi/JBFlFTv6DpuCpx6zj/WGceGDr7Q6k0ThcBUqo me@vm
 Then, create the `/root/.ssh/` directory on the *target*, and in it create an `authorized_keys` file with the line in `id_rsa_empty.pub`.
 
 ```console
+# sudo chmod -R a+rwx "$NFSROOT/root/"
 $ cd "$NFSROOT/root/"
 $ mkdir -p .ssh/
-$ cp ~/.ssh/id_rsa_empty.pub .ssh/
+$ cat ~/.ssh/id_rsa_empty.pub > .ssh/authorized_keys
 ```
 
 Finally, fix permissions on the *target*, as *Dropbear* is quite strict about them:
@@ -509,7 +510,19 @@ Finally, fix permissions on the *target*, as *Dropbear* is quite strict about th
 Then, you can test that SSH works without a password:
 
 ```console
-$ ssh root@192.168.0.69
+$ ssh -i ~/.ssh/id_rsa_empty root@192.168.0.69
+```
+
+If you face trouble, you can check the *Dropbear* logs on the *target* (++ctrl+c++ to exit `journalctl`).<br/>
+For example, here we once tried to connect with the wrong *SSH identity*, then we retied with the authorized one:
+
+```console title="picocomBBB - systemd" hl_lines="3 6"
+# journalctl -fu dropbear
+May 06 19:13:21 buildroot dropbear[179]: Child connection from 192.168.0.15:48928
+May 06 19:13:22 buildroot dropbear[179]: User account 'root' is locked
+May 06 19:13:24 buildroot dropbear[179]: Exit before auth from <192.168.0.15:48928>: (user 'root', 1 fails): Exited normally
+May 06 19:22:39 buildroot dropbear[190]: Child connection from 192.168.0.15:46688
+May 06 19:22:40 buildroot dropbear[190]: Pubkey auth succeeded for 'root' with key sha1!! 12:f0:db:23:34:dc:60:f1:7a:1a:d5:0c:f8:a2:dc:aa:37:97:36:0e from 192.168.0.15:46688
 ```
 
 **TODO**
