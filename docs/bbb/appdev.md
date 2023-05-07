@@ -525,11 +525,80 @@ May 06 19:22:39 buildroot dropbear[190]: Child connection from 192.168.0.15:4668
 May 06 19:22:40 buildroot dropbear[190]: Pubkey auth succeeded for 'root' with key sha1!! 12:f0:db:23:34:dc:60:f1:7a:1a:d5:0c:f8:a2:dc:aa:37:97:36:0e from 192.168.0.15:46688
 ```
 
-**TODO**
 
 ### Compiling and debugging
 
-**TODO**
+The `appdev/` lab directory already contains a `prep-debug.sh` script and a `.vscode/` directory with ready made settings for code editing and for compiling and debugging our application.
+
+Here are these files:
+
+* `prep-debug.sh`: script to recompile the program, copy it to the *target* through SSH, and start it through the debugger.<br/>
+  Open this file and update the *target* IP and path settings if necessary.<br/>
+  Since we're using a custom *SSH identity*, add `-i ~/.ssh/id_rsa_empty` to the SSH commands (`ssh` and `scp`).<br/>
+  The result should look like:
+
+```sh title="File: prep-debug.sh - adapted to this lab"
+#!/bin/sh
+
+# Definitions
+TARGETIP="192.168.0.69"
+PATH="$HOME/embedded-linux-bbb-labs/integration/buildroot/output/host/bin:$PATH"
+EXEC=nunchuk-mpd-client
+CROSS_COMPILE=arm-linux-
+SSHID="~/.ssh/id_rsa_empty"
+
+# Rebuild executable
+${CROSS_COMPILE}gcc -g -o $EXEC $EXEC.c $(pkg-config --libs --cflags libmpdclient)
+
+# Kill gdbserver on the target
+ssh -i $SSHID root@$TARGETIP killall gdbserver
+
+# Copy over new executable
+scp -i $SSHID $EXEC root@$TARGETIP:/root/
+
+# Start gdbserver on the target
+ssh -i $SSHID -n -f root@$TARGETIP "sh -c 'nohup gdbserver localhost:2345 /root/nunchuk-mpd-client > /dev/null 2>&1 &'"
+```
+
+* `.vscode/c_cpp_properties.json`: settings for the code editor.<br/>
+  Modify the paths in this file according to your setup.
+
+* `.vscode/tasks.json`: definition of a `build` task, calling the `prep-debug.sh` script.
+
+* `.vscode/launch.json`: these are the settings for remote debugging.<br/>
+  Again, open this file, update the paths, and the *target* IP address if necessary.
+
+Start *Visual Studio Code*:
+
+```console
+$ code
+```
+
+Use `File` &rarr; `Open Folder` to open the `appdev/` directory.
+
+The first thing to do is to make sure the *C/C++ extension* from *Microsoft* (`ms-vscode.cpptools`) is installed.
+Do this using the *Extensions* vertical tab.
+
+Then click on the `nunchuk-mpd-client.c` file in the left column to open it in *VSC*.
+
+Now, start by compiling your program from *VSC*, copying it to the *target*, and running it through the debugger by using the `Terminal` &rarr; `Run Build Task...` menu entry.
+
+Last but not least, you can start debugging the program by clicking on the `Run and Debug` tab, and then on the `gdb (Launch)` at the top.
+
+In the debug console, you should see that debugging has started.
+The bottom line of the interface should turn orange too.
+
+Then, start using the *Nunchuk* to control playback, and when you try to quit with the *C* button, *VSC* should now see the *segmentation fault*.
+
+You can then look at variables, the call stack, browse the code, *et cetera*...
+
+To stop debugging, you should use `Run` &rarr; `Stop Debugging`.
+
+By studing the the code, you should eventually find that what's causing the *segmentation fault* is the call to `free()` in the test for the *C* button.<br/>
+Remove this line, save the file through the `File` menu (otherwise nothing will change), and then compile and run the application again.<br/>
+This time, there should be no more *segmentation fault* when you hit the *C* button.
+
+If you are ahead of time, don't hesitate to spend more time with *VSC*, for example to add breakpoints and execute the program step-by-step.
 
 
 ## Profiling the application with perf
