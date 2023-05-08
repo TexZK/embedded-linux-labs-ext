@@ -270,7 +270,7 @@ Finally, `quit` *GDB* to close the debugging session.
 
 ## Post mortem analysis
 
-Following the details in the slides (**TODO**), configure your shell on the *target* to get a *core file* dumped when you run `vista-emulator` again.
+Configure your shell on the *target* to get a *core file* dumped when you run `vista-emulator` again.
 
 ```console title="QEMU - Buildroot" hl_lines="4 6"
 # ulimit -c unlimited
