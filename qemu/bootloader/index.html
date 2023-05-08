@@ -1,0 +1,977 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../toolchain/" rel="prev"/>
+<link href="../kernel/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.4.3, mkdocs-material-9.1.11" name="generator"/>
+<title>Bootloader - U-Boot - Embedded Systems Linux Development Notes</title>
+<link href="../../assets/stylesheets/main.85bb2934.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#bootloader-u-boot">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Embedded Systems Linux Development Notes" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Embedded Systems Linux Development Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Embedded Systems Linux Development Notes
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Bootloader - U-Boot
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Embedded Systems Linux Development Notes" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Embedded Systems Linux Development Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    Embedded Systems Linux Development Notes
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+        Overview
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          QEMU variant
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+          QEMU variant
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../virtualbox/">
+        Host VM
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../toolchain/">
+        Building a cross-compile toolchain
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Bootloader - U-Boot
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        Bootloader - U-Boot
+      </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#objectives">
+    Objectives
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+    Overview
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#required-tools">
+    Required tools
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#source-code">
+    Source code
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration">
+    Configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#build">
+    Build
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#quick-test">
+    Quick test
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sd-card-setup">
+    SD card setup
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-environment">
+    Test environment
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#networking">
+    Networking
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tftp-server">
+    TFTP server
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup-and-restore">
+    Backup and restore
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing">
+    Licensing
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../kernel/">
+        Linux Kernel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tinysystem/">
+        Tiny embedded system with BusyBox
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hardware/">
+        Accessing Hardware Devices
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../blockfs/">
+        Block Filesystems
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../thirdparty/">
+        Third-party libraries and apps
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../buildroot/">
+        Buildroot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../appdev/">
+        App - Development
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../debugging/">
+        App - Remote debug
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../debootstrap/">
+        debootstrap
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          BeagleBone Black variant
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+          BeagleBone Black variant
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/virtualbox/">
+        Host VM
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/toolchain/">
+        Building a cross-compile toolchain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/bootloader/">
+        Bootloader - U-Boot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/kernel/">
+        Linux Kernel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/tinysystem/">
+        Tiny embedded system with BusyBox
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/hardware/">
+        Accessing Hardware Devices
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/blockfs/">
+        Block Filesystems
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/thirdparty/">
+        Third-party libraries and apps
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/buildroot/">
+        Buildroot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/integration/">
+        System integration
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/appdev/">
+        App - Development
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Knowledge Base
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          Knowledge Base
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/git-hash/">
+        git commit hash expansion
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/menuconfig/">
+        menuconfig
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/processors/">
+        Processors
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../copying/">
+        Copying this document
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#objectives">
+    Objectives
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#overview">
+    Overview
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#required-tools">
+    Required tools
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#source-code">
+    Source code
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration">
+    Configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#build">
+    Build
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#quick-test">
+    Quick test
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#sd-card-setup">
+    SD card setup
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#test-environment">
+    Test environment
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#networking">
+    Networking
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#tftp-server">
+    TFTP server
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup-and-restore">
+    Backup and restore
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing">
+    Licensing
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="bootloader-u-boot"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.</span> Bootloader - U-Boot</h1>
+<h2 id="objectives"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.1</span> Objectives</h2>
+<p>After this lab you will be able to:</p>
+<ul>
+<li>
+<p>Compile and install the <em>U-Boot</em> bootloader for an emulated <em>ARM Vexpress Cortex A9</em> board.</p>
+</li>
+<li>
+<p>Use basic <em>U-Boot</em> commands.</p>
+</li>
+<li>
+<p>Set up <em>TFTP</em> communication with the host machine.</p>
+</li>
+</ul>
+<h2 id="overview"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.2</span> Overview</h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a>@startuml
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a>boundary "Host\nLubuntu VM" as Host
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a>control "QEMU\nvexpress-a9" as Qemu
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a>control "U-Boot\n10.0.2.69" as UBoot
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a>entity "TFTP Server\n10.0.2.15\n/srv/tftp/" as TftpServer
+</span><span id="__span-0-7"><a href="#__codelineno-0-7" id="__codelineno-0-7" name="__codelineno-0-7"></a>
+</span><span id="__span-0-8"><a href="#__codelineno-0-8" id="__codelineno-0-8" name="__codelineno-0-8"></a>activate Host
+</span><span id="__span-0-9"><a href="#__codelineno-0-9" id="__codelineno-0-9" name="__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a href="#__codelineno-0-10" id="__codelineno-0-10" name="__codelineno-0-10"></a>Host -&gt; TftpServer: start
+</span><span id="__span-0-11"><a href="#__codelineno-0-11" id="__codelineno-0-11" name="__codelineno-0-11"></a>activate TftpServer
+</span><span id="__span-0-12"><a href="#__codelineno-0-12" id="__codelineno-0-12" name="__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a href="#__codelineno-0-13" id="__codelineno-0-13" name="__codelineno-0-13"></a>Host -&gt; Qemu: start
+</span><span id="__span-0-14"><a href="#__codelineno-0-14" id="__codelineno-0-14" name="__codelineno-0-14"></a>activate Qemu
+</span><span id="__span-0-15"><a href="#__codelineno-0-15" id="__codelineno-0-15" name="__codelineno-0-15"></a>
+</span><span id="__span-0-16"><a href="#__codelineno-0-16" id="__codelineno-0-16" name="__codelineno-0-16"></a>Qemu -&gt; UBoot: kernel "u-boot"
+</span><span id="__span-0-17"><a href="#__codelineno-0-17" id="__codelineno-0-17" name="__codelineno-0-17"></a>activate UBoot
+</span><span id="__span-0-18"><a href="#__codelineno-0-18" id="__codelineno-0-18" name="__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a href="#__codelineno-0-19" id="__codelineno-0-19" name="__codelineno-0-19"></a>UBoot -&gt; UBoot: setenv serverip 10.0.2.15\nsetenv ipaddr 10.0.2.69
+</span><span id="__span-0-20"><a href="#__codelineno-0-20" id="__codelineno-0-20" name="__codelineno-0-20"></a>
+</span><span id="__span-0-21"><a href="#__codelineno-0-21" id="__codelineno-0-21" name="__codelineno-0-21"></a>UBoot -&gt; UBoot: tftp 0x61000000 zImage
+</span><span id="__span-0-22"><a href="#__codelineno-0-22" id="__codelineno-0-22" name="__codelineno-0-22"></a>activate UBoot
+</span><span id="__span-0-23"><a href="#__codelineno-0-23" id="__codelineno-0-23" name="__codelineno-0-23"></a>UBoot -&gt; TftpServer: get "zImage"
+</span><span id="__span-0-24"><a href="#__codelineno-0-24" id="__codelineno-0-24" name="__codelineno-0-24"></a>activate TftpServer
+</span><span id="__span-0-25"><a href="#__codelineno-0-25" id="__codelineno-0-25" name="__codelineno-0-25"></a>TftpServer -&gt; UBoot: "zImage"
+</span><span id="__span-0-26"><a href="#__codelineno-0-26" id="__codelineno-0-26" name="__codelineno-0-26"></a>deactivate TftpServer
+</span><span id="__span-0-27"><a href="#__codelineno-0-27" id="__codelineno-0-27" name="__codelineno-0-27"></a>UBoot -&gt; UBoot: write @ 0x61000000
+</span><span id="__span-0-28"><a href="#__codelineno-0-28" id="__codelineno-0-28" name="__codelineno-0-28"></a>deactivate UBoot
+</span><span id="__span-0-29"><a href="#__codelineno-0-29" id="__codelineno-0-29" name="__codelineno-0-29"></a>
+</span><span id="__span-0-30"><a href="#__codelineno-0-30" id="__codelineno-0-30" name="__codelineno-0-30"></a>UBoot -&gt; UBoot: tftp 0x62000000 vexpress-v2p-ca9.dtb
+</span><span id="__span-0-31"><a href="#__codelineno-0-31" id="__codelineno-0-31" name="__codelineno-0-31"></a>activate UBoot
+</span><span id="__span-0-32"><a href="#__codelineno-0-32" id="__codelineno-0-32" name="__codelineno-0-32"></a>UBoot -&gt; TftpServer: get "vexpress-v2p-ca9.dtb"
+</span><span id="__span-0-33"><a href="#__codelineno-0-33" id="__codelineno-0-33" name="__codelineno-0-33"></a>activate TftpServer
+</span><span id="__span-0-34"><a href="#__codelineno-0-34" id="__codelineno-0-34" name="__codelineno-0-34"></a>TftpServer -&gt; UBoot: "zImage"
+</span><span id="__span-0-35"><a href="#__codelineno-0-35" id="__codelineno-0-35" name="__codelineno-0-35"></a>deactivate TftpServer
+</span><span id="__span-0-36"><a href="#__codelineno-0-36" id="__codelineno-0-36" name="__codelineno-0-36"></a>UBoot -&gt; UBoot: write @ 0x62000000
+</span><span id="__span-0-37"><a href="#__codelineno-0-37" id="__codelineno-0-37" name="__codelineno-0-37"></a>deactivate UBoot
+</span><span id="__span-0-38"><a href="#__codelineno-0-38" id="__codelineno-0-38" name="__codelineno-0-38"></a>
+</span><span id="__span-0-39"><a href="#__codelineno-0-39" id="__codelineno-0-39" name="__codelineno-0-39"></a>UBoot -&gt; UBoot: bootz 0x61000000 - 0x62000000
+</span><span id="__span-0-40"><a href="#__codelineno-0-40" id="__codelineno-0-40" name="__codelineno-0-40"></a>activate UBoot
+</span><span id="__span-0-41"><a href="#__codelineno-0-41" id="__codelineno-0-41" name="__codelineno-0-41"></a>UBoot -&gt; UBoot: enter Linux
+</span><span id="__span-0-42"><a href="#__codelineno-0-42" id="__codelineno-0-42" name="__codelineno-0-42"></a>deactivate UBoot
+</span><span id="__span-0-43"><a href="#__codelineno-0-43" id="__codelineno-0-43" name="__codelineno-0-43"></a>destroy UBoot
+</span><span id="__span-0-44"><a href="#__codelineno-0-44" id="__codelineno-0-44" name="__codelineno-0-44"></a>
+</span><span id="__span-0-45"><a href="#__codelineno-0-45" id="__codelineno-0-45" name="__codelineno-0-45"></a>@enduml
+</span></code></pre></div>
+<h2 id="required-tools"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.3</span> Required tools</h2>
+<ul>
+<li>
+<p>Our <a href="../toolchain/"><em>cross-compile toolchain</em></a></p>
+</li>
+<li>
+<p>Ubuntu packages:</p>
+<p><code>device-tree-compiler</code>
+<code>libssl-dev</code>
+<code>parted</code>
+<code>python3-dev</code>
+<code>python3-distutils</code>
+<code>qemu-system-arm</code>
+<code>swig</code>
+<code>tftpd-hpa</code></p>
+<p>plus those from the previous labs.</p>
+</li>
+<li>
+<p><a href="https://u-boot.readthedocs.io/"><em>Das U-Boot</em></a>, either as:</p>
+<ul>
+<li>
+<p><a href="https://source.denx.de/u-boot/u-boot/"><em>git</em> repository</a></p>
+</li>
+<li>
+<p><a href="https://source.denx.de/u-boot/u-boot/-/archive/v2023.01/u-boot-v2023.01.tar.bz2">Source code archive for release <code>v2023.01</code></a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="source-code"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.4</span> Source code</h2>
+<p>Enter the folder of this lab, that's going to become our main workspace folder:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="gp">$ </span><span class="nv">LAB_PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/embedded-linux-qemu-labs/bootloader"</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span></code></pre></div>
+<p>You can now get <em>U-Boot</em> at the suggested version (<em>git</em> tag <code>v2023.01</code>).</p>
+<p>We're going to clone the <em>git</em> repository into the home folder, creating a new <em>branch</em> named after the <em>embedded-linux-qemu</em> tutorial just for convenience.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span><span class="s2">"https://source.denx.de/u-boot/u-boot"</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>u-boot/
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="gp">$ </span><span class="nv">label</span><span class="o">=</span><span class="s2">"v2023.01"</span>
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="gp">$ </span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>embedded-linux-qemu<span class="w"> </span><span class="nv">$label</span>
+</span></code></pre></div>
+<p>Alternatively, you can directly unpack an archive of the suggested version. This is usually much faster than cloning a big <em>git</em> repository, despite losing all the features of a <em>git</em> repository.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="gp">$ </span><span class="nv">label</span><span class="o">=</span><span class="s2">"v2023.01"</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="gp">$ </span>wget<span class="w"> </span><span class="s2">"https://source.denx.de/u-boot/u-boot/-/archive/</span><span class="si">${</span><span class="nv">label</span><span class="si">}</span><span class="s2">/u-boot-</span><span class="si">${</span><span class="nv">label</span><span class="si">}</span><span class="s2">.tar.bz2"</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="gp">$ </span>tar<span class="w"> </span>xfv<span class="w"> </span><span class="s2">"u-boot-</span><span class="si">${</span><span class="nv">label</span><span class="si">}</span><span class="s2">.tar.bz2"</span>
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="gp">$ </span>mv<span class="w"> </span>u-boot*/<span class="w"> </span>u-boot
+</span></code></pre></div>
+<h2 id="configuration"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.5</span> Configuration</h2>
+<p>Get an understanding of <em>U-Boot</em>’s configuration and compilation steps by reading its <code>README</code> file, and specifically the <em>Building the Software</em> section.</p>
+<p><em>U-Boot</em> comes with some sample configuration files for officially supported boards, under the <code>configs</code> folder, named with a <code>_defconfig</code> suffix.</p>
+<p>Our board is an <em>ARM Vexpress Cortex A9</em>, so let's find it:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>/u-boot/
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="gp">$ </span>ls<span class="w"> </span>configs/<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>vexpress
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="go">vexpress_aemv8a_juno_defconfig</span>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="go">vexpress_aemv8a_semi_defconfig</span>
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="go">vexpress_aemv8r_defconfig</span>
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="hll"><span class="go">vexpress_ca9x4_defconfig</span>
+</span></span></code></pre></div>
+<p>We choose <code>vexpress_ca9x4_defconfig</code> as our template. Let's call <code>make</code> to make it effective:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="gp">$ </span>make<span class="w"> </span>vexpress_ca9x4_defconfig
+</span></code></pre></div>
+<h2 id="build"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.6</span> Build</h2>
+<p>To build <em>U-Boot</em>, we need to specify
+<a href="../toolchain/">the cross-compile toolchain we built</a>
+by setting a global variable <code>CROSS_COMPILE</code>.<br/>
+The <code>export</code> keyword makes it available also to sub-processes, including <code>make</code> and the tools called by it.
+We can choose between the full name <code>arm-training-linux-uclibcgnueabihf-</code> or the shortened alias <code>arm-linux-</code> as the prefix.<br/>
+Also, remmeber to parallelize to save time.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="gp">$ </span><span class="nv">TC_NAME</span><span class="o">=</span><span class="s2">"arm-training-linux-uclibcgnueabihf"</span>
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="gp">$ </span><span class="nv">TC_BASE</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/x-tools/</span><span class="nv">$TC_NAME</span><span class="s2">"</span>
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$TC_BASE</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">"</span>
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">CROSS_COMPILE</span><span class="o">=</span>arm-linux-
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">MAKEFLAGS</span><span class="o">=</span>-j<span class="k">$(</span>nproc<span class="k">)</span>
+</span></code></pre></div>
+<p>We're going to use the <code>menuconfig</code> to refine the configuration to suit our needs.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>/u-boot/
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="gp">$ </span>make<span class="w"> </span>menuconfig
+</span></code></pre></div>
+<blockquote>
+<p>See: <a href="../../kb/menuconfig/"><code>menuconfig</code></a></p>
+</blockquote>
+<p>In <code>Command line interface</code> → <code>Boot commands</code>:</p>
+<ul>
+<li>Add support for <code>bootd</code> (<code>CONFIG_CMD_BOOTD</code>)</li>
+</ul>
+<p>In <code>Command line interface</code> → <code>Environment commands</code>:</p>
+<ul>
+<li>Add support for <code>editenv</code> (<code>CONFIG_CMD_EDITENV</code>)</li>
+</ul>
+<p>In <code>Environment</code>, we will configure <em>U-Boot</em> so that it stores its environment inside a file called <code>uboot.env</code>
+in a <em>FAT</em> filesystem on an MMC/SD card (device <code>mmcblk<b><u>0</u></b>p<b><u>1</u></b></code>),
+as our emulated machine won’t have flash storage.</p>
+<ul>
+<li>
+<p>Unset <code>Environment in flash memory</code> (<code>CONFIG_ENV_IS_IN_FLASH</code>)</p>
+</li>
+<li>
+<p>Set <code>Environment is in a FAT filesystem</code> (<code>CONFIG_ENV_IS_IN_FAT</code>)</p>
+</li>
+<li>
+<p>Set <code>Name of the block device for the environment</code> (<code>CONFIG_ENV_FAT_INTERFACE</code>) = <code>mmc</code></p>
+</li>
+<li>
+<p>Set <code>Device and partition for where to store the environment in FAT</code> (<code>CONFIG_ENV_FAT_DEVICE_AND_PART</code>) = <code>0:1</code></p>
+</li>
+</ul>
+<p>You can now <code>&lt;Save&gt;</code> and make a backup copy of this configuration:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="gp">$ </span>cp<span class="w"> </span>.config<span class="w"> </span>../u-boot.config
+</span></code></pre></div>
+<p>Install some packages required for compilation:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="w">  </span>device-tree-compiler<span class="w"> </span>libssl-dev<span class="w"> </span>parted<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="w">  </span>python3-dev<span class="w"> </span>python3-distutils<span class="w"> </span>swig
+</span></code></pre></div>
+<p>You can now build the bootloader:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="gp">$ </span>make
+</span></code></pre></div>
+<p>This generates several binaries, including <code>u-boot</code> and <code>u-boot.bin</code>.<br/>
+You can save the former into a backup archive if you wish so:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="gp">$ </span>tar<span class="w"> </span>cfJv<span class="w"> </span>../u-boot.tar.xz<span class="w"> </span>u-boot
+</span></code></pre></div>
+<h2 id="quick-test"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.7</span> Quick test</h2>
+<p>Back to the lab folder, test that <em>U-Boot</em> works. We're going to use <em>QEMU system</em>, which emulates a whole target machine (instead of <em>QEMU user</em> that only emulates executables).</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-12-2"><a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="gp">$ </span>qemu-system-arm<span class="w">  </span>-nographic<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-12-3"><a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="w">  </span>-M<span class="w"> </span>vexpress-a9<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-12-4"><a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="w">  </span>-m<span class="w"> </span>128M<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-12-5"><a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="w">  </span>-kernel<span class="w"> </span>u-boot/u-boot
+</span></code></pre></div>
+<ul>
+<li><code>-M</code>: emulated machine</li>
+<li><code>-m</code>: amount of memory in the emulated machine</li>
+<li><code>-kernel</code>: allows to load the binary directly into the emulated machine, and run the machine with it.
+  This way, you don’t need a <em>first stage bootloader</em>. Of course, you don’t have this with real hardware.</li>
+</ul>
+<p><strong>Press a key before the end of the timeout</strong>, to access the <em>U-Boot prompt</em>:
+You can then type the <code>help</code> command, and explore the few commands available.</p>
+<div class="language-text highlight"><span class="filename">QEMU - U-Boot</span><pre><span></span><code><span id="__span-13-1"><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a>Hit any key to stop autoboot:  0
+</span><span id="__span-13-2"><a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a>=&gt; help
+</span><span id="__span-13-3"><a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a>?         - alias for 'help'
+</span><span id="__span-13-4"><a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a>  ...
+</span><span id="__span-13-5"><a href="#__codelineno-13-5" id="__codelineno-13-5" name="__codelineno-13-5"></a>version   - print monitor, compiler and linker version
+</span></code></pre></div>
+<p>To exit QEMU, type <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span> then <span class="keys"><kbd class="key-h">H</kbd></span> to see the available commands.</p>
+<div class="language-text highlight"><span class="filename">QEMU - help</span><pre><span></span><code><span id="__span-14-1"><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a>C-a h    print this help
+</span><span id="__span-14-2"><a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a>C-a x    exit emulator
+</span><span id="__span-14-3"><a href="#__codelineno-14-3" id="__codelineno-14-3" name="__codelineno-14-3"></a>C-a s    save disk data back to file (if -snapshot)
+</span><span id="__span-14-4"><a href="#__codelineno-14-4" id="__codelineno-14-4" name="__codelineno-14-4"></a>C-a t    toggle console timestamps
+</span><span id="__span-14-5"><a href="#__codelineno-14-5" id="__codelineno-14-5" name="__codelineno-14-5"></a>C-a b    send break (magic sysrq)
+</span><span id="__span-14-6"><a href="#__codelineno-14-6" id="__codelineno-14-6" name="__codelineno-14-6"></a>C-a c    switch between console and monitor
+</span><span id="__span-14-7"><a href="#__codelineno-14-7" id="__codelineno-14-7" name="__codelineno-14-7"></a>C-a C-a  sends C-a
+</span></code></pre></div>
+<p>One of them is <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span> then <span class="keys"><kbd class="key-x">X</kbd></span>, which allows to <strong>quit</strong> the emulator.</p>
+<h2 id="sd-card-setup"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.8</span> SD card setup</h2>
+<p>We now need to add an SD card image to the <em>QEMU</em> virtual machine, in particular to get a way to store the <em>U-Boot environment</em>.
+In later labs, we will also use such storage for other purposes (e.g. to store the <em>kernel</em> and <em>device tree</em>, <em>root filesystem</em> and other filesystems).
+The commands that we are going to use will be further explained during the <a href="../blockfs/"><em>Block filesystems</em></a> lectures.</p>
+<p>First, using the <code>dd</code> command, create a 1 GB file filled with zeros, called <code>sd.img</code>, to be used by <em>QEMU</em> as an SD card disk image.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-15-1"><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-15-2"><a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="gp">$ </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span>/dev/zero<span class="w"> </span><span class="nv">of</span><span class="o">=</span>sd.img<span class="w"> </span><span class="nv">bs</span><span class="o">=</span>1M<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">1024</span>
+</span></code></pre></div>
+<p>Now, let’s call the <code>cfdisk</code> command to create the partitions that we are going to use:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-16-1"><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="gp">$ </span>cfdisk<span class="w"> </span>sd.img
+</span></code></pre></div>
+<p>If <code>cfdisk</code> asks you to <code>Select a label type</code>, choose <code>dos</code>, as we don’t really need a <code>gpt</code> partition table for our labs.</p>
+<p>In the <code>cfdisk</code> interface, create three <em>primary</em> partitions, starting from the beginning, with the following properties:</p>
+<ul>
+<li>
+<p>One partition, 64 MB big, with the <code>FAT16</code> partition type.<br/>
+  Mark this partition as <em>bootable</em>.</p>
+</li>
+<li>
+<p>One partition, 32 MB big, that will be used for the root filesystem.<br>
+  Due to the geometry of the device, the partition might be larger, but it does not matter.<br/>
+  Keep the <code>Linux</code> partition type.</br></p>
+</li>
+<li>
+<p>One partition filling the remaining space of the SD card image, to be used for the data filesystem.<br/>
+  Keep the <code>Linux</code> partition type.</p>
+</li>
+</ul>
+<p>Select <code>Write</code> when you are done.</p>
+<blockquote>
+<p>You could've done something similar with a single <code>parted</code> issue:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-17-1"><a href="#__codelineno-17-1" id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="gp">$ </span>parted<span class="w"> </span>-s<span class="w"> </span>sd.img<span class="w"> </span>--<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-17-2"><a href="#__codelineno-17-2" id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="w">    </span>mklabel<span class="w"> </span>msdos<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-17-3"><a href="#__codelineno-17-3" id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="w">    </span>mkpart<span class="w"> </span>primary<span class="w"> </span>boot<span class="w"> </span>fat16<span class="w"> </span>1m<span class="w"> </span>64m<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-17-4"><a href="#__codelineno-17-4" id="__codelineno-17-4" name="__codelineno-17-4"></a><span class="w">    </span>mkpart<span class="w"> </span>primary<span class="w"> </span>root<span class="w"> </span>ext4<span class="w"> </span>64m<span class="w"> </span>96m<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-17-5"><a href="#__codelineno-17-5" id="__codelineno-17-5" name="__codelineno-17-5"></a><span class="w">    </span>mkpart<span class="w"> </span>primary<span class="w"> </span>data<span class="w"> </span>ext4<span class="w"> </span>96m<span class="w"> </span>-1s<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-17-6"><a href="#__codelineno-17-6" id="__codelineno-17-6" name="__codelineno-17-6"></a><span class="w">    </span><span class="nb">set</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>boot<span class="w"> </span>on
+</span></code></pre></div>
+</blockquote>
+<p>We're allocating a <em>loop</em> driver to emulate block devices from this image and its partitions, by calling <code>losetup</code>
+(returned <code>loop<b><i>13</i></b></code> in the example):</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-18-1"><a href="#__codelineno-18-1" id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="gp">$ </span><span class="nv">LOOP_DEV</span><span class="o">=</span><span class="k">$(</span>sudo<span class="w"> </span>losetup<span class="w"> </span>-f<span class="w"> </span>--show<span class="w"> </span>--partscan<span class="w"> </span>sd.img<span class="k">)</span>
+</span><span id="__span-18-2"><a href="#__codelineno-18-2" id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$LOOP_DEV</span>
+</span><span id="__span-18-3"><a href="#__codelineno-18-3" id="__codelineno-18-3" name="__codelineno-18-3"></a><span class="go">/dev/loop13</span>
+</span></code></pre></div>
+<ul>
+<li><code>-f</code>: finds a free <em>loop</em> device</li>
+<li><code>--show</code>: shows the <em>loop</em> device that it used</li>
+<li>
+<p><code>--partscan</code>: scans the <em>loop</em> device for partitions, and creates additional <code>/dev/loop<b><i>X</i></b>p<b><i>Y</i></b></code> block devices, where:</p>
+<ul>
+<li><em>X</em>: device index</li>
+<li><em>Y</em>: partition index</li>
+</ul>
+</li>
+</ul>
+<p>Also run <code>sudo dmesg</code> to confirm that 3 partitions were detected for the <em>loop</em> device selected by <code>losetup</code>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-19-1"><a href="#__codelineno-19-1" id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>loop
+</span><span id="__span-19-2"><a href="#__codelineno-19-2" id="__codelineno-19-2" name="__codelineno-19-2"></a><span class="go">  ...</span>
+</span><span id="__span-19-3"><a href="#__codelineno-19-3" id="__codelineno-19-3" name="__codelineno-19-3"></a><span class="go">[19698.310073] loop13: detected capacity change from 0 to 2097152</span>
+</span><span id="__span-19-4"><a href="#__codelineno-19-4" id="__codelineno-19-4" name="__codelineno-19-4"></a><span class="go">[19698.310264]  loop13: p1 p2 p3</span>
+</span></code></pre></div>
+<p>Last but not least, format partition <code>1</code> as <code>FAT16</code> with <code>boot</code> as label.
+The other partitions will be formated later.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-20-1"><a href="#__codelineno-20-1" id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>mkfs.vfat<span class="w"> </span>-F<span class="w"> </span><span class="m">16</span><span class="w"> </span>-n<span class="w"> </span>boot<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">LOOP_DEV</span><span class="si">}</span><span class="s2">p1"</span>
+</span><span id="__span-20-2"><a href="#__codelineno-20-2" id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="go">mkfs.fat 4.2 (2021-01-31)</span>
+</span><span id="__span-20-3"><a href="#__codelineno-20-3" id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="go">mkfs.fat: Warning: lowercase labels might not work properly on some systems</span>
+</span></code></pre></div>
+<p>You could've formatted this partition directly within the <code>parted</code> example above, with a <code>parted</code> command like: <code>mkfs 1 fat16</code>.</p>
+<p>Now, you can release the <em>loop</em> device. If you want, you can create a backup archive.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-21-1"><a href="#__codelineno-21-1" id="__codelineno-21-1" name="__codelineno-21-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>losetup<span class="w"> </span>-d<span class="w"> </span><span class="nv">$LOOP_DEV</span>
+</span><span id="__span-21-2"><a href="#__codelineno-21-2" id="__codelineno-21-2" name="__codelineno-21-2"></a><span class="gp">$ </span>tar<span class="w"> </span>cfJv<span class="w"> </span>sd.img_p1-only.tar.xz<span class="w"> </span>sd.img
+</span></code></pre></div>
+<h2 id="test-environment"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.9</span> Test environment</h2>
+<p>Start <em>QEMU</em> again, but this time with the emulated SD card:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-22-1"><a href="#__codelineno-22-1" id="__codelineno-22-1" name="__codelineno-22-1"></a><span class="gp">$ </span>qemu-system-arm<span class="w">  </span>-nographic<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-22-2"><a href="#__codelineno-22-2" id="__codelineno-22-2" name="__codelineno-22-2"></a><span class="w">  </span>-M<span class="w"> </span>vexpress-a9<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-22-3"><a href="#__codelineno-22-3" id="__codelineno-22-3" name="__codelineno-22-3"></a><span class="w">  </span>-m<span class="w"> </span>128M<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-22-4"><a href="#__codelineno-22-4" id="__codelineno-22-4" name="__codelineno-22-4"></a><span class="w">  </span>-kernel<span class="w"> </span>u-boot/u-boot<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-22-5"><a href="#__codelineno-22-5" id="__codelineno-22-5" name="__codelineno-22-5"></a><span class="hll"><span class="w">  </span>-sd<span class="w"> </span>sd.img
+</span></span></code></pre></div>
+<p>Now, in the <em>U-Boot prompt</em>, make sure that you can set and store an environment variable:</p>
+<div class="language-text highlight"><span class="filename">QEMU - U-Boot</span><pre><span></span><code><span id="__span-23-1"><a href="#__codelineno-23-1" id="__codelineno-23-1" name="__codelineno-23-1"></a>=&gt; setenv foo bar
+</span><span id="__span-23-2"><a href="#__codelineno-23-2" id="__codelineno-23-2" name="__codelineno-23-2"></a>=&gt; saveenv
+</span><span id="__span-23-3"><a href="#__codelineno-23-3" id="__codelineno-23-3" name="__codelineno-23-3"></a>Saving Environment to FAT... OK
+</span></code></pre></div>
+<p>Run <code>reset</code> to reboot the virtual board, and then check that the <code>foo</code> variable is still set:</p>
+<div class="language-text highlight"><span class="filename">QEMU - U-Boot</span><pre><span></span><code><span id="__span-24-1"><a href="#__codelineno-24-1" id="__codelineno-24-1" name="__codelineno-24-1"></a>=&gt; reset
+</span><span id="__span-24-2"><a href="#__codelineno-24-2" id="__codelineno-24-2" name="__codelineno-24-2"></a>    ...
+</span><span id="__span-24-3"><a href="#__codelineno-24-3" id="__codelineno-24-3" name="__codelineno-24-3"></a>Hit any key to stop autoboot:  0
+</span><span id="__span-24-4"><a href="#__codelineno-24-4" id="__codelineno-24-4" name="__codelineno-24-4"></a>=&gt; printenv foo
+</span><span id="__span-24-5"><a href="#__codelineno-24-5" id="__codelineno-24-5" name="__codelineno-24-5"></a>foo=bar
+</span></code></pre></div>
+<p>You can now quit from <em>QEMU</em> (<span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span> then <span class="keys"><kbd class="key-x">X</kbd></span>).</p>
+<h2 id="networking"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.10</span> Networking</h2>
+<p>To load a kernel in the next lab, we have to setup networking between the host machine and the <em>QEMU</em> emulated target machine.<br/></p>
+<blockquote>
+<p>See <a href="../virtualbox/#networking">Host VM - Networking</a> for information about the IP addresses for this lab.</p>
+</blockquote>
+<p>To do so, create a <code>qemu-myifup</code> shell script that brings up the network interface between <em>QEMU</em> and the host.
+It's going to be called by <em>QEMU</em> upon spawning of the emulated target machine, with script argument <code>$1</code> holding the created network interface.<br/>
+Here's the content of the shell script file:</p>
+<div class="language-sh highlight"><span class="filename">$LAB_PATH/qemu-myifup</span><pre><span></span><code><span id="__span-25-1"><a href="#__codelineno-25-1" id="__codelineno-25-1" name="__codelineno-25-1"></a><span class="ch">#!/bin/sh</span>
+</span><span id="__span-25-2"><a href="#__codelineno-25-2" id="__codelineno-25-2" name="__codelineno-25-2"></a><span class="nv">HOST_IP</span><span class="o">=</span><span class="s2">"10.0.2.15"</span>
+</span><span id="__span-25-3"><a href="#__codelineno-25-3" id="__codelineno-25-3" name="__codelineno-25-3"></a><span class="nv">NET_MASK</span><span class="o">=</span><span class="s2">"255.255.255.0"</span>
+</span><span id="__span-25-4"><a href="#__codelineno-25-4" id="__codelineno-25-4" name="__codelineno-25-4"></a>/sbin/ip<span class="w"> </span>a<span class="w"> </span>add<span class="w"> </span><span class="s2">"</span><span class="nv">$HOST_IP</span><span class="s2">/</span><span class="nv">$NET_MASK</span><span class="s2">"</span><span class="w"> </span>dev<span class="w"> </span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span>
+</span><span id="__span-25-5"><a href="#__codelineno-25-5" id="__codelineno-25-5" name="__codelineno-25-5"></a>/sbin/ip<span class="w"> </span>link<span class="w"> </span><span class="nb">set</span><span class="w"> </span><span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span><span class="w"> </span>up
+</span></code></pre></div>
+<p>You can dump the content directly to the file with a single command line trick that concatenates (<code>cat</code>) a delimited multi-line block of text (between <code>&lt;&lt;'EOF'</code> and a standalone <code>EOF</code>; quoted to prevent parameter expansion).<br/>
+Remember to make the script executable.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-26-1"><a href="#__codelineno-26-1" id="__codelineno-26-1" name="__codelineno-26-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-26-2"><a href="#__codelineno-26-2" id="__codelineno-26-2" name="__codelineno-26-2"></a><span class="gp">$ </span>cat<span class="w"> </span>&gt;<span class="w"> </span>qemu-myifup<span class="w"> </span>&lt;&lt;<span class="s1">'EOF'</span>
+</span><span id="__span-26-3"><a href="#__codelineno-26-3" id="__codelineno-26-3" name="__codelineno-26-3"></a><span class="gp">#</span>!/bin/sh
+</span><span id="__span-26-4"><a href="#__codelineno-26-4" id="__codelineno-26-4" name="__codelineno-26-4"></a><span class="go">HOST_IP="10.0.2.15"</span>
+</span><span id="__span-26-5"><a href="#__codelineno-26-5" id="__codelineno-26-5" name="__codelineno-26-5"></a><span class="go">NET_MASK="255.255.255.0"</span>
+</span><span id="__span-26-6"><a href="#__codelineno-26-6" id="__codelineno-26-6" name="__codelineno-26-6"></a><span class="go">/sbin/ip a add "$HOST_IP/$NET_MASK" dev "$1"</span>
+</span><span id="__span-26-7"><a href="#__codelineno-26-7" id="__codelineno-26-7" name="__codelineno-26-7"></a><span class="go">/sbin/ip link set "$1" up</span>
+</span><span id="__span-26-8"><a href="#__codelineno-26-8" id="__codelineno-26-8" name="__codelineno-26-8"></a><span class="go">EOF</span>
+</span><span id="__span-26-9"><a href="#__codelineno-26-9" id="__codelineno-26-9" name="__codelineno-26-9"></a><span class="gp">$ </span>chmod<span class="w"> </span>+x<span class="w"> </span>qemu-myifup
+</span></code></pre></div>
+<p>You need <em>root</em> privileges to run <em>QEMU</em> this time, because of the need to bring up the
+network interface.<br/>
+You could put the command into another shell script named <code>qemu</code>, for convenience:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-27-1"><a href="#__codelineno-27-1" id="__codelineno-27-1" name="__codelineno-27-1"></a><span class="gp">$ </span>cat<span class="w"> </span>&gt;<span class="w"> </span>qemu<span class="w"> </span>&lt;&lt;<span class="s1">'EOF'</span>
+</span><span id="__span-27-2"><a href="#__codelineno-27-2" id="__codelineno-27-2" name="__codelineno-27-2"></a><span class="gp">#</span>!/bin/sh
+</span><span id="__span-27-3"><a href="#__codelineno-27-3" id="__codelineno-27-3" name="__codelineno-27-3"></a><span class="go">sudo qemu-system-arm  -nographic  \</span>
+</span><span id="__span-27-4"><a href="#__codelineno-27-4" id="__codelineno-27-4" name="__codelineno-27-4"></a><span class="go">  -M vexpress-a9  \</span>
+</span><span id="__span-27-5"><a href="#__codelineno-27-5" id="__codelineno-27-5" name="__codelineno-27-5"></a><span class="go">  -m 128M  \</span>
+</span><span id="__span-27-6"><a href="#__codelineno-27-6" id="__codelineno-27-6" name="__codelineno-27-6"></a><span class="go">  -kernel u-boot/u-boot  \</span>
+</span><span id="__span-27-7"><a href="#__codelineno-27-7" id="__codelineno-27-7" name="__codelineno-27-7"></a><span class="go">  -sd sd.img  \</span>
+</span><span id="__span-27-8"><a href="#__codelineno-27-8" id="__codelineno-27-8" name="__codelineno-27-8"></a><span class="go">  -net tap,script=./qemu-myifup  \</span>
+</span><span id="__span-27-9"><a href="#__codelineno-27-9" id="__codelineno-27-9" name="__codelineno-27-9"></a><span class="go">  -net nic</span>
+</span><span id="__span-27-10"><a href="#__codelineno-27-10" id="__codelineno-27-10" name="__codelineno-27-10"></a><span class="go">EOF</span>
+</span><span id="__span-27-11"><a href="#__codelineno-27-11" id="__codelineno-27-11" name="__codelineno-27-11"></a><span class="gp">$ </span>chmod<span class="w"> </span>+x<span class="w"> </span>qemu
+</span><span id="__span-27-12"><a href="#__codelineno-27-12" id="__codelineno-27-12" name="__codelineno-27-12"></a><span class="gp">$ </span>./qemu
+</span></code></pre></div>
+<p>Note the new <em>net</em> options:</p>
+<ul>
+<li><code>-net tap</code>: creates a software network interface on the host side.</li>
+<li><code>-net nic</code>: adds a network device to the emulated machine.</li>
+</ul>
+<p>Meanwhile on the host machine, using the <code>ip a</code> command, check that there is now a <code>tap<b><i>N</i></b></code> network interface with the expected host IP address.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-28-1"><a href="#__codelineno-28-1" id="__codelineno-28-1" name="__codelineno-28-1"></a><span class="gp">$ </span>ip<span class="w"> </span>a
+</span><span id="__span-28-2"><a href="#__codelineno-28-2" id="__codelineno-28-2" name="__codelineno-28-2"></a><span class="go">1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000</span>
+</span><span id="__span-28-3"><a href="#__codelineno-28-3" id="__codelineno-28-3" name="__codelineno-28-3"></a><span class="go">    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00</span>
+</span><span id="__span-28-4"><a href="#__codelineno-28-4" id="__codelineno-28-4" name="__codelineno-28-4"></a><span class="go">    inet 127.0.0.1/8 scope host lo</span>
+</span><span id="__span-28-5"><a href="#__codelineno-28-5" id="__codelineno-28-5" name="__codelineno-28-5"></a><span class="go">       valid_lft forever preferred_lft forever</span>
+</span><span id="__span-28-6"><a href="#__codelineno-28-6" id="__codelineno-28-6" name="__codelineno-28-6"></a><span class="go">    inet6 ::1/128 scope host</span>
+</span><span id="__span-28-7"><a href="#__codelineno-28-7" id="__codelineno-28-7" name="__codelineno-28-7"></a><span class="go">       valid_lft forever preferred_lft forever</span>
+</span><span id="__span-28-8"><a href="#__codelineno-28-8" id="__codelineno-28-8" name="__codelineno-28-8"></a><span class="go">2: enp0s3: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UP group default qlen 1000</span>
+</span><span id="__span-28-9"><a href="#__codelineno-28-9" id="__codelineno-28-9" name="__codelineno-28-9"></a><span class="go">    link/ether 08:00:27:c2:2c:2e brd ff:ff:ff:ff:ff:ff</span>
+</span><span id="__span-28-10"><a href="#__codelineno-28-10" id="__codelineno-28-10" name="__codelineno-28-10"></a><span class="go">    inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic noprefixroute enp0s3</span>
+</span><span id="__span-28-11"><a href="#__codelineno-28-11" id="__codelineno-28-11" name="__codelineno-28-11"></a><span class="go">       valid_lft 86241sec preferred_lft 86241sec</span>
+</span><span id="__span-28-12"><a href="#__codelineno-28-12" id="__codelineno-28-12" name="__codelineno-28-12"></a><span class="go">    inet6 fe80::ed74:587e:b871:454d/64 scope link noprefixroute</span>
+</span><span id="__span-28-13"><a href="#__codelineno-28-13" id="__codelineno-28-13" name="__codelineno-28-13"></a><span class="go">       valid_lft forever preferred_lft forever</span>
+</span><span id="__span-28-14"><a href="#__codelineno-28-14" id="__codelineno-28-14" name="__codelineno-28-14"></a><span class="hll"><span class="go">3: tap0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu 1500 qdisc fq_codel state UNKNOWN group default qlen 1000</span>
+</span></span><span id="__span-28-15"><a href="#__codelineno-28-15" id="__codelineno-28-15" name="__codelineno-28-15"></a><span class="go">    link/ether b2:5d:a5:d1:4d:ce brd ff:ff:ff:ff:ff:ff</span>
+</span><span id="__span-28-16"><a href="#__codelineno-28-16" id="__codelineno-28-16" name="__codelineno-28-16"></a><span class="hll"><span class="go">    inet 10.0.2.15/24 scope global tap0</span>
+</span></span><span id="__span-28-17"><a href="#__codelineno-28-17" id="__codelineno-28-17" name="__codelineno-28-17"></a><span class="go">       valid_lft forever preferred_lft forever</span>
+</span><span id="__span-28-18"><a href="#__codelineno-28-18" id="__codelineno-28-18" name="__codelineno-28-18"></a><span class="go">    inet6 fe80::b05d:a5ff:fed1:4dce/64 scope link</span>
+</span><span id="__span-28-19"><a href="#__codelineno-28-19" id="__codelineno-28-19" name="__codelineno-28-19"></a><span class="go">       valid_lft forever preferred_lft forever</span>
+</span></code></pre></div>
+<p>On the <em>U-Boot</em> command line, you have to configure the environment variables for networking:
+<code>serverip</code> for the <em>host</em> (<em>server</em>) machine, and <code>ipaddr</code> for the <em>target</em> machine.<br/>
+To make these settings permanent, save the environment.</p>
+<div class="language-text highlight"><span class="filename">QEMU - U-Boot</span><pre><span></span><code><span id="__span-29-1"><a href="#__codelineno-29-1" id="__codelineno-29-1" name="__codelineno-29-1"></a>=&gt; setenv serverip 10.0.2.15
+</span><span id="__span-29-2"><a href="#__codelineno-29-2" id="__codelineno-29-2" name="__codelineno-29-2"></a>=&gt; setenv ipaddr 10.0.2.69
+</span><span id="__span-29-3"><a href="#__codelineno-29-3" id="__codelineno-29-3" name="__codelineno-29-3"></a>=&gt; saveenv
+</span></code></pre></div>
+<p>You can now test the connection to the host, with the <code>ping</code> command of <em>U-Boot</em>.<br/>
+Note that while <em>U-Boot</em> can <em>ping</em> other machines, it cannot be <em>ping</em>ed back, because <em>U-Boot</em> doesn't use a complete network stack.</p>
+<div class="language-text highlight"><span class="filename">QEMU - U-Boot</span><pre><span></span><code><span id="__span-30-1"><a href="#__codelineno-30-1" id="__codelineno-30-1" name="__codelineno-30-1"></a>=&gt; ping $serverip
+</span><span id="__span-30-2"><a href="#__codelineno-30-2" id="__codelineno-30-2" name="__codelineno-30-2"></a>    ...
+</span><span id="__span-30-3"><a href="#__codelineno-30-3" id="__codelineno-30-3" name="__codelineno-30-3"></a>host 10.0.2.15 is alive
+</span></code></pre></div>
+<p>You can leave the <em>QEMU</em> instance running for the next paragraph.</p>
+<h2 id="tftp-server"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.11</span> TFTP server</h2>
+<p>Let’s install a <em>TFTP</em> server on your <em>host</em> machine*, by the <code>tftpd-hda</code> package.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-31-1"><a href="#__codelineno-31-1" id="__codelineno-31-1" name="__codelineno-31-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>tftpd-hpa
+</span><span id="__span-31-2"><a href="#__codelineno-31-2" id="__codelineno-31-2" name="__codelineno-31-2"></a><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>tftpd-hpa
+</span></code></pre></div>
+<p>By default, files are stored under the <code>/srv/tftp/</code> folder, which should be accessible by the by <code>tftp</code> group.<br/>
+So, let's add our user to it.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-32-1"><a href="#__codelineno-32-1" id="__codelineno-32-1" name="__codelineno-32-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/srv/tftp
+</span><span id="__span-32-2"><a href="#__codelineno-32-2" id="__codelineno-32-2" name="__codelineno-32-2"></a><span class="gp">$ </span>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>tftp:tftp<span class="w"> </span>/srv/tftp
+</span><span id="__span-32-3"><a href="#__codelineno-32-3" id="__codelineno-32-3" name="__codelineno-32-3"></a><span class="gp">$ </span>sudo<span class="w"> </span>chmod<span class="w"> </span>g+rw<span class="w"> </span>/srv/tftp/
+</span><span id="__span-32-4"><a href="#__codelineno-32-4" id="__codelineno-32-4" name="__codelineno-32-4"></a><span class="gp">$ </span>sudo<span class="w"> </span>adduser<span class="w"> </span><span class="nv">$USER</span><span class="w"> </span>tftp
+</span><span id="__span-32-5"><a href="#__codelineno-32-5" id="__codelineno-32-5" name="__codelineno-32-5"></a><span class="gp">$ </span>newgrp<span class="w"> </span>tftp
+</span></code></pre></div>
+<blockquote>
+<p>The <code>newgrp tftp</code> command makes this group available to the current shell without restarting the <em>host</em> login session.
+Until the next login session, you have to type this command again for any new shells of the current login session.</p>
+</blockquote>
+<p>To test the TFTP connection, put a small text file in the directory exported through TFTP on your <em>host</em> machine, then try to read it back as a TFTP client to check that the server is working properly.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-33-1"><a href="#__codelineno-33-1" id="__codelineno-33-1" name="__codelineno-33-1"></a><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Hello, World!"</span><span class="w"> </span>&gt;<span class="w"> </span>/srv/tftp/textfile.txt
+</span><span id="__span-33-2"><a href="#__codelineno-33-2" id="__codelineno-33-2" name="__codelineno-33-2"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-33-3"><a href="#__codelineno-33-3" id="__codelineno-33-3" name="__codelineno-33-3"></a><span class="gp">$ </span>tftp<span class="w"> </span>localhost<span class="w"> </span>-v<span class="w"> </span>-c<span class="w"> </span>get<span class="w"> </span>textfile.txt
+</span><span id="__span-33-4"><a href="#__codelineno-33-4" id="__codelineno-33-4" name="__codelineno-33-4"></a><span class="go">Connected to localhost (::1), port 69</span>
+</span><span id="__span-33-5"><a href="#__codelineno-33-5" id="__codelineno-33-5" name="__codelineno-33-5"></a><span class="go">getting from localhost:textfile.txt to textfile.txt [netascii]</span>
+</span><span id="__span-33-6"><a href="#__codelineno-33-6" id="__codelineno-33-6" name="__codelineno-33-6"></a><span class="go">Received 15 bytes in 0.0 seconds [6306 bit/s]</span>
+</span><span id="__span-33-7"><a href="#__codelineno-33-7" id="__codelineno-33-7" name="__codelineno-33-7"></a><span class="gp">$ </span>cat<span class="w"> </span>textfile.txt
+</span><span id="__span-33-8"><a href="#__codelineno-33-8" id="__codelineno-33-8" name="__codelineno-33-8"></a><span class="go">Hello, World!</span>
+</span></code></pre></div>
+<p>Back in <em>U-Boot</em> run <code>bdinfo</code>, which allows finding out that the RAM starts at <code>0x60000000</code>.</p>
+<div class="language-text highlight"><span class="filename">QEMU - U-Boot</span><pre><span></span><code><span id="__span-34-1"><a href="#__codelineno-34-1" id="__codelineno-34-1" name="__codelineno-34-1"></a>=&gt; bdinfo
+</span><span id="__span-34-2"><a href="#__codelineno-34-2" id="__codelineno-34-2" name="__codelineno-34-2"></a>boot_params = 0x60002000
+</span><span id="__span-34-3"><a href="#__codelineno-34-3" id="__codelineno-34-3" name="__codelineno-34-3"></a>DRAM bank   = 0x00000000
+</span><span id="__span-34-4"><a href="#__codelineno-34-4" id="__codelineno-34-4" name="__codelineno-34-4"></a><span class="hll">-&gt; start    = 0x60000000
+</span></span><span id="__span-34-5"><a href="#__codelineno-34-5" id="__codelineno-34-5" name="__codelineno-34-5"></a>-&gt; size     = 0x08000000
+</span><span id="__span-34-6"><a href="#__codelineno-34-6" id="__codelineno-34-6" name="__codelineno-34-6"></a>DRAM bank   = 0x00000001
+</span><span id="__span-34-7"><a href="#__codelineno-34-7" id="__codelineno-34-7" name="__codelineno-34-7"></a>-&gt; start    = 0x80000000
+</span><span id="__span-34-8"><a href="#__codelineno-34-8" id="__codelineno-34-8" name="__codelineno-34-8"></a>-&gt; size     = 0x00000004
+</span><span id="__span-34-9"><a href="#__codelineno-34-9" id="__codelineno-34-9" name="__codelineno-34-9"></a>flashstart  = 0x40000000
+</span><span id="__span-34-10"><a href="#__codelineno-34-10" id="__codelineno-34-10" name="__codelineno-34-10"></a>flashsize   = 0x04000000
+</span><span id="__span-34-11"><a href="#__codelineno-34-11" id="__codelineno-34-11" name="__codelineno-34-11"></a>flashoffset = 0x00000000
+</span><span id="__span-34-12"><a href="#__codelineno-34-12" id="__codelineno-34-12" name="__codelineno-34-12"></a>baudrate    = 38400 bps
+</span><span id="__span-34-13"><a href="#__codelineno-34-13" id="__codelineno-34-13" name="__codelineno-34-13"></a>relocaddr   = 0x67f67000
+</span><span id="__span-34-14"><a href="#__codelineno-34-14" id="__codelineno-34-14" name="__codelineno-34-14"></a>reloc off   = 0x07767000
+</span><span id="__span-34-15"><a href="#__codelineno-34-15" id="__codelineno-34-15" name="__codelineno-34-15"></a>Build       = 32-bit
+</span><span id="__span-34-16"><a href="#__codelineno-34-16" id="__codelineno-34-16" name="__codelineno-34-16"></a>current eth = ethernet@3,02000000
+</span><span id="__span-34-17"><a href="#__codelineno-34-17" id="__codelineno-34-17" name="__codelineno-34-17"></a>ethaddr     = 52:54:00:12:34:56
+</span><span id="__span-34-18"><a href="#__codelineno-34-18" id="__codelineno-34-18" name="__codelineno-34-18"></a>IP addr     = 10.0.2.69
+</span><span id="__span-34-19"><a href="#__codelineno-34-19" id="__codelineno-34-19" name="__codelineno-34-19"></a>fdt_blob    = 0x67fdf590
+</span><span id="__span-34-20"><a href="#__codelineno-34-20" id="__codelineno-34-20" name="__codelineno-34-20"></a>new_fdt     = 0x00000000
+</span><span id="__span-34-21"><a href="#__codelineno-34-21" id="__codelineno-34-21" name="__codelineno-34-21"></a>fdt_size    = 0x00000000
+</span><span id="__span-34-22"><a href="#__codelineno-34-22" id="__codelineno-34-22" name="__codelineno-34-22"></a>lmb_dump_all:
+</span><span id="__span-34-23"><a href="#__codelineno-34-23" id="__codelineno-34-23" name="__codelineno-34-23"></a> memory.cnt  = 0x2
+</span><span id="__span-34-24"><a href="#__codelineno-34-24" id="__codelineno-34-24" name="__codelineno-34-24"></a><span class="hll"> memory[0]      [0x60000000-0x67ffffff], 0x08000000 bytes flags: 0
+</span></span><span id="__span-34-25"><a href="#__codelineno-34-25" id="__codelineno-34-25" name="__codelineno-34-25"></a> memory[1]      [0x80000000-0x80000003], 0x00000004 bytes flags: 0
+</span><span id="__span-34-26"><a href="#__codelineno-34-26" id="__codelineno-34-26" name="__codelineno-34-26"></a> reserved.cnt  = 0x2
+</span><span id="__span-34-27"><a href="#__codelineno-34-27" id="__codelineno-34-27" name="__codelineno-34-27"></a> reserved[0]    [0x4c000000-0x4c7fffff], 0x00800000 bytes flags: 4
+</span><span id="__span-34-28"><a href="#__codelineno-34-28" id="__codelineno-34-28" name="__codelineno-34-28"></a> reserved[1]    [0x67b22c78-0x67ffffff], 0x004dd388 bytes flags: 0
+</span><span id="__span-34-29"><a href="#__codelineno-34-29" id="__codelineno-34-29" name="__codelineno-34-29"></a>devicetree  = embed
+</span><span id="__span-34-30"><a href="#__codelineno-34-30" id="__codelineno-34-30" name="__codelineno-34-30"></a>arch_number = 0x000008e0
+</span><span id="__span-34-31"><a href="#__codelineno-34-31" id="__codelineno-34-31" name="__codelineno-34-31"></a>TLB addr    = 0x67ff0000
+</span><span id="__span-34-32"><a href="#__codelineno-34-32" id="__codelineno-34-32" name="__codelineno-34-32"></a>irq_sp      = 0x67b26eb0
+</span><span id="__span-34-33"><a href="#__codelineno-34-33" id="__codelineno-34-33" name="__codelineno-34-33"></a>sp start    = 0x67b26ea0
+</span><span id="__span-34-34"><a href="#__codelineno-34-34" id="__codelineno-34-34" name="__codelineno-34-34"></a>Early malloc usage: 370 / 400
+</span></code></pre></div>
+<p>Therefore, we will use the <code>0x61000000</code> address to test <code>tftp</code>.</p>
+<p>From the <em>U-Boot</em> prompt, ask the TFTP server that file:</p>
+<div class="language-text highlight"><span class="filename">QEMU - U-Boot</span><pre><span></span><code><span id="__span-35-1"><a href="#__codelineno-35-1" id="__codelineno-35-1" name="__codelineno-35-1"></a><span class="hll">=&gt; setenv ram_app_start 0x61000000
+</span></span><span id="__span-35-2"><a href="#__codelineno-35-2" id="__codelineno-35-2" name="__codelineno-35-2"></a><span class="hll">=&gt; tftp $ram_app_start textfile.txt
+</span></span><span id="__span-35-3"><a href="#__codelineno-35-3" id="__codelineno-35-3" name="__codelineno-35-3"></a>smc911x: detected LAN9118 controller
+</span><span id="__span-35-4"><a href="#__codelineno-35-4" id="__codelineno-35-4" name="__codelineno-35-4"></a>smc911x: phy initialized
+</span><span id="__span-35-5"><a href="#__codelineno-35-5" id="__codelineno-35-5" name="__codelineno-35-5"></a>smc911x: MAC 52:54:00:12:34:56
+</span><span id="__span-35-6"><a href="#__codelineno-35-6" id="__codelineno-35-6" name="__codelineno-35-6"></a>Using ethernet@3,02000000 device
+</span><span id="__span-35-7"><a href="#__codelineno-35-7" id="__codelineno-35-7" name="__codelineno-35-7"></a>TFTP from server 10.0.2.15; our IP address is 10.0.2.69
+</span><span id="__span-35-8"><a href="#__codelineno-35-8" id="__codelineno-35-8" name="__codelineno-35-8"></a>Filename 'textfile.txt'.
+</span><span id="__span-35-9"><a href="#__codelineno-35-9" id="__codelineno-35-9" name="__codelineno-35-9"></a>Load address: 0x61000000
+</span><span id="__span-35-10"><a href="#__codelineno-35-10" id="__codelineno-35-10" name="__codelineno-35-10"></a>Loading: #
+</span><span id="__span-35-11"><a href="#__codelineno-35-11" id="__codelineno-35-11" name="__codelineno-35-11"></a>         2 KiB/s
+</span><span id="__span-35-12"><a href="#__codelineno-35-12" id="__codelineno-35-12" name="__codelineno-35-12"></a>done
+</span><span id="__span-35-13"><a href="#__codelineno-35-13" id="__codelineno-35-13" name="__codelineno-35-13"></a>Bytes transferred = 14 (e hex)
+</span><span id="__span-35-14"><a href="#__codelineno-35-14" id="__codelineno-35-14" name="__codelineno-35-14"></a>smc911x: MAC 52:54:00:12:34:56
+</span></code></pre></div>
+<p>The <code>tftp</code> command should have downloaded <code>textfile.txt</code> from your development workstation into the board’s memory at location <code>0x61000000</code>.<br/>
+You can verify that the download was successful by dumping the contents of the memory (<code>md</code>, <em>memory dump</em>):</p>
+<div class="language-text highlight"><span class="filename">QEMU - U-Boot</span><pre><span></span><code><span id="__span-36-1"><a href="#__codelineno-36-1" id="__codelineno-36-1" name="__codelineno-36-1"></a>=&gt; md $ram_app_start
+</span><span id="__span-36-2"><a href="#__codelineno-36-2" id="__codelineno-36-2" name="__codelineno-36-2"></a><span class="hll">61000000: 6c6c6548 57202c6f 646c726f 00000a21  Hello, World!...
+</span></span><span id="__span-36-3"><a href="#__codelineno-36-3" id="__codelineno-36-3" name="__codelineno-36-3"></a>61000010: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-4"><a href="#__codelineno-36-4" id="__codelineno-36-4" name="__codelineno-36-4"></a>61000020: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-5"><a href="#__codelineno-36-5" id="__codelineno-36-5" name="__codelineno-36-5"></a>61000030: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-6"><a href="#__codelineno-36-6" id="__codelineno-36-6" name="__codelineno-36-6"></a>61000040: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-7"><a href="#__codelineno-36-7" id="__codelineno-36-7" name="__codelineno-36-7"></a>61000050: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-8"><a href="#__codelineno-36-8" id="__codelineno-36-8" name="__codelineno-36-8"></a>61000060: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-9"><a href="#__codelineno-36-9" id="__codelineno-36-9" name="__codelineno-36-9"></a>61000070: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-10"><a href="#__codelineno-36-10" id="__codelineno-36-10" name="__codelineno-36-10"></a>61000080: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-11"><a href="#__codelineno-36-11" id="__codelineno-36-11" name="__codelineno-36-11"></a>61000090: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-12"><a href="#__codelineno-36-12" id="__codelineno-36-12" name="__codelineno-36-12"></a>610000a0: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-13"><a href="#__codelineno-36-13" id="__codelineno-36-13" name="__codelineno-36-13"></a>610000b0: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-14"><a href="#__codelineno-36-14" id="__codelineno-36-14" name="__codelineno-36-14"></a>610000c0: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-15"><a href="#__codelineno-36-15" id="__codelineno-36-15" name="__codelineno-36-15"></a>610000d0: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-16"><a href="#__codelineno-36-16" id="__codelineno-36-16" name="__codelineno-36-16"></a>610000e0: 00000000 00000000 00000000 00000000  ................
+</span><span id="__span-36-17"><a href="#__codelineno-36-17" id="__codelineno-36-17" name="__codelineno-36-17"></a>610000f0: 00000000 00000000 00000000 00000000  ................
+</span></code></pre></div>
+<p>You can now quit from <em>QEMU</em> (<span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-a">A</kbd></span> then <span class="keys"><kbd class="key-x">X</kbd></span>).</p>
+<h2 id="backup-and-restore"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.12</span> Backup and restore</h2>
+<p>If you have trouble generating binaries that work properly, or later make a mistake that causes you to lose your bootloader binary, you can find a working version under <code>$LAB_PATH/data/</code>, to be copied to <code>$LAB_PATH/u-boot/</code>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-37-1"><a href="#__codelineno-37-1" id="__codelineno-37-1" name="__codelineno-37-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-37-2"><a href="#__codelineno-37-2" id="__codelineno-37-2" name="__codelineno-37-2"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>u-boot/
+</span><span id="__span-37-3"><a href="#__codelineno-37-3" id="__codelineno-37-3" name="__codelineno-37-3"></a><span class="gp">$ </span>cp<span class="w"> </span>data/u-boot<span class="w"> </span>u-boot/u-boot
+</span></code></pre></div>
+<h2 id="licensing"><span class="enumerate-headings-plugin enumerate-heading-plugin">4.13</span> Licensing</h2>
+<p>This document is an extension to: <a href="https://bootlin.com/doc/training/embedded-linux-qemu/"><em>Embedded Linux System Development - Practical Labs - QEMU Variant</em></a>
+ — © 2004-2023, <em>Bootlin</em> <a href="https://bootlin.com">https://bootlin.com/</a>, <a href="(https://creativecommons.org/licenses/by-sa/3.0/)"><code>CC-BY-SA-3.0</code></a> license.</p>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.fac441b0.min.js"></script>
+</body>
+</html>

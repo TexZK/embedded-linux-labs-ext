@@ -1,0 +1,725 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../appdev/" rel="prev"/>
+<link href="../debootstrap/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.4.3, mkdocs-material-9.1.11" name="generator"/>
+<title>App - Remote debug - Embedded Systems Linux Development Notes</title>
+<link href="../../assets/stylesheets/main.85bb2934.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#app-remote-debug">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Embedded Systems Linux Development Notes" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Embedded Systems Linux Development Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Embedded Systems Linux Development Notes
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              App - Remote debug
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Embedded Systems Linux Development Notes" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Embedded Systems Linux Development Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    Embedded Systems Linux Development Notes
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+        Overview
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          QEMU variant
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+          QEMU variant
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../virtualbox/">
+        Host VM
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../toolchain/">
+        Building a cross-compile toolchain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../bootloader/">
+        Bootloader - U-Boot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../kernel/">
+        Linux Kernel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tinysystem/">
+        Tiny embedded system with BusyBox
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hardware/">
+        Accessing Hardware Devices
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../blockfs/">
+        Block Filesystems
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../thirdparty/">
+        Third-party libraries and apps
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../buildroot/">
+        Buildroot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../appdev/">
+        App - Development
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          App - Remote debug
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        App - Remote debug
+      </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#objectives">
+    Objectives
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#setup">
+    Setup
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#debugging-setup">
+    Debugging setup
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-strace">
+    Using strace
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-ltrace">
+    Using ltrace
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-gdbserver">
+    Using gdbserver
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#post-mortem-analysis">
+    Post mortem analysis
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-to-remember">
+    What to remember
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing">
+    Licensing
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../debootstrap/">
+        debootstrap
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          BeagleBone Black variant
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+          BeagleBone Black variant
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/virtualbox/">
+        Host VM
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/toolchain/">
+        Building a cross-compile toolchain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/bootloader/">
+        Bootloader - U-Boot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/kernel/">
+        Linux Kernel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/tinysystem/">
+        Tiny embedded system with BusyBox
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/hardware/">
+        Accessing Hardware Devices
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/blockfs/">
+        Block Filesystems
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/thirdparty/">
+        Third-party libraries and apps
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/buildroot/">
+        Buildroot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/integration/">
+        System integration
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/appdev/">
+        App - Development
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Knowledge Base
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          Knowledge Base
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/git-hash/">
+        git commit hash expansion
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/menuconfig/">
+        menuconfig
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/processors/">
+        Processors
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../copying/">
+        Copying this document
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#objectives">
+    Objectives
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#setup">
+    Setup
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#debugging-setup">
+    Debugging setup
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-strace">
+    Using strace
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-ltrace">
+    Using ltrace
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-gdbserver">
+    Using gdbserver
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#post-mortem-analysis">
+    Post mortem analysis
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#what-to-remember">
+    What to remember
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing">
+    Licensing
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="app-remote-debug"><span class="enumerate-headings-plugin enumerate-heading-plugin">12.</span> App - Remote debug</h1>
+<h2 id="objectives"><span class="enumerate-headings-plugin enumerate-heading-plugin">12.1</span> Objectives</h2>
+<ul>
+<li>
+<p>Use <code>strace</code> and <code>ltrace</code> to diagnose program issues.</p>
+</li>
+<li>
+<p>Use <code>gdbserver</code> and a cross-debugger to remotely debug an embedded application.</p>
+</li>
+</ul>
+<h2 id="setup"><span class="enumerate-headings-plugin enumerate-heading-plugin">12.2</span> Setup</h2>
+<p>Go to the <code>$HOME/embedded-linux-qemu-labs/debugging/</code> directory.
+Create an <code>nfsroot</code> directory there.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="gp">$ </span><span class="nv">LAB_PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/embedded-linux-qemu-labs/debugging"</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="gp">$ </span>mkdir<span class="w"> </span>nfsroot
+</span></code></pre></div>
+<h2 id="debugging-setup"><span class="enumerate-headings-plugin enumerate-heading-plugin">12.3</span> Debugging setup</h2>
+<p>Because of issues in <code>gdb</code> and <code>ltrace</code> in the <em>uClibc</em> version that we are using in our toolchain, we'r going to use a different toolchain in this lab, based on <code>glibc</code>.</p>
+<p>As <code>glibc</code> has more complete features than lighter libraries, it looks like a good idea to perform your application debugging work with a <code>glibc</code> toolchain first, and switch to lighter libraries once your application and software stack are production ready.</p>
+<p>As done in the <em>Buildroot</em> lab, clone once again the <em>Buildroot</em> <em>git</em> repository, and checkout the tag corresponding to the <code>2022.02</code> release (<em>Long Term Support</em>), which we have tested for this lab.<br/>
+You could re-use the installation already performed previously.</p>
+<p>Then, in the <code>menuconfig</code> interface, configure the target architecture as done previously, but configure the <em>toolchain</em> and <em>target packages</em> differently.</p>
+<p>In <code>Toolchain</code>:</p>
+<ul>
+<li>
+<p><code>Toolchain type</code> = <code>External toolchain</code>.</p>
+</li>
+<li>
+<p><code>Toolchain</code> = <code>Bootlin toolchains</code>.</p>
+</li>
+<li>
+<p><code>Toolchain origin</code> = <code>Toolchain to be downloaded and installed</code>.</p>
+</li>
+<li>
+<p><code>Bootlin toolchain variant</code> = <code>armv7-eabihf glibc stable 2021.11-1</code>.</p>
+</li>
+<li>
+<p>Enable <code>Copy gdb server to the Target</code>.</p>
+</li>
+</ul>
+<p>In <code>Target packages</code> → <code>Debugging, profiling and benchmark</code>:</p>
+<ul>
+<li>
+<p>Enable <code>ltrace</code>.</p>
+</li>
+<li>
+<p>Enable <code>strace</code>.</p>
+</li>
+</ul>
+<p>Now, <code>&lt;Save&gt;</code> the <code>.config</code>, backup it, and build your <em>root</em> filesystem.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/../buildroot/buildroot/"</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="gp">$ </span>make<span class="w"> </span>menuconfig
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="gp">$ </span>cp<span class="w"> </span>.config<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot-debugging.config"</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">MAKEFLAGS</span><span class="o">=</span>-j<span class="k">$(</span>nproc<span class="k">)</span>
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="gp">$ </span>make<span class="w"> </span>clean
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="gp">$ </span>make
+</span></code></pre></div>
+<p>Go back to the lab directory and extract the <code>buildroot/output/images/rootfs.tar</code> archive into the <code>nfsroot</code> directory.
+Add this directory to the <code>/etc/exports</code> file and run <code>sudo exportfs -r</code>. You can of course remap the <em>symlink</em> as done previously.<br/>
+Boot your ARM board over NFS on this new filesystem, using the same kernel as before.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="gp">$ </span>tar<span class="w"> </span>xfv<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/../buildroot/buildroot/output/images/rootfs.tar"</span>
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="gp">$ </span>sudo<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>/srv/nfs
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="gp">$ </span>sudo<span class="w"> </span>ln<span class="w"> </span>-snv<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span><span class="w"> </span>/srv/nfs
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="go">'/srv/nfs' -&gt; '/home/me/embedded-linux-qemu-labs/debugging/nfsroot/'</span>
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="gp">$ </span>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>tftp:tftp<span class="w"> </span>/srv/nfs
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="gp">$ </span>sudo<span class="w"> </span>exportfs<span class="w"> </span>-ar
+</span><span id="__span-2-8"><a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>nfs-kernel-server
+</span></code></pre></div>
+<h2 id="using-strace"><span class="enumerate-headings-plugin enumerate-heading-plugin">12.4</span> Using <code>strace</code></h2>
+<p>The <code>strace</code> allows to <em>trace</em> all the system calls made by a process: opening, reading and writing files,
+starting other processes, accessing time, etc.
+When something goes wrong in your application, <code>strace</code> is an invaluable tool to see what it actually does, even when you don’t have the source code.</p>
+<p>Update the <code>PATH</code>.<br/>
+With your cross-compiling toolchain compile the <code>data/vista-emulator.c</code> program, copy the
+resulting binary to the <code>/root</code> directory of the <em>root</em> filesystem and then strip it.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/embedded-linux-qemu-labs/buildroot/buildroot/output/host/bin:</span><span class="nv">$PATH</span><span class="s2">"</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/data/"</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="gp">$ </span>arm-linux-gcc<span class="w"> </span>-o<span class="w"> </span>vista-emulator<span class="w"> </span>vista-emulator.c
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="gp">$ </span>cp<span class="w"> </span>vista-emulator<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/root/"</span>
+</span></code></pre></div>
+<p>Back to target system, try to run the <code>/root/vista-emulator</code> program. It should hang indefinitely!<br/>
+Interrupt this program by hitting <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-c">C</kbd></span>.</p>
+<p>Now, running this program again through the <code>strace</code> command and understand why it hangs.
+You can guess it without reading the source code!</p>
+<div class="language-console highlight"><span class="filename">QEMU - Buildroot</span><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="gp"># </span>strace<span class="w"> </span>/root/vista-emulator
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="go">execve("/root/vista-emulator", ["/root/vista-emulator"], 0x7ed7ce60 /* 10 vars */) = 0</span>
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="go">    ...</span>
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="hll"><span class="go">openat(AT_FDCWD, "/etc/vista.key", O_RDONLY) = -1 ENOENT (No such file or directory)</span>
+</span></span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="go">clock_nanosleep(CLOCK_REALTIME, 0, {tv_sec=1, tv_nsec=0}, 0x7e926c70) = 0</span>
+</span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="go">openat(AT_FDCWD, "/etc/vista.key", O_RDONLY) = -1 ENOENT (No such file or directory)</span>
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="go">clock_nanosleep(CLOCK_REALTIME, 0, {tv_sec=1, tv_nsec=0}, 0x7e926c70) = 0</span>
+</span><span id="__span-4-8"><a href="#__codelineno-4-8" id="__codelineno-4-8" name="__codelineno-4-8"></a><span class="go">openat(AT_FDCWD, "/etc/vista.key", O_RDONLY) = -1 ENOENT (No such file or directory)</span>
+</span><span id="__span-4-9"><a href="#__codelineno-4-9" id="__codelineno-4-9" name="__codelineno-4-9"></a><span class="go">clock_nanosleep(CLOCK_REALTIME, 0, {tv_sec=1, tv_nsec=0}, 0x7e926c70) = 0</span>
+</span><span id="__span-4-10"><a href="#__codelineno-4-10" id="__codelineno-4-10" name="__codelineno-4-10"></a><span class="go">    ...</span>
+</span></code></pre></div>
+<p>Interrupt again by hitting <span class="keys"><kbd class="key-control">Ctrl</kbd><span>+</span><kbd class="key-c">C</kbd></span>.</p>
+<p>Now add what the program was waiting for, and see your program proceed to another bug, failing with a mighty <em>segmentation fault</em>.</p>
+<div class="language-console highlight"><span class="filename">QEMU - Buildroot</span><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="gp"># </span>touch<span class="w"> </span>/etc/vista.key
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="gp"># </span>strace<span class="w"> </span>/root/vista-emulator
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="go">execve("/root/vista-emulator", ["/root/vista-emulator"], 0x7efe8e60 /* 10 vars */) = 0</span>
+</span><span id="__span-5-4"><a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="go">    ...</span>
+</span><span id="__span-5-5"><a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="hll"><span class="go">openat(AT_FDCWD, "/etc/vista.key", O_RDONLY) = 3</span>
+</span></span><span id="__span-5-6"><a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="go">close(3)                                = 0</span>
+</span><span id="__span-5-7"><a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="go">mmap2(NULL, 659456, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x1b100000</span>
+</span><span id="__span-5-8"><a href="#__codelineno-5-8" id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="go">mmap2(NULL, 659456, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x1b05f000</span>
+</span><span id="__span-5-9"><a href="#__codelineno-5-9" id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="go">mmap2(NULL, 659456, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x1afbe000</span>
+</span><span id="__span-5-10"><a href="#__codelineno-5-10" id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="go">    ...</span>
+</span><span id="__span-5-11"><a href="#__codelineno-5-11" id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="go">mmap2(NULL, 659456, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7eed9000</span>
+</span><span id="__span-5-12"><a href="#__codelineno-5-12" id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="hll"><span class="go">mmap2(NULL, 659456, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = -1 ENOMEM (Cannot allocate memory)</span>
+</span></span><span id="__span-5-13"><a href="#__codelineno-5-13" id="__codelineno-5-13" name="__codelineno-5-13"></a><span class="go">brk(0x4e3000)                           = 0x443000</span>
+</span><span id="__span-5-14"><a href="#__codelineno-5-14" id="__codelineno-5-14" name="__codelineno-5-14"></a><span class="go">mmap2(NULL, 1048576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = -1 ENOMEM (Cannot allocate memory)</span>
+</span><span id="__span-5-15"><a href="#__codelineno-5-15" id="__codelineno-5-15" name="__codelineno-5-15"></a><span class="hll"><span class="go">--- SIGSEGV {si_signo=SIGSEGV, si_code=SEGV_MAPERR, si_addr=NULL} ---</span>
+</span></span><span id="__span-5-16"><a href="#__codelineno-5-16" id="__codelineno-5-16" name="__codelineno-5-16"></a><span class="go">+++ killed by SIGSEGV +++</span>
+</span><span id="__span-5-17"><a href="#__codelineno-5-17" id="__codelineno-5-17" name="__codelineno-5-17"></a><span class="go">Segmentation fault</span>
+</span></code></pre></div>
+<h2 id="using-ltrace"><span class="enumerate-headings-plugin enumerate-heading-plugin">12.5</span> Using <code>ltrace</code></h2>
+<p>Now run the program through <code>ltrace</code>. You should see what the program does: it tries to consume as much system memory as it can! You can also notice that <code>ltrace</code> makes the execution much slower than with <code>strace</code>.</p>
+<div class="language-console highlight"><span class="filename">QEMU - Buildroot</span><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="gp"># </span>ltrace<span class="w"> </span>/root/vista-emulator
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="go">__libc_start_main([ "/root/vista-emulator" ] &lt;unfinished ...&gt;</span>
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="go">fopen("/etc/vista.key", "r")                     = 0x432190</span>
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="go">fclose(0x432190)                                 = 0</span>
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="go">malloc(655360)                                   = 0x76d3e008</span>
+</span><span id="__span-6-6"><a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="go">strstr("", "Mickey Mouse")                       = nil</span>
+</span><span id="__span-6-7"><a href="#__codelineno-6-7" id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="go">malloc(655360)                                   = 0x76c9d008</span>
+</span><span id="__span-6-8"><a href="#__codelineno-6-8" id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="go">strstr("", "Mickey Mouse")                       = nil</span>
+</span><span id="__span-6-9"><a href="#__codelineno-6-9" id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="go">malloc(655360)                                   = 0x76bfc008</span>
+</span><span id="__span-6-10"><a href="#__codelineno-6-10" id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="go">    ...</span>
+</span><span id="__span-6-11"><a href="#__codelineno-6-11" id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="go">malloc(655360)                                   = 0x7ef56008</span>
+</span><span id="__span-6-12"><a href="#__codelineno-6-12" id="__codelineno-6-12" name="__codelineno-6-12"></a><span class="go">strstr("", "Mickey Mouse")                       = nil</span>
+</span><span id="__span-6-13"><a href="#__codelineno-6-13" id="__codelineno-6-13" name="__codelineno-6-13"></a><span class="hll"><span class="go">malloc(655360)                                   = nil</span>
+</span></span><span id="__span-6-14"><a href="#__codelineno-6-14" id="__codelineno-6-14" name="__codelineno-6-14"></a><span class="go">strstr(nil, "Mickey Mouse" &lt;no return ...&gt;</span>
+</span><span id="__span-6-15"><a href="#__codelineno-6-15" id="__codelineno-6-15" name="__codelineno-6-15"></a><span class="go">--- SIGSEGV (Segmentation fault) ---</span>
+</span><span id="__span-6-16"><a href="#__codelineno-6-16" id="__codelineno-6-16" name="__codelineno-6-16"></a><span class="go">+++ killed by SIGSEGV +++</span>
+</span></code></pre></div>
+<p>Also run the program through <code>ltrace -c</code>, to see what function call statistics this utility can
+provide.</p>
+<div class="language-console highlight"><span class="filename">QEMU - Buildroot</span><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="gp"># </span>ltrace<span class="w"> </span>-c<span class="w"> </span>/root/vista-emulator
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="gp">% </span><span class="nb">time</span><span class="w">     </span>seconds<span class="w">  </span>usecs/call<span class="w">     </span>calls<span class="w">      </span><span class="k">function</span>
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="go">------ ----------- ----------- --------- --------------------</span>
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="go"> 55.92   39.256634    39256634         1 __libc_start_main</span>
+</span><span id="__span-7-5"><a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="go"> 25.19   17.688146        5484      3225 malloc</span>
+</span><span id="__span-7-6"><a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="go"> 18.86   13.242600        4106      3225 strstr</span>
+</span><span id="__span-7-7"><a href="#__codelineno-7-7" id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="go">  0.02    0.013549       13549         1 fopen</span>
+</span><span id="__span-7-8"><a href="#__codelineno-7-8" id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="go">  0.01    0.006764        6764         1 fclose</span>
+</span><span id="__span-7-9"><a href="#__codelineno-7-9" id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="go">------ ----------- ----------- --------- --------------------</span>
+</span><span id="__span-7-10"><a href="#__codelineno-7-10" id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="go">100.00   70.207693                  6453 total</span>
+</span></code></pre></div>
+<p>It’s also interesting to run the program again with <code>strace</code> (or, refer to the previous paragraph).
+You can see that memory allocations translate into <code>mmap()</code> system calls. That’s how you can recognize them when you’re using <code>strace</code>.</p>
+<h2 id="using-gdbserver"><span class="enumerate-headings-plugin enumerate-heading-plugin">12.6</span> Using <code>gdbserver</code></h2>
+<p>We are now going to use gdbserver to understand why the program segfaults.</p>
+<p>Compile <code>vista-emulator.c</code> again with the <code>-g</code> option to include debugging symbols.
+This time, just keep it on your workstation, as you already have the version without debugging symbols
+on your target.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/data/"</span>
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="gp">$ </span>arm-linux-gcc<span class="w"> </span>-g<span class="w"> </span>-o<span class="w"> </span>vista-emulator<span class="w"> </span>vista-emulator.c
+</span></code></pre></div>
+<p>Then, on the <em>target</em> side, run <code>vista-emulator</code> under <code>gdbserver</code>, which will listen on a TCP
+port for a connection from <code>gdb</code>, and will control the execution of <code>vista-emulator</code> according to
+the <code>gdb</code> commands.</p>
+<div class="language-console highlight"><span class="filename">QEMU - Buildroot</span><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="gp"># </span>gdbserver<span class="w"> </span>localhost:2345<span class="w"> </span>/root/vista-emulator
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="go">Process /root/vista-emulator created; pid = 160</span>
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="go">Listening on port 2345</span>
+</span></code></pre></div>
+<p>On the <em>host</em> side, run <code>arm-linux-gdb</code> (also found in your toolchain).
+This way, <code>gdb</code> starts and loads the debugging information from the <code>vista-emulator</code> binary that was
+compiled with <code>-g</code>.<br/>
+We need to tell where to find our libraries, since they are not present in the default <code>/lib/</code>
+and <code>/usr/lib/</code> directories on your workstation.
+This is done by setting the <code>sysroot</code> variable of <code>gdb</code>. We do this directly by the command line (<code>-ex</code> argument) for convenience.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/data/"</span>
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="gp">$ </span><span class="nv">BUILDROOT_STAGING</span><span class="o">=</span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/../buildroot/buildroot/output/staging"</span>
+</span><span id="__span-10-3"><a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="gp">$ </span>arm-linux-gdb<span class="w">  </span>-ex<span class="w"> </span><span class="s2">"set sysroot </span><span class="nv">$BUILDROOT_STAGING</span><span class="s2">"</span><span class="w">  </span>vista-emulator
+</span><span id="__span-10-4"><a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="go">    ...</span>
+</span><span id="__span-10-5"><a href="#__codelineno-10-5" id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="go">Reading symbols from ./vista-emulator...</span>
+</span></code></pre></div>
+<p>Tell <code>gdb</code> to connect to the remote <em>target</em> system, and it will break at the <code>_start()</code> library function.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a>(gdb) target remote 10.0.2.69:2345
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a>Remote debugging using 10.0.2.69:2345
+</span><span id="__span-11-3"><a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a>Reading symbols from /home/me/embedded-linux-qemu-labs/buildroot/buildroot/output/staging/lib/ld-linux-armhf.so.3...
+</span><span id="__span-11-4"><a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a>0x76fc88c0 in _start ()
+</span><span id="__span-11-5"><a href="#__codelineno-11-5" id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="hll">   from /home/me/embedded-linux-qemu-labs/buildroot/buildroot/output/staging/lib/ld-linux-armhf.so.3
+</span></span></code></pre></div>
+<p>Then, you can use <code>gdb</code> as usual to set breakpoints, look at the source code, run the application step by
+step, etc.
+Graphical versions of <code>gdb</code> (such as <code>ddd</code>) can also be used in the same way.<br/>
+In our case, we’ll just start the program and wait for it to hit the <em>segmentation fault</em>.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a>(gdb) continue
+</span><span id="__span-12-2"><a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a>Continuing.
+</span><span id="__span-12-3"><a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a>Program received signal SIGSEGV, Segmentation fault.
+</span><span id="__span-12-5"><a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="hll">0x76edbbd0 in strchr () from /home/me/embedded-linux-qemu-labs/buildroot/buildroot/output/staging/lib/libc.so.6
+</span></span></code></pre></div>
+<p>You could then ask for a <em>backtrace</em> to see where this happened.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a>(gdb) backtrace
+</span><span id="__span-13-2"><a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="hll">#0  0x76edbbd0 in strchr ()
+</span></span><span id="__span-13-3"><a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="hll">   from /home/me/embedded-linux-qemu-labs/buildroot/buildroot/output/staging/lib/libc.so.6
+</span></span><span id="__span-13-4"><a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a>#1  0x76edd11c in strstr ()
+</span><span id="__span-13-5"><a href="#__codelineno-13-5" id="__codelineno-13-5" name="__codelineno-13-5"></a>   from /home/me/embedded-linux-qemu-labs/buildroot/buildroot/output/staging/lib/libc.so.6
+</span><span id="__span-13-6"><a href="#__codelineno-13-6" id="__codelineno-13-6" name="__codelineno-13-6"></a>#2  0x00400784 in log_activity (buffer=0x0) at vista-emulator.c:39
+</span><span id="__span-13-7"><a href="#__codelineno-13-7" id="__codelineno-13-7" name="__codelineno-13-7"></a>#3  0x00400808 in init_resources () at vista-emulator.c:52
+</span><span id="__span-13-8"><a href="#__codelineno-13-8" id="__codelineno-13-8" name="__codelineno-13-8"></a>#4  0x0040085c in main () at vista-emulator.c:72
+</span></code></pre></div>
+<p>This will tell you that the <em>segmentation fault</em> occurred in a function of the C library, called by
+our program. This should help you in finding the bug in our application.</p>
+<p>Finally, <code>quit</code> <em>GDB</em> to close the debugging session.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a>(gdb) set confirm off
+</span><span id="__span-14-2"><a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a>(gdb) quit
+</span></code></pre></div>
+<h2 id="post-mortem-analysis"><span class="enumerate-headings-plugin enumerate-heading-plugin">12.7</span> Post mortem analysis</h2>
+<p>Configure your shell on the <em>target</em> to get a <em>core file</em> dumped when you run <code>vista-emulator</code> again.</p>
+<div class="language-console highlight"><span class="filename">QEMU - Buildroot</span><pre><span></span><code><span id="__span-15-1"><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="gp"># </span><span class="nb">ulimit</span><span class="w"> </span>-c<span class="w"> </span>unlimited
+</span><span id="__span-15-2"><a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="gp"># </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"vista-emulator.core"</span><span class="w"> </span>&gt;<span class="w"> </span>/proc/sys/kernel/core_pattern
+</span><span id="__span-15-3"><a href="#__codelineno-15-3" id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="gp"># </span>/root/vista-emulator
+</span><span id="__span-15-4"><a href="#__codelineno-15-4" id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="hll"><span class="go">Segmentation fault (core dumped)</span>
+</span></span><span id="__span-15-5"><a href="#__codelineno-15-5" id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="gp"># </span>du<span class="w"> </span>-h<span class="w"> </span>vista-emulator.core
+</span><span id="__span-15-6"><a href="#__codelineno-15-6" id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="hll"><span class="go">12.7M   vista-emulator.core</span>
+</span></span><span id="__span-15-7"><a href="#__codelineno-15-7" id="__codelineno-15-7" name="__codelineno-15-7"></a><span class="gp"># </span>chmod<span class="w"> </span>a+r<span class="w"> </span>vista-emulator.core
+</span></code></pre></div>
+<p>Once you have such a file, inspect it with <code>arm-linux-gdb</code> on the <em>host</em>, set the <code>sysroot</code> setting, and then generate a <em>backtrace</em> to see where the program crashed.<br/>
+This way, you can have information about the crash without running the program through the debugger.</p>
+<p>Because the executable on the <em>target</em> does not contain debug information (it was compiled without the <code>-g</code> option), and because the core dump holds the <em>absolute paths</em> of the <em>target</em>, we have to emulate the state of the <em>target sysroot</em> somehow.<br/>
+One way works by copying the <em>debug</em> executable and the <em>core dump</em> to the corresponding places within the <code>staging</code> folder by <em>Buildroot</em>.<br/>
+With <code>set sysroot</code>, <code>gdb</code> sees the debug files as if they were there on the fake <em>target</em>.</p>
+<div class="language-text highlight"><span class="filename">Folder structure excerpts to analyze our core dump</span><pre><span></span><code><span id="__span-16-1"><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a>[TARGET]
+</span><span id="__span-16-2"><a href="#__codelineno-16-2" id="__codelineno-16-2" name="__codelineno-16-2"></a>/                            &lt;&lt;&lt;  host NFS: $LAB_PATH/nfsroot/
+</span><span id="__span-16-3"><a href="#__codelineno-16-3" id="__codelineno-16-3" name="__codelineno-16-3"></a>├── lib/
+</span><span id="__span-16-4"><a href="#__codelineno-16-4" id="__codelineno-16-4" name="__codelineno-16-4"></a>|   └── libc.so.6
+</span><span id="__span-16-5"><a href="#__codelineno-16-5" id="__codelineno-16-5" name="__codelineno-16-5"></a>└── root/
+</span><span id="__span-16-6"><a href="#__codelineno-16-6" id="__codelineno-16-6" name="__codelineno-16-6"></a>    ├── vista-emulator       &lt;&lt;&lt;  without debug symbols
+</span><span id="__span-16-7"><a href="#__codelineno-16-7" id="__codelineno-16-7" name="__codelineno-16-7"></a>    └── vista-emulator.core
+</span><span id="__span-16-8"><a href="#__codelineno-16-8" id="__codelineno-16-8" name="__codelineno-16-8"></a>
+</span><span id="__span-16-9"><a href="#__codelineno-16-9" id="__codelineno-16-9" name="__codelineno-16-9"></a>[HOST]
+</span><span id="__span-16-10"><a href="#__codelineno-16-10" id="__codelineno-16-10" name="__codelineno-16-10"></a>buildroot/output/staging/    &lt;&lt;&lt;  gdb: sysroot
+</span><span id="__span-16-11"><a href="#__codelineno-16-11" id="__codelineno-16-11" name="__codelineno-16-11"></a>├── lib/
+</span><span id="__span-16-12"><a href="#__codelineno-16-12" id="__codelineno-16-12" name="__codelineno-16-12"></a>|   └── libc.so.6
+</span><span id="__span-16-13"><a href="#__codelineno-16-13" id="__codelineno-16-13" name="__codelineno-16-13"></a>└── root/
+</span><span id="__span-16-14"><a href="#__codelineno-16-14" id="__codelineno-16-14" name="__codelineno-16-14"></a>    ├── vista-emulator       &lt;&lt;&lt;  with debug symbols, copied from: $LAB_PATH/data/
+</span><span id="__span-16-15"><a href="#__codelineno-16-15" id="__codelineno-16-15" name="__codelineno-16-15"></a>    └── vista-emulator.core  &lt;&lt;&lt;  copied from: $LAB_PATH/nsfroot/root/
+</span></code></pre></div>
+<p>Here's the sequence of operations, switching between the shell and <code>gdb</code>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-17-1"><a href="#__codelineno-17-1" id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$BUILDROOT_STAGING</span>
+</span><span id="__span-17-2"><a href="#__codelineno-17-2" id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="gp">$ </span>cp<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/data/vista-emulator"</span><span class="w"> </span>root/
+</span><span id="__span-17-3"><a href="#__codelineno-17-3" id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="gp">$ </span>cp<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/root/vista-emulator.core"</span><span class="w"> </span>root/
+</span><span id="__span-17-4"><a href="#__codelineno-17-4" id="__codelineno-17-4" name="__codelineno-17-4"></a><span class="gp">$ </span>arm-linux-gdb<span class="w">  </span>-ex<span class="w"> </span><span class="s2">"set sysroot </span><span class="nv">$BUILDROOT_STAGING</span><span class="s2">"</span>
+</span><span id="__span-17-5"><a href="#__codelineno-17-5" id="__codelineno-17-5" name="__codelineno-17-5"></a><span class="go">    ...</span>
+</span></code></pre></div>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-18-1"><a href="#__codelineno-18-1" id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="hll">(gdb) file vista-emulator
+</span></span><span id="__span-18-2"><a href="#__codelineno-18-2" id="__codelineno-18-2" name="__codelineno-18-2"></a>Reading symbols from vista-emulator...
+</span><span id="__span-18-3"><a href="#__codelineno-18-3" id="__codelineno-18-3" name="__codelineno-18-3"></a><span class="hll">(gdb) core-file vista-emulator.core
+</span></span><span id="__span-18-4"><a href="#__codelineno-18-4" id="__codelineno-18-4" name="__codelineno-18-4"></a>[New LWP 122]
+</span><span id="__span-18-5"><a href="#__codelineno-18-5" id="__codelineno-18-5" name="__codelineno-18-5"></a>Core was generated by `/root/vista-emulator'.
+</span><span id="__span-18-6"><a href="#__codelineno-18-6" id="__codelineno-18-6" name="__codelineno-18-6"></a>Program terminated with signal SIGSEGV, Segmentation fault.
+</span><span id="__span-18-7"><a href="#__codelineno-18-7" id="__codelineno-18-7" name="__codelineno-18-7"></a>#0  0x76e93bd0 in strchr ()
+</span><span id="__span-18-8"><a href="#__codelineno-18-8" id="__codelineno-18-8" name="__codelineno-18-8"></a>   from /home/me/embedded-linux-qemu-labs/buildroot/buildroot/output/staging/lib/libc.so.6
+</span><span id="__span-18-9"><a href="#__codelineno-18-9" id="__codelineno-18-9" name="__codelineno-18-9"></a><span class="hll">(gdb) backtrace
+</span></span><span id="__span-18-10"><a href="#__codelineno-18-10" id="__codelineno-18-10" name="__codelineno-18-10"></a>#0  0x76e93bd0 in strchr ()
+</span><span id="__span-18-11"><a href="#__codelineno-18-11" id="__codelineno-18-11" name="__codelineno-18-11"></a>   from /home/me/embedded-linux-qemu-labs/buildroot/buildroot/output/staging/lib/libc.so.6
+</span><span id="__span-18-12"><a href="#__codelineno-18-12" id="__codelineno-18-12" name="__codelineno-18-12"></a>#1  0x76e9511c in strstr ()
+</span><span id="__span-18-13"><a href="#__codelineno-18-13" id="__codelineno-18-13" name="__codelineno-18-13"></a>   from /home/me/embedded-linux-qemu-labs/buildroot/buildroot/output/staging/lib/libc.so.6
+</span><span id="__span-18-14"><a href="#__codelineno-18-14" id="__codelineno-18-14" name="__codelineno-18-14"></a>#2  0x00490784 in log_activity (buffer=0x0) at vista-emulator.c:39
+</span><span id="__span-18-15"><a href="#__codelineno-18-15" id="__codelineno-18-15" name="__codelineno-18-15"></a>#3  0x00490808 in init_resources () at vista-emulator.c:52
+</span><span id="__span-18-16"><a href="#__codelineno-18-16" id="__codelineno-18-16" name="__codelineno-18-16"></a>#4  0x0049085c in main () at vista-emulator.c:72
+</span><span id="__span-18-17"><a href="#__codelineno-18-17" id="__codelineno-18-17" name="__codelineno-18-17"></a><span class="hll">(gdb) set confirm off
+</span></span><span id="__span-18-18"><a href="#__codelineno-18-18" id="__codelineno-18-18" name="__codelineno-18-18"></a><span class="hll">(gdb) quit
+</span></span></code></pre></div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-19-1"><a href="#__codelineno-19-1" id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="gp">$ </span>rm<span class="w"> </span>root/vista-emulator
+</span><span id="__span-19-2"><a href="#__codelineno-19-2" id="__codelineno-19-2" name="__codelineno-19-2"></a><span class="gp">$ </span>rm<span class="w"> </span>root/vista-emulator.core
+</span></code></pre></div>
+<h2 id="what-to-remember"><span class="enumerate-headings-plugin enumerate-heading-plugin">12.8</span> What to remember</h2>
+<p>During this lab, we learned that...</p>
+<ul>
+<li>
+<p>It’s easy to study the behavior of programs and diagnose issues without even having the source code, thanks to <code>strace</code> and <code>ltrace</code>.</p>
+</li>
+<li>
+<p>You can leave a small <code>gdbserver</code> program (about 300 KB) on your target that allows to debug target applications, using a standard <code>gdb</code> debugger on the development host.</p>
+</li>
+<li>
+<p>It is fine to strip applications and binaries on the target machine, as long as the programs and libraries with debugging symbols are available on the development host.</p>
+</li>
+<li>
+<p>Thanks to <em>core dumps</em>, you can know where a program crashed, without having to reproduce the issue by running the program through the debugger.</p>
+</li>
+</ul>
+<h2 id="licensing"><span class="enumerate-headings-plugin enumerate-heading-plugin">12.9</span> Licensing</h2>
+<p>This document is an extension to: <a href="https://bootlin.com/doc/training/embedded-linux-qemu/"><em>Embedded Linux System Development - Practical Labs - QEMU Variant</em></a>
+ — © 2004-2023, <em>Bootlin</em> <a href="https://bootlin.com">https://bootlin.com/</a>, <a href="(https://creativecommons.org/licenses/by-sa/3.0/)"><code>CC-BY-SA-3.0</code></a> license.</p>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.fac441b0.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,757 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../hardware/" rel="prev"/>
+<link href="../thirdparty/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.4.3, mkdocs-material-9.1.11" name="generator"/>
+<title>Block Filesystems - Embedded Systems Linux Development Notes</title>
+<link href="../../assets/stylesheets/main.85bb2934.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#block-filesystems">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Embedded Systems Linux Development Notes" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Embedded Systems Linux Development Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Embedded Systems Linux Development Notes
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Block Filesystems
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Embedded Systems Linux Development Notes" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Embedded Systems Linux Development Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    Embedded Systems Linux Development Notes
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+        Overview
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          QEMU variant
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+          QEMU variant
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/virtualbox/">
+        Host VM
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/toolchain/">
+        Building a cross-compile toolchain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/bootloader/">
+        Bootloader - U-Boot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/kernel/">
+        Linux Kernel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/tinysystem/">
+        Tiny embedded system with BusyBox
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/hardware/">
+        Accessing Hardware Devices
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/blockfs/">
+        Block Filesystems
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/thirdparty/">
+        Third-party libraries and apps
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/buildroot/">
+        Buildroot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/appdev/">
+        App - Development
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/debugging/">
+        App - Remote debug
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/debootstrap/">
+        debootstrap
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          BeagleBone Black variant
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+          BeagleBone Black variant
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../virtualbox/">
+        Host VM
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../toolchain/">
+        Building a cross-compile toolchain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../bootloader/">
+        Bootloader - U-Boot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../kernel/">
+        Linux Kernel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tinysystem/">
+        Tiny embedded system with BusyBox
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hardware/">
+        Accessing Hardware Devices
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Block Filesystems
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        Block Filesystems
+      </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#objectives">
+    Objectives
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#setup">
+    Setup
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#filesystem-support-in-the-kernel">
+    Filesystem support in the kernel
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#format-the-third-partition">
+    Format the third partition
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adding-a-tmpfs-partition-for-log-files">
+    Adding a tmpfs partition for log files
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#making-a-squashfs-image">
+    Making a SquashFS image
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#booting-on-the-squashfs-partition">
+    Booting on the SquashFS partition
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#store-the-kernel-image-and-dtb-on-the-sd-card">
+    Store the kernel image and DTB on the SD card
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup">
+    Backup
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing">
+    Licensing
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../thirdparty/">
+        Third-party libraries and apps
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../buildroot/">
+        Buildroot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../integration/">
+        System integration
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../appdev/">
+        App - Development
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Knowledge Base
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          Knowledge Base
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/git-hash/">
+        git commit hash expansion
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/menuconfig/">
+        menuconfig
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/processors/">
+        Processors
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../copying/">
+        Copying this document
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#objectives">
+    Objectives
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#setup">
+    Setup
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#filesystem-support-in-the-kernel">
+    Filesystem support in the kernel
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#format-the-third-partition">
+    Format the third partition
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adding-a-tmpfs-partition-for-log-files">
+    Adding a tmpfs partition for log files
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#making-a-squashfs-image">
+    Making a SquashFS image
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#booting-on-the-squashfs-partition">
+    Booting on the SquashFS partition
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#store-the-kernel-image-and-dtb-on-the-sd-card">
+    Store the kernel image and DTB on the SD card
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup">
+    Backup
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing">
+    Licensing
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="block-filesystems"><span class="enumerate-headings-plugin enumerate-heading-plugin">20.</span> Block Filesystems</h1>
+<h2 id="objectives"><span class="enumerate-headings-plugin enumerate-heading-plugin">20.1</span> Objectives</h2>
+<ul>
+<li>
+<p>Produce filesystem images.</p>
+</li>
+<li>
+<p>Configure the kernel to use these filesystems.</p>
+</li>
+<li>
+<p>Use the <code>tmpfs</code> filesystem to store temporary files.</p>
+</li>
+<li>
+<p>Load the kernel and DTB from a FAT partition.</p>
+</li>
+</ul>
+<p>After doing the <em>BusyBox</em> lab, we are going to copy the filesystem contents to the emulated SD card.
+The storage will be split into several partitions, and your QEMU emulated board will be booted from this SD card, without using NFS anymore.</p>
+<h2 id="setup"><span class="enumerate-headings-plugin enumerate-heading-plugin">20.2</span> Setup</h2>
+<p>Throughout this lab, we will continue to use the root filesystem we have created in the <code>$HOME/embedded-linux-bbb-labs/tinysystem/nfsroot</code> directory, which we will progressively adapt to use block filesystems.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="gp">$ </span><span class="nv">LAB_PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/embedded-linux-bbb-labs/tinysystem"</span>
+</span></code></pre></div>
+<h2 id="filesystem-support-in-the-kernel"><span class="enumerate-headings-plugin enumerate-heading-plugin">20.3</span> Filesystem support in the kernel</h2>
+<p>Make sure that your kernel supports <em>SquashFS</em> (<code>SQUASHFS</code>) and <em>ext4</em> (<code>EXT4_FS</code>).
+Basic configuration options for these filesystems will be sufficient; no need for things like extended attributes.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/../kernel/linux"</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="gp">$ </span>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">"\bCONFIG_SQUASHFS\b"</span><span class="w"> </span>.config
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="gp"># </span>CONFIG_SQUASHFS<span class="w"> </span>is<span class="w"> </span>not<span class="w"> </span><span class="nb">set</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="gp">$ </span>grep<span class="w"> </span>-r<span class="w"> </span><span class="s2">"\bCONFIG_EXT4_FS\b"</span><span class="w"> </span>.config
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="go">CONFIG_EXT4_FS=y</span>
+</span></code></pre></div>
+<p>If necessary, recompile and update your kernel image on the TFTP server.
+We will only later copy the kernel to our FAT partition.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="gp">$ </span>cp<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/../hardware/kernel-leds.config"</span><span class="w"> </span>.config
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a><span class="gp">$ </span>make<span class="w"> </span>menuconfig
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a><span class="gp">$ </span>cp<span class="w"> </span>.config<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/kernel-blockfs.config"</span>
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a><span class="gp">$ </span><span class="nv">TC_NAME</span><span class="o">=</span><span class="s2">"arm-training-linux-uclibcgnueabihf"</span>
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a><span class="gp">$ </span><span class="nv">TC_BASE</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/x-tools/</span><span class="nv">$TC_NAME</span><span class="s2">"</span>
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$TC_BASE</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">"</span>
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">CROSS_COMPILE</span><span class="o">=</span>arm-linux-
+</span><span id="__span-2-8"><a href="#__codelineno-2-8" id="__codelineno-2-8" name="__codelineno-2-8"></a><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">MAKEFLAGS</span><span class="o">=</span>-j<span class="k">$(</span>nproc<span class="k">)</span>
+</span><span id="__span-2-9"><a href="#__codelineno-2-9" id="__codelineno-2-9" name="__codelineno-2-9"></a><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">ARCH</span><span class="o">=</span>arm
+</span><span id="__span-2-10"><a href="#__codelineno-2-10" id="__codelineno-2-10" name="__codelineno-2-10"></a><span class="gp">$ </span>make
+</span><span id="__span-2-11"><a href="#__codelineno-2-11" id="__codelineno-2-11" name="__codelineno-2-11"></a><span class="gp">$ </span>cp<span class="w"> </span>arch/arm/boot/zImage<span class="w"> </span>/srv/tftp/zImage-with-blockfs
+</span><span id="__span-2-12"><a href="#__codelineno-2-12" id="__codelineno-2-12" name="__codelineno-2-12"></a><span class="gp">$ </span>cp<span class="w"> </span>arch/arm/boot/zImage<span class="w"> </span>/srv/tftp/zImage
+</span></code></pre></div>
+<p>Boot your board on the NFS filesystem you used in this previous lab.<br/>
+Now, check the contents of <code>/proc/filesystems</code>. You should see that <em>ext4</em> and <em>SquashFS</em> are supported.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - BusyBox</span><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="gp"># </span>cat<span class="w"> </span>/proc/filesystems
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="go">nodev   sysfs</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="go">nodev   tmpfs</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="go">nodev   bdev</span>
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="go">nodev   proc</span>
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="go">nodev   cgroup</span>
+</span><span id="__span-3-7"><a href="#__codelineno-3-7" id="__codelineno-3-7" name="__codelineno-3-7"></a><span class="go">nodev   cgroup2</span>
+</span><span id="__span-3-8"><a href="#__codelineno-3-8" id="__codelineno-3-8" name="__codelineno-3-8"></a><span class="go">nodev   cpuset</span>
+</span><span id="__span-3-9"><a href="#__codelineno-3-9" id="__codelineno-3-9" name="__codelineno-3-9"></a><span class="go">nodev   devtmpfs</span>
+</span><span id="__span-3-10"><a href="#__codelineno-3-10" id="__codelineno-3-10" name="__codelineno-3-10"></a><span class="go">nodev   binfmt_misc</span>
+</span><span id="__span-3-11"><a href="#__codelineno-3-11" id="__codelineno-3-11" name="__codelineno-3-11"></a><span class="go">nodev   configfs</span>
+</span><span id="__span-3-12"><a href="#__codelineno-3-12" id="__codelineno-3-12" name="__codelineno-3-12"></a><span class="go">nodev   debugfs</span>
+</span><span id="__span-3-13"><a href="#__codelineno-3-13" id="__codelineno-3-13" name="__codelineno-3-13"></a><span class="go">nodev   tracefs</span>
+</span><span id="__span-3-14"><a href="#__codelineno-3-14" id="__codelineno-3-14" name="__codelineno-3-14"></a><span class="go">nodev   sockfs</span>
+</span><span id="__span-3-15"><a href="#__codelineno-3-15" id="__codelineno-3-15" name="__codelineno-3-15"></a><span class="go">nodev   pipefs</span>
+</span><span id="__span-3-16"><a href="#__codelineno-3-16" id="__codelineno-3-16" name="__codelineno-3-16"></a><span class="go">nodev   ramfs</span>
+</span><span id="__span-3-17"><a href="#__codelineno-3-17" id="__codelineno-3-17" name="__codelineno-3-17"></a><span class="go">nodev   rpc_pipefs</span>
+</span><span id="__span-3-18"><a href="#__codelineno-3-18" id="__codelineno-3-18" name="__codelineno-3-18"></a><span class="go">nodev   devpts</span>
+</span><span id="__span-3-19"><a href="#__codelineno-3-19" id="__codelineno-3-19" name="__codelineno-3-19"></a><span class="go">        ext3</span>
+</span><span id="__span-3-20"><a href="#__codelineno-3-20" id="__codelineno-3-20" name="__codelineno-3-20"></a><span class="hll"><span class="go">        ext4</span>
+</span></span><span id="__span-3-21"><a href="#__codelineno-3-21" id="__codelineno-3-21" name="__codelineno-3-21"></a><span class="go">        ext2</span>
+</span><span id="__span-3-22"><a href="#__codelineno-3-22" id="__codelineno-3-22" name="__codelineno-3-22"></a><span class="go">        cramfs</span>
+</span><span id="__span-3-23"><a href="#__codelineno-3-23" id="__codelineno-3-23" name="__codelineno-3-23"></a><span class="hll"><span class="go">        squashfs</span>
+</span></span><span id="__span-3-24"><a href="#__codelineno-3-24" id="__codelineno-3-24" name="__codelineno-3-24"></a><span class="go">        vfat</span>
+</span><span id="__span-3-25"><a href="#__codelineno-3-25" id="__codelineno-3-25" name="__codelineno-3-25"></a><span class="go">        msdos</span>
+</span><span id="__span-3-26"><a href="#__codelineno-3-26" id="__codelineno-3-26" name="__codelineno-3-26"></a><span class="go">nodev   nfs</span>
+</span><span id="__span-3-27"><a href="#__codelineno-3-27" id="__codelineno-3-27" name="__codelineno-3-27"></a><span class="go">nodev   nfs4</span>
+</span><span id="__span-3-28"><a href="#__codelineno-3-28" id="__codelineno-3-28" name="__codelineno-3-28"></a><span class="go">nodev   jffs2</span>
+</span><span id="__span-3-29"><a href="#__codelineno-3-29" id="__codelineno-3-29" name="__codelineno-3-29"></a><span class="go">nodev   mqueue</span>
+</span><span id="__span-3-30"><a href="#__codelineno-3-30" id="__codelineno-3-30" name="__codelineno-3-30"></a><span class="go">nodev   ubifs</span>
+</span></code></pre></div>
+<p>You can now <code>halt</code> the board and disconnect, so that you can remove the SD card to be formatted.</p>
+<h2 id="format-the-third-partition"><span class="enumerate-headings-plugin enumerate-heading-plugin">20.4</span> Format the third partition</h2>
+<p>We are going to format the third partition of the SD card image with the <em>EXT4</em> filesystem, so that it can contain uploaded images.</p>
+<p>Plug the SD card again. With the <a href="../bootloader/">bootloader tutorial</a> we alredy created the partition, but now we're going to format it.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="gp">$ </span><span class="nv">SDCARD_DEV</span><span class="o">=</span><span class="s2">"/dev/mmcblk0"</span>
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="gp">$ </span><span class="nv">SDCARD_DEVP</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SDCARD_DEV</span><span class="si">}</span><span class="s2">p"</span>
+</span></code></pre></div>
+<blockquote>
+<p>If using an <em>USB SD card reader</em>, remember to follow the instructions of the <a href="../bootloader/">bootloader tutorial</a>.<br/>
+In my case, the device is <code>/dev/sdd</code>.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="gp">$ </span><span class="nv">SDCARD_DEV</span><span class="o">=</span><span class="s2">"/dev/sdd"</span>
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="gp">$ </span><span class="nv">SDCARD_DEVP</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SDCARD_DEV</span><span class="si">}</span><span class="s2">"</span>
+</span></code></pre></div>
+</blockquote>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>partprobe
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="gp">$ </span>sudo<span class="w"> </span>umount<span class="w"> </span><span class="si">${</span><span class="nv">SDCARD_DEVP</span><span class="si">}</span>*
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="gp">$ </span>sudo<span class="w"> </span>mkfs.ext4<span class="w"> </span>-L<span class="w"> </span>data<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">SDCARD_DEVP</span><span class="si">}</span><span class="s2">3"</span>
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="go">    ...</span>
+</span></code></pre></div>
+<p>Mount this partition on a directory on your host (you could create the <code>/mnt/www_upload_files</code> directory, for example) and move the contents of the <code>/www/upload/files</code> directory (in your target <em>root</em> filesystem) into it.
+The goal is to use the third partition of the SD card as the storage for the uploaded images.<br/>
+Finally, unmount the partition.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="gp">$ </span><span class="nv">mnt_path</span><span class="o">=</span><span class="s2">"/mnt/www_upload_files"</span>
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="gp">$ </span>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$mnt_path</span>
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="gp">$ </span>sudo<span class="w"> </span>mount<span class="w"> </span>-t<span class="w"> </span>ext4<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">SDCARD_DEVP</span><span class="si">}</span><span class="s2">3"</span><span class="w"> </span><span class="nv">$mnt_path</span>
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/www/upload/files/"</span>
+</span><span id="__span-7-5"><a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>-rv<span class="w"> </span><span class="k">$(</span>ls<span class="k">)</span><span class="w"> </span><span class="nv">$mnt_path</span>
+</span><span id="__span-7-6"><a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="go">'adult-small.png' -&gt; '/mnt/www_upload_files/adult-small.png'</span>
+</span><span id="__span-7-7"><a href="#__codelineno-7-7" id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="go">'brick.png' -&gt; '/mnt/www_upload_files/brick.png'</span>
+</span><span id="__span-7-8"><a href="#__codelineno-7-8" id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="go">'linux-blackfin.jpg' -&gt; '/mnt/www_upload_files/linux-blackfin.jpg'</span>
+</span><span id="__span-7-9"><a href="#__codelineno-7-9" id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="go">'linux-kernel-dev-book.jpg' -&gt; '/mnt/www_upload_files/linux-kernel-dev-book.jpg'</span>
+</span><span id="__span-7-10"><a href="#__codelineno-7-10" id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="go">'lkn-small.jpg' -&gt; '/mnt/www_upload_files/lkn-small.jpg'</span>
+</span><span id="__span-7-11"><a href="#__codelineno-7-11" id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="gp">$ </span>sudo<span class="w"> </span>umount<span class="w"> </span><span class="nv">$mnt_path</span>
+</span><span id="__span-7-12"><a href="#__codelineno-7-12" id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="gp">$ </span>sudo<span class="w"> </span>rmdir<span class="w"> </span><span class="nv">$mnt_path</span>
+</span></code></pre></div>
+<p>Now, restart the board with the updated SD card, and from the Linux command line mount this third partition on <code>/www/upload/files</code>.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - BusyBox</span><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="gp"># </span>ls<span class="w"> </span>/www/upload/files/
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="go">adult-small.png            linux-kernel-dev-book.jpg</span>
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="go">brick.png                  lkn-small.jpg</span>
+</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="go">linux-blackfin.jpg</span>
+</span><span id="__span-8-5"><a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="gp"># </span>rm<span class="w"> </span>-rf<span class="w"> </span>/www/upload/files/*
+</span><span id="__span-8-6"><a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="gp"># </span>mount<span class="w"> </span>-t<span class="w"> </span>ext4<span class="w"> </span>/dev/mmcblk0p3<span class="w"> </span>/www/upload/files/
+</span><span id="__span-8-7"><a href="#__codelineno-8-7" id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="hll"><span class="go">EXT4-fs (mmcblk0p3): mounted filesystem with ordered data mode. Opts: (null). Quota mode: disabled.</span>
+</span></span><span id="__span-8-8"><a href="#__codelineno-8-8" id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="gp"># </span>ls<span class="w"> </span>/www/upload/files/
+</span><span id="__span-8-9"><a href="#__codelineno-8-9" id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="go">adult-small.png            linux-kernel-dev-book.jpg</span>
+</span><span id="__span-8-10"><a href="#__codelineno-8-10" id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="go">brick.png                  lkn-small.jpg</span>
+</span><span id="__span-8-11"><a href="#__codelineno-8-11" id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="hll"><span class="go">linux-blackfin.jpg         lost+found</span>
+</span></span></code></pre></div>
+<p>Once this works, modify the startup scripts in your root filesystem to do it automatically at boot time.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="gp">$ </span>cat<span class="w"> </span>&gt;<span class="w"> </span>etc/init.d/rcS<span class="w"> </span>&lt;&lt;<span class="s1">'EOF'</span>
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="gp">#</span>!/bin/sh
+</span><span id="__span-9-4"><a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="go">mount -t proc proc /proc</span>
+</span><span id="__span-9-5"><a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="go">mount -t sysfs sys /sys</span>
+</span><span id="__span-9-6"><a href="#__codelineno-9-6" id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="hll"><span class="go">mount -t ext4 /dev/mmcblk0p3 /www/upload/files/</span>
+</span></span><span id="__span-9-7"><a href="#__codelineno-9-7" id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="go">/usr/sbin/httpd -h /www/</span>
+</span><span id="__span-9-8"><a href="#__codelineno-9-8" id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="go">modprobe snd-usb-audio</span>
+</span><span id="__span-9-9"><a href="#__codelineno-9-9" id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="go">EOF</span>
+</span></code></pre></div>
+<p>Reboot your target system again. With the <code>mount</code> command, check that <code>/www/upload/files</code> is now a mount point for the third SD card partition.</p>
+<p>Also make sure that you can still upload new images, and that these images are listed in the
+<a href="http://192.168.0.69/index.html">web interface</a>.
+For example, upload the file <code>$LAB_PATH/nfsroot/www/gohome.png</code>.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - BusyBox</span><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="gp"># </span>reboot
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="go">    ...</span>
+</span><span id="__span-10-3"><a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="gp"># </span>mount
+</span><span id="__span-10-4"><a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="go">192.168.0.15:/srv/nfs on / type nfs (rw,relatime,vers=3,rsize=4096,wsize=4096,namlen=255,hard,nolock,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.0.15,mountvers=3,mountproto=tcp,local_lock=all,addr=192.168.0.15)</span>
+</span><span id="__span-10-5"><a href="#__codelineno-10-5" id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="go">devtmpfs on /dev type devtmpfs (rw,relatime,size=242424k,nr_inodes=60606,mode=755)</span>
+</span><span id="__span-10-6"><a href="#__codelineno-10-6" id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="go">proc on /proc type proc (rw,relatime)</span>
+</span><span id="__span-10-7"><a href="#__codelineno-10-7" id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="go">sys on /sys type sysfs (rw,relatime)</span>
+</span><span id="__span-10-8"><a href="#__codelineno-10-8" id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="hll"><span class="go">/dev/mmcblk0p3 on /www/upload/files type ext4 (rw,relatime)</span>
+</span></span><span id="__span-10-9"><a href="#__codelineno-10-9" id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="gp"># </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Upload gohome.png from the web interface, please!"</span>
+</span><span id="__span-10-10"><a href="#__codelineno-10-10" id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="go">    ...</span>
+</span><span id="__span-10-11"><a href="#__codelineno-10-11" id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="gp"># </span>ls<span class="w"> </span>/www/upload/files/
+</span><span id="__span-10-12"><a href="#__codelineno-10-12" id="__codelineno-10-12" name="__codelineno-10-12"></a><span class="go">adult-small.png            linux-kernel-dev-book.jpg</span>
+</span><span id="__span-10-13"><a href="#__codelineno-10-13" id="__codelineno-10-13" name="__codelineno-10-13"></a><span class="go">brick.png                  lkn-small.jpg</span>
+</span><span id="__span-10-14"><a href="#__codelineno-10-14" id="__codelineno-10-14" name="__codelineno-10-14"></a><span class="hll"><span class="go">gohome.png                 lost+found</span>
+</span></span><span id="__span-10-15"><a href="#__codelineno-10-15" id="__codelineno-10-15" name="__codelineno-10-15"></a><span class="go">linux-blackfin.jpg         upload.log</span>
+</span></code></pre></div>
+<blockquote>
+<p>The pictures below are from the <em>QEMU</em> variant of this course.</p>
+</blockquote>
+<p><img alt="*gohome.png* uploaded" src="../../qemu/blockfs_uploaded_file.png"/></p>
+<p><img alt="Updated gallery" src="../../qemu/blockfs_uploaded_list.png"/></p>
+<h2 id="adding-a-tmpfs-partition-for-log-files"><span class="enumerate-headings-plugin enumerate-heading-plugin">20.5</span> Adding a <code>tmpfs</code> partition for log files</h2>
+<p>Currently, the upload script was storing its log file in <code>/www/upload/files/upload.log</code>.<br/>
+To avoid seeing this log file in the directory containing uploaded files, let's store it into <code>/var/log</code> instead.</p>
+<p>Add the <code>/var/log/</code> directory to your <em>root</em> filesystem, and modify the startup script to mount a <code>tmpfs</code> filesystem to this directory.<br/>
+You can test your <code>tmpfs</code> mount command line on the system before adding it to the startup script, in order to be sure that it works properly. Note that for types of <code>tmpfs</code> and <code>sysfs</code> the device name is just ignored, so we can just name them after the type.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>var/log/
+</span><span id="__span-11-3"><a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="gp">$ </span>cat<span class="w"> </span>&gt;<span class="w"> </span>etc/init.d/rcS<span class="w"> </span>&lt;&lt;<span class="s1">'EOF'</span>
+</span><span id="__span-11-4"><a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="gp">#</span>!/bin/sh
+</span><span id="__span-11-5"><a href="#__codelineno-11-5" id="__codelineno-11-5" name="__codelineno-11-5"></a><span class="go">mount -t proc proc /proc</span>
+</span><span id="__span-11-6"><a href="#__codelineno-11-6" id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="go">mount -t sysfs sysfs /sys</span>
+</span><span id="__span-11-7"><a href="#__codelineno-11-7" id="__codelineno-11-7" name="__codelineno-11-7"></a><span class="hll"><span class="go">mount -t tmpfs tmpfs /var/log/</span>
+</span></span><span id="__span-11-8"><a href="#__codelineno-11-8" id="__codelineno-11-8" name="__codelineno-11-8"></a><span class="go">mount -t ext4 /dev/mmcblk0p3 /www/upload/files/</span>
+</span><span id="__span-11-9"><a href="#__codelineno-11-9" id="__codelineno-11-9" name="__codelineno-11-9"></a><span class="go">/usr/sbin/httpd -h /www/</span>
+</span><span id="__span-11-10"><a href="#__codelineno-11-10" id="__codelineno-11-10" name="__codelineno-11-10"></a><span class="go">modprobe snd-usb-audio</span>
+</span><span id="__span-11-11"><a href="#__codelineno-11-11" id="__codelineno-11-11" name="__codelineno-11-11"></a><span class="go">EOF</span>
+</span></code></pre></div>
+<p>Modify the <code>www/cgi-bin/upload.cfg</code> configuration file to store the log file in <code>/var/log/upload.log</code>.
+You will lose your log file each time you reboot your system, but that's OK in our system.<br/>
+That's what <code>tmpfs</code> is for: temporary data that you don't need to keep across system reboots.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="gp">$ </span>nano<span class="w"> </span>www/cgi-bin/upload.cfg
+</span><span id="__span-12-2"><a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="gp">$ </span>cat<span class="w"> </span>www/cgi-bin/upload.cfg
+</span><span id="__span-12-3"><a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="go">Config          = Default</span>
+</span><span id="__span-12-4"><a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="go">  Root          = /www/upload/files</span>
+</span><span id="__span-12-5"><a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="go">  FileMask      = *</span>
+</span><span id="__span-12-6"><a href="#__codelineno-12-6" id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="go">  IgnoreSubdirs = YES</span>
+</span><span id="__span-12-7"><a href="#__codelineno-12-7" id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="go">  Overwrite     = YES</span>
+</span><span id="__span-12-8"><a href="#__codelineno-12-8" id="__codelineno-12-8" name="__codelineno-12-8"></a><span class="hll"><span class="go">  LogFile       = /var/log/upload.log</span>
+</span></span><span id="__span-12-9"><a href="#__codelineno-12-9" id="__codelineno-12-9" name="__codelineno-12-9"></a><span class="go">  OkPage        = /www/upload/OkPage.html</span>
+</span><span id="__span-12-10"><a href="#__codelineno-12-10" id="__codelineno-12-10" name="__codelineno-12-10"></a><span class="go">  BadPage       = /www/upload/BadPage.html</span>
+</span><span id="__span-12-11"><a href="#__codelineno-12-11" id="__codelineno-12-11" name="__codelineno-12-11"></a><span class="go">  Debug         = 0</span>
+</span></code></pre></div>
+<p>Reboot your system and check that it works as expected, by uploading <code>gohome.png</code> again.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - BusyBox</span><pre><span></span><code><span id="__span-13-1"><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="gp"># </span>reboot
+</span><span id="__span-13-2"><a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="go">    ...</span>
+</span><span id="__span-13-3"><a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="gp"># </span>mount
+</span><span id="__span-13-4"><a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="go">192.168.0.15:/srv/nfs on / type nfs (rw,relatime,vers=3,rsize=4096,wsize=4096,namlen=255,hard,nolock,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.0.15,mountvers=3,mountproto=tcp,local_lock=all,addr=192.168.0.15)</span>
+</span><span id="__span-13-5"><a href="#__codelineno-13-5" id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="go">devtmpfs on /dev type devtmpfs (rw,relatime,size=242424k,nr_inodes=60606,mode=755)</span>
+</span><span id="__span-13-6"><a href="#__codelineno-13-6" id="__codelineno-13-6" name="__codelineno-13-6"></a><span class="go">proc on /proc type proc (rw,relatime)</span>
+</span><span id="__span-13-7"><a href="#__codelineno-13-7" id="__codelineno-13-7" name="__codelineno-13-7"></a><span class="go">sysfs on /sys type sysfs (rw,relatime)</span>
+</span><span id="__span-13-8"><a href="#__codelineno-13-8" id="__codelineno-13-8" name="__codelineno-13-8"></a><span class="go">tmpfs on /var/log type tmpfs (rw,relatime)</span>
+</span><span id="__span-13-9"><a href="#__codelineno-13-9" id="__codelineno-13-9" name="__codelineno-13-9"></a><span class="hll"><span class="go">/dev/mmcblk0p3 on /www/upload/files type ext4 (rw,relatime)</span>
+</span></span><span id="__span-13-10"><a href="#__codelineno-13-10" id="__codelineno-13-10" name="__codelineno-13-10"></a><span class="gp"># </span>rm<span class="w"> </span>-v<span class="w"> </span>/www/upload/files/gohome.png
+</span><span id="__span-13-11"><a href="#__codelineno-13-11" id="__codelineno-13-11" name="__codelineno-13-11"></a><span class="go">removed '/www/upload/files/gohome.png'</span>
+</span><span id="__span-13-12"><a href="#__codelineno-13-12" id="__codelineno-13-12" name="__codelineno-13-12"></a><span class="gp"># </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"Upload gohome.png from the web interface, please!"</span>
+</span><span id="__span-13-13"><a href="#__codelineno-13-13" id="__codelineno-13-13" name="__codelineno-13-13"></a><span class="go">    ...</span>
+</span><span id="__span-13-14"><a href="#__codelineno-13-14" id="__codelineno-13-14" name="__codelineno-13-14"></a><span class="gp"># </span>ls<span class="w"> </span>/www/upload/files/
+</span><span id="__span-13-15"><a href="#__codelineno-13-15" id="__codelineno-13-15" name="__codelineno-13-15"></a><span class="go">adult-small.png            linux-kernel-dev-book.jpg</span>
+</span><span id="__span-13-16"><a href="#__codelineno-13-16" id="__codelineno-13-16" name="__codelineno-13-16"></a><span class="go">brick.png                  lkn-small.jpg</span>
+</span><span id="__span-13-17"><a href="#__codelineno-13-17" id="__codelineno-13-17" name="__codelineno-13-17"></a><span class="hll"><span class="go">gohome.png                 lost+found</span>
+</span></span><span id="__span-13-18"><a href="#__codelineno-13-18" id="__codelineno-13-18" name="__codelineno-13-18"></a><span class="go">linux-blackfin.jpg         upload.log</span>
+</span><span id="__span-13-19"><a href="#__codelineno-13-19" id="__codelineno-13-19" name="__codelineno-13-19"></a><span class="gp"># </span>cat<span class="w"> </span>/var/log/upload.log
+</span><span id="__span-13-20"><a href="#__codelineno-13-20" id="__codelineno-13-20" name="__codelineno-13-20"></a><span class="hll"><span class="go">Thu Jan  1 00:00:45 1970 File uploaded succesfully: gohome.png (888 bytes)</span>
+</span></span><span id="__span-13-21"><a href="#__codelineno-13-21" id="__codelineno-13-21" name="__codelineno-13-21"></a><span class="gp"># </span>reboot
+</span><span id="__span-13-22"><a href="#__codelineno-13-22" id="__codelineno-13-22" name="__codelineno-13-22"></a><span class="go">    ...</span>
+</span><span id="__span-13-23"><a href="#__codelineno-13-23" id="__codelineno-13-23" name="__codelineno-13-23"></a><span class="gp"># </span>cat<span class="w"> </span>/var/log/upload.log
+</span><span id="__span-13-24"><a href="#__codelineno-13-24" id="__codelineno-13-24" name="__codelineno-13-24"></a><span class="hll"><span class="go">cat: can't open '/var/log/upload.log': No such file or directory</span>
+</span></span></code></pre></div>
+<p>You can now <code>halt</code> and disconnect.</p>
+<h2 id="making-a-squashfs-image"><span class="enumerate-headings-plugin enumerate-heading-plugin">20.6</span> Making a SquashFS image</h2>
+<p>We are going to store the root filesystem in a <em>SquashFS</em> filesystem in the second partition of the SD card.<br/>
+In order to create <em>SquashFS</em> images on your <em>host</em>, you need to install the <code>squashfs-tools</code> package.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-14-1"><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>squashfs-tools
+</span></code></pre></div>
+<p>Then, create a <em>SquashFS</em> image of your NFS <em>root</em> directory with <code>mksquashfs</code>.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-15-1"><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-15-2"><a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="gp">$ </span>mksquashfs<span class="w"> </span>*<span class="w"> </span>../nfsroot.sqsh
+</span></code></pre></div>
+<p>Plug the SD card again. Using the <code>dd</code> command, copy the filesystem image to the second partition (named <code>image</code>) in the SD card image. Finally, unmount and cleanup.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-16-1"><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>partprobe
+</span><span id="__span-16-2"><a href="#__codelineno-16-2" id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="gp">$ </span>sudo<span class="w"> </span>umount<span class="w"> </span><span class="si">${</span><span class="nv">SDCARD_DEVP</span><span class="si">}</span>*
+</span><span id="__span-16-3"><a href="#__codelineno-16-3" id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="gp">$ </span>sudo<span class="w"> </span>mkfs.ext4<span class="w"> </span>-L<span class="w"> </span>image<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">SDCARD_DEVP</span><span class="si">}</span><span class="s2">2"</span>
+</span><span id="__span-16-4"><a href="#__codelineno-16-4" id="__codelineno-16-4" name="__codelineno-16-4"></a><span class="go">    ...</span>
+</span><span id="__span-16-5"><a href="#__codelineno-16-5" id="__codelineno-16-5" name="__codelineno-16-5"></a><span class="gp">$ </span>sudo<span class="w"> </span>dd<span class="w"> </span><span class="k">if</span><span class="o">=</span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot.sqsh"</span><span class="w"> </span><span class="nv">of</span><span class="o">=</span><span class="s2">"</span><span class="si">${</span><span class="nv">SDCARD_DEVP</span><span class="si">}</span><span class="s2">2"</span>
+</span><span id="__span-16-6"><a href="#__codelineno-16-6" id="__codelineno-16-6" name="__codelineno-16-6"></a><span class="go">50168+0 records in</span>
+</span><span id="__span-16-7"><a href="#__codelineno-16-7" id="__codelineno-16-7" name="__codelineno-16-7"></a><span class="go">50168+0 records out</span>
+</span><span id="__span-16-8"><a href="#__codelineno-16-8" id="__codelineno-16-8" name="__codelineno-16-8"></a><span class="go">25686016 bytes (26 MB, 24 MiB) copied, 71.6355 s, 359 kB/s</span>
+</span></code></pre></div>
+<h2 id="booting-on-the-squashfs-partition"><span class="enumerate-headings-plugin enumerate-heading-plugin">20.7</span> Booting on the SquashFS partition</h2>
+<p>In the <em>U-boot</em> shell, configure the kernel command line to use the second partition of the SD card as the root file system.<br/>
+Also add the <code>rootwait</code> boot argument, to wait for the SD card to be properly initialized before trying to mount the <em>root</em> filesystem.<br/>
+Since the SD cards are detected asynchronously by the kernel, the kernel might try to mount the <em>root</em> filesystem too early without <code>rootwait</code>.<br/>
+Check that your system still works. Congratulations if it does!</p>
+<div class="language-text highlight"><span class="filename">picocomBBB - U-Boot</span><pre><span></span><code><span id="__span-17-1"><a href="#__codelineno-17-1" id="__codelineno-17-1" name="__codelineno-17-1"></a>    ...
+</span><span id="__span-17-2"><a href="#__codelineno-17-2" id="__codelineno-17-2" name="__codelineno-17-2"></a>Hit any key to stop autoboot:  0
+</span><span id="__span-17-3"><a href="#__codelineno-17-3" id="__codelineno-17-3" name="__codelineno-17-3"></a>=&gt; setenv bootargs_mmcblk0p2 "console=ttyS0,115200n8  root=/dev/mmcblk0p2 rootwait  ip=${ipaddr}::${serverip}:${netmask}::${netif}"
+</span><span id="__span-17-4"><a href="#__codelineno-17-4" id="__codelineno-17-4" name="__codelineno-17-4"></a>=&gt; setenv bootargs $bootargs_mmcblk0p2
+</span><span id="__span-17-5"><a href="#__codelineno-17-5" id="__codelineno-17-5" name="__codelineno-17-5"></a>=&gt; saveenv
+</span><span id="__span-17-6"><a href="#__codelineno-17-6" id="__codelineno-17-6" name="__codelineno-17-6"></a>=&gt; reset
+</span><span id="__span-17-7"><a href="#__codelineno-17-7" id="__codelineno-17-7" name="__codelineno-17-7"></a>    ...
+</span><span id="__span-17-8"><a href="#__codelineno-17-8" id="__codelineno-17-8" name="__codelineno-17-8"></a><span class="hll">VFS: Mounted root (squashfs filesystem) readonly on device 179:2.
+</span></span><span id="__span-17-9"><a href="#__codelineno-17-9" id="__codelineno-17-9" name="__codelineno-17-9"></a>    ...
+</span><span id="__span-17-10"><a href="#__codelineno-17-10" id="__codelineno-17-10" name="__codelineno-17-10"></a>Please press Enter to activate this console.
+</span></code></pre></div>
+<p>Now <code>halt</code> and disconnect.</p>
+<h2 id="store-the-kernel-image-and-dtb-on-the-sd-card"><span class="enumerate-headings-plugin enumerate-heading-plugin">20.8</span> Store the kernel image and DTB on the SD card</h2>
+<p>We have to edit the SD card again, to mount the FAT partition (the first one) in the SD card image, for example on <code>/mnt/sd_boot</code>. It should contain only the latest saved <em>U-Boot</em> environment.<br/>
+Then, copy the kernel image and DTB to it.<br/>
+FInally, unmount the FAT partition and release the <em>loop</em> device.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-18-1"><a href="#__codelineno-18-1" id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>partprobe
+</span><span id="__span-18-2"><a href="#__codelineno-18-2" id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="gp">$ </span>sudo<span class="w"> </span>umount<span class="w"> </span><span class="si">${</span><span class="nv">SDCARD_DEVP</span><span class="si">}</span>*
+</span><span id="__span-18-3"><a href="#__codelineno-18-3" id="__codelineno-18-3" name="__codelineno-18-3"></a><span class="gp">$ </span><span class="nv">mnt_path</span><span class="o">=</span><span class="s2">"/mnt/sd_boot"</span>
+</span><span id="__span-18-4"><a href="#__codelineno-18-4" id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="gp">$ </span>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$mnt_path</span>
+</span><span id="__span-18-5"><a href="#__codelineno-18-5" id="__codelineno-18-5" name="__codelineno-18-5"></a><span class="gp">$ </span>sudo<span class="w"> </span>mount<span class="w"> </span>-t<span class="w"> </span>vfat<span class="w"> </span><span class="s2">"</span><span class="si">${</span><span class="nv">SDCARD_DEVP</span><span class="si">}</span><span class="s2">1"</span><span class="w"> </span><span class="nv">$mnt_path</span>
+</span><span id="__span-18-6"><a href="#__codelineno-18-6" id="__codelineno-18-6" name="__codelineno-18-6"></a><span class="gp">$ </span>ls<span class="w"> </span>/mnt/sd_boot/
+</span><span id="__span-18-7"><a href="#__codelineno-18-7" id="__codelineno-18-7" name="__codelineno-18-7"></a><span class="go">MLO uboot.env uboot.img</span>
+</span><span id="__span-18-8"><a href="#__codelineno-18-8" id="__codelineno-18-8" name="__codelineno-18-8"></a><span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>/srv/tftp/zImage<span class="w"> </span>/srv/tftp/am335x-boneblack-custom.dtb<span class="w"> </span><span class="nv">$mnt_path</span>
+</span><span id="__span-18-9"><a href="#__codelineno-18-9" id="__codelineno-18-9" name="__codelineno-18-9"></a><span class="gp">$ </span>ls<span class="w"> </span>/mnt/sd_boot/
+</span><span id="__span-18-10"><a href="#__codelineno-18-10" id="__codelineno-18-10" name="__codelineno-18-10"></a><span class="go">am335x-boneblack-custom.dtb  MLO  uboot.env  u-boot.img  zImage</span>
+</span><span id="__span-18-11"><a href="#__codelineno-18-11" id="__codelineno-18-11" name="__codelineno-18-11"></a><span class="gp">$ </span>sudo<span class="w"> </span>umount<span class="w"> </span><span class="nv">$mnt_path</span>
+</span><span id="__span-18-12"><a href="#__codelineno-18-12" id="__codelineno-18-12" name="__codelineno-18-12"></a><span class="gp">$ </span>sudo<span class="w"> </span>rmdir<span class="w"> </span><span class="nv">$mnt_path</span>
+</span></code></pre></div>
+<p>You now need to adjust the <code>bootcmd</code> of <em>U-Boot</em> so that it loads kernel and from the SD card, instead of loading them from the network via TFTP.<br/>
+In <em>U-boot</em>, you can load a file from a FAT filesystem using the <code>fatload</code> command, which expects: the device, the partition, the load address, and the source filename.<br/>
+Compare the previous and the new <code>bootcmd</code>. Finally, <code>reset</code> to reboot the board and make sure that your system still boots fine.</p>
+<div class="language-text highlight"><span class="filename">picocomBBB - U-Boot</span><pre><span></span><code><span id="__span-19-1"><a href="#__codelineno-19-1" id="__codelineno-19-1" name="__codelineno-19-1"></a>    ...
+</span><span id="__span-19-2"><a href="#__codelineno-19-2" id="__codelineno-19-2" name="__codelineno-19-2"></a>Hit any key to stop autoboot:  0
+</span><span id="__span-19-3"><a href="#__codelineno-19-3" id="__codelineno-19-3" name="__codelineno-19-3"></a>=&gt; printenv bootcmd
+</span><span id="__span-19-4"><a href="#__codelineno-19-4" id="__codelineno-19-4" name="__codelineno-19-4"></a>bootcmd=tftp 0x81000000 zImage;  tftp 0x82000000 am335x-boneblack-custom.dtb;  bootz 0x81000000 - 0x82000000
+</span><span id="__span-19-5"><a href="#__codelineno-19-5" id="__codelineno-19-5" name="__codelineno-19-5"></a>=&gt; setenv bootcmd_mmcblk0p1 "fatload mmc 0:1 0x81000000 zImage;  fatload mmc 0:1 0x82000000 am335x-boneblack-custom.dtb;  bootz 0x81000000 - 0x82000000"
+</span><span id="__span-19-6"><a href="#__codelineno-19-6" id="__codelineno-19-6" name="__codelineno-19-6"></a>=&gt; setenv bootcmd $bootcmd_mmcblk0p1
+</span><span id="__span-19-7"><a href="#__codelineno-19-7" id="__codelineno-19-7" name="__codelineno-19-7"></a>=&gt; saveenv
+</span><span id="__span-19-8"><a href="#__codelineno-19-8" id="__codelineno-19-8" name="__codelineno-19-8"></a>=&gt; reset
+</span><span id="__span-19-9"><a href="#__codelineno-19-9" id="__codelineno-19-9" name="__codelineno-19-9"></a>    ...
+</span><span id="__span-19-10"><a href="#__codelineno-19-10" id="__codelineno-19-10" name="__codelineno-19-10"></a><span class="hll">4869856 bytes read in 320 ms (14.5 MiB/s)
+</span></span><span id="__span-19-11"><a href="#__codelineno-19-11" id="__codelineno-19-11" name="__codelineno-19-11"></a><span class="hll">67275 bytes read in 7 ms (9.2 MiB/s)
+</span></span><span id="__span-19-12"><a href="#__codelineno-19-12" id="__codelineno-19-12" name="__codelineno-19-12"></a>Kernel image @ 0x81000000 [ 0x000000 - 0x4a4ee0 ]
+</span><span id="__span-19-13"><a href="#__codelineno-19-13" id="__codelineno-19-13" name="__codelineno-19-13"></a>## Flattened Device Tree blob at 82000000
+</span><span id="__span-19-14"><a href="#__codelineno-19-14" id="__codelineno-19-14" name="__codelineno-19-14"></a>   Booting using the fdt blob at 0x82000000
+</span><span id="__span-19-15"><a href="#__codelineno-19-15" id="__codelineno-19-15" name="__codelineno-19-15"></a>   Loading Device Tree to 8ffec000, end 8ffff6ca ... OK
+</span><span id="__span-19-16"><a href="#__codelineno-19-16" id="__codelineno-19-16" name="__codelineno-19-16"></a>
+</span><span id="__span-19-17"><a href="#__codelineno-19-17" id="__codelineno-19-17" name="__codelineno-19-17"></a>Starting kernel ...
+</span><span id="__span-19-18"><a href="#__codelineno-19-18" id="__codelineno-19-18" name="__codelineno-19-18"></a>    ...
+</span><span id="__span-19-19"><a href="#__codelineno-19-19" id="__codelineno-19-19" name="__codelineno-19-19"></a>Please press Enter to activate this console.
+</span></code></pre></div>
+<p>You can now <code>halt</code> and disconnect.</p>
+<p>Now, the whole system (bootloader, kernel and filesystems) is stored on the SD card.
+That's very useful for product demos, for examples. You can switch demos by switching SD cards, and the system depends on nothing else. In particular, no networking is necessary.</p>
+<h2 id="backup"><span class="enumerate-headings-plugin enumerate-heading-plugin">20.9</span> Backup</h2>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-20-1"><a href="#__codelineno-20-1" id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-20-2"><a href="#__codelineno-20-2" id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="gp">$ </span>find<span class="w"> </span>.<span class="w"> </span>-depth<span class="w"> </span>-print0<span class="w"> </span><span class="p">|</span><span class="w"> </span>cpio<span class="w"> </span>-ocv0<span class="w"> </span><span class="p">|</span><span class="w"> </span>xz<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot-fatload.cpio.xz"</span>
+</span><span id="__span-20-3"><a href="#__codelineno-20-3" id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-20-4"><a href="#__codelineno-20-4" id="__codelineno-20-4" name="__codelineno-20-4"></a><span class="gp">$ </span>tar<span class="w"> </span>cfJv<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot.sqsh.tar.xz"</span><span class="w"> </span>nfsroot.sqsh
+</span><span id="__span-20-5"><a href="#__codelineno-20-5" id="__codelineno-20-5" name="__codelineno-20-5"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>/srv/tftp/
+</span><span id="__span-20-6"><a href="#__codelineno-20-6" id="__codelineno-20-6" name="__codelineno-20-6"></a><span class="gp">$ </span>tar<span class="w"> </span>cfJv<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/blockfs-tftp.tar.xz"</span><span class="w"> </span>zImage<span class="w"> </span>am335x-boneblack-custom.dtb
+</span></code></pre></div>
+<h2 id="licensing"><span class="enumerate-headings-plugin enumerate-heading-plugin">20.10</span> Licensing</h2>
+<p>This document is an extension to: <a href="https://bootlin.com/doc/training/embedded-linux-bbb/"><em>Embedded Linux System Development - Practical Labs - BeagleBone Black Variant</em></a>
+ — © 2004-2023, <em>Bootlin</em> <a href="https://bootlin.com">https://bootlin.com/</a>, <a href="(https://creativecommons.org/licenses/by-sa/3.0/)"><code>CC-BY-SA-3.0</code></a> license.</p>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.fac441b0.min.js"></script>
+</body>
+</html>

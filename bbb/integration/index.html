@@ -1,0 +1,1044 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../buildroot/" rel="prev"/>
+<link href="../appdev/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.4.3, mkdocs-material-9.1.11" name="generator"/>
+<title>System integration - Embedded Systems Linux Development Notes</title>
+<link href="../../assets/stylesheets/main.85bb2934.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#system-integration">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Embedded Systems Linux Development Notes" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Embedded Systems Linux Development Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Embedded Systems Linux Development Notes
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              System integration
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Embedded Systems Linux Development Notes" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Embedded Systems Linux Development Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    Embedded Systems Linux Development Notes
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+        Overview
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          QEMU variant
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+          QEMU variant
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/virtualbox/">
+        Host VM
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/toolchain/">
+        Building a cross-compile toolchain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/bootloader/">
+        Bootloader - U-Boot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/kernel/">
+        Linux Kernel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/tinysystem/">
+        Tiny embedded system with BusyBox
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/hardware/">
+        Accessing Hardware Devices
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/blockfs/">
+        Block Filesystems
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/thirdparty/">
+        Third-party libraries and apps
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/buildroot/">
+        Buildroot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/appdev/">
+        App - Development
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/debugging/">
+        App - Remote debug
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/debootstrap/">
+        debootstrap
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          BeagleBone Black variant
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+          BeagleBone Black variant
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../virtualbox/">
+        Host VM
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../toolchain/">
+        Building a cross-compile toolchain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../bootloader/">
+        Bootloader - U-Boot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../kernel/">
+        Linux Kernel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tinysystem/">
+        Tiny embedded system with BusyBox
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hardware/">
+        Accessing Hardware Devices
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../blockfs/">
+        Block Filesystems
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../thirdparty/">
+        Third-party libraries and apps
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../buildroot/">
+        Buildroot
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          System integration
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        System integration
+      </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#objectives">
+    Objectives
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#setup">
+    Setup
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#root-filesystem-overlay">
+    Root filesystem overlay
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#buildroot-configuration">
+    Buildroot configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#build-and-test">
+    Build and test
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#inspecting-the-system">
+    Inspecting the system
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#automatic-module-loading">
+    Automatic module loading
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing">
+    Testing
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup-and-restore">
+    Backup and restore
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing">
+    Licensing
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../appdev/">
+        App - Development
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Knowledge Base
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          Knowledge Base
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/git-hash/">
+        git commit hash expansion
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/menuconfig/">
+        menuconfig
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/processors/">
+        Processors
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../copying/">
+        Copying this document
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#objectives">
+    Objectives
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#setup">
+    Setup
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#root-filesystem-overlay">
+    Root filesystem overlay
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#buildroot-configuration">
+    Buildroot configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#build-and-test">
+    Build and test
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#inspecting-the-system">
+    Inspecting the system
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#automatic-module-loading">
+    Automatic module loading
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing">
+    Testing
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup-and-restore">
+    Backup and restore
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing">
+    Licensing
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="system-integration"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.</span> System integration</h1>
+<h2 id="objectives"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.1</span> Objectives</h2>
+<ul>
+<li>Get familiar with the <code>systemd</code> init system.</li>
+</ul>
+<p>Compared to the previous lab, we go on increasing the complexity of the system, this time by using the systemd init system, and by taking advantage of it to add a few extra features, in particular ones that will be useful for debugging in the next lab.</p>
+<h2 id="setup"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.2</span> Setup</h2>
+<p>Since <code>systemd</code> requires the GNU C library, we are going to make a new <em>Buildroot</em> build in a new working directory, and using a different cross-compiling toolchain.</p>
+<p>So, create the <code>$HOME/embedded-linux-bbb-labs/integration/</code> directory and go inside of it.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="gp">$ </span><span class="nv">LAB_PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/embedded-linux-bbb-labs/integration"</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span></code></pre></div>
+<p>Make a new clone of <em>Buildroot</em> from the existing local <em>git</em> repository, and checkout our <code>embedded-linux-bbb</code> branch:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>../buildroot/buildroot/
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>buildroot/
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="gp">$ </span>git<span class="w"> </span>switch<span class="w"> </span>embedded-linux-bbb
+</span></code></pre></div>
+<h2 id="root-filesystem-overlay"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.3</span> Root filesystem overlay</h2>
+<p>Remove <code>etc/init.d/</code> from the <em>root</em> filesystem overlay, because it was for <em>BusyBox</em>, not <em>systemd</em>.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="gp">$ </span>rm<span class="w"> </span>-rf<span class="w"> </span>board/bootlin/training/rootfs-overlay/etc/init.d/
+</span></code></pre></div>
+<h2 id="buildroot-configuration"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.4</span> Buildroot configuration</h2>
+<p>Let's make a new <em>Buildroot</em> configuration from scratch.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="gp">$ </span>make<span class="w"> </span>distclean
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="gp">$ </span>make<span class="w"> </span>menuconfig
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="gp">$ </span>cp<span class="w"> </span>.config<span class="w"> </span>../buildroot.config
+</span></code></pre></div>
+<p>In <code>Target options</code>:</p>
+<ul>
+<li>
+<p><code>Target Architecture</code> = <code>ARM (little endian)</code>.</p>
+</li>
+<li>
+<p><code>Target Architecture Variant</code> = <code>cortex-A8</code>.</p>
+</li>
+<li>
+<p><code>Target ABI</code> = <code>EABIhf</code>.</p>
+</li>
+<li>
+<p><code>Floating point strategy</code> = <code>VFPv3-D16</code>.</p>
+</li>
+</ul>
+<p>In <code>Toolchain</code>:</p>
+<ul>
+<li>
+<p><code>Toolchain type</code> = <code>External toolchain</code>.</p>
+</li>
+<li>
+<p><code>Toolchain</code> = <code>Bootlin toolchains</code>.<br/>
+  This time, we will use a <em>Bootlin</em> ready-made toolchain for <code>glibc</code>, as this is necessary for using <em>systemd</em>.</p>
+</li>
+<li>
+<p><code>Toolchain origin</code> = <code>Toolchain to be downloaded and installed</code>.</p>
+</li>
+<li>
+<p><code>Bootlin toolchain variant</code> = <code>armv7-eabihf glibc bleeding-edge 2021.11-1</code>.</p>
+</li>
+<li>
+<p>Enable <code>Copy gdb server to the Target</code>.</p>
+</li>
+</ul>
+<p>In <code>System configuration</code>:</p>
+<ul>
+<li>
+<p><code>Init system</code> = <code>systemd</code>.</p>
+</li>
+<li>
+<p><code>Root filesystem overlay directories</code> = <code>board/bootlin/training/rootfs-overlay</code>.</p>
+</li>
+</ul>
+<p>In <code>Kernel</code>:</p>
+<ul>
+<li>
+<p>Enable <code>Linux Kernel</code>.</p>
+</li>
+<li>
+<p><code>Kernel version</code> = <code>Latest version (5.15)</code>.</p>
+</li>
+<li>
+<p><code>Custom kernel patches</code> = <code>board/bootlin/training/0001-Custom-DTS-for-Bootlin-lab.patch</code>.</p>
+</li>
+<li>
+<p><code>Kernel configuration</code> = <code>Using a custom (def)config file</code>.</p>
+</li>
+<li>
+<p><code>Configuration file path</code> = <code>board/bootlin/training/linux.config</code>.</p>
+</li>
+<li>
+<p>Enable <code>Build a Device Tree Blob (DTB)</code>.</p>
+</li>
+<li>
+<p><code>In-tree Device Tree Source file names</code> = <code>am335x-boneblack-custom</code>.</p>
+</li>
+</ul>
+<p>In <code>Target packages</code>:</p>
+<ul>
+<li>
+<p><code>Audio and video applications</code>:</p>
+<ul>
+<li>
+<p>Enable <code>mpd</code>, and in the submenu:</p>
+<ul>
+<li>Keep only <code>alsa</code>, <code>vorbis</code>, and <code>tcp sockets</code>.</li>
+</ul>
+</li>
+<li>
+<p>Enable <code>mpd-mpc</code>.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><code>Hardware handling</code>:</p>
+<ul>
+<li>Enable <code>nunchuk driver</code>.</li>
+</ul>
+</li>
+<li>
+<p><code>Networking applications</code>:</p>
+<ul>
+<li>Enable <code>dropbear</code>, a lightweight <em>SSH</em> server used instead of <em>OpenSSH</em> in most embedded devices.<br/>
+  Disable <code>client programs</code>, which are not needed.</li>
+</ul>
+</li>
+</ul>
+<p>In <code>Filesystem images</code>:</p>
+<ul>
+<li>Enable <code>tar the root filesystem</code>.</li>
+</ul>
+<h2 id="build-and-test"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.5</span> Build and test</h2>
+<p>Now build the full system.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="gp">$ </span>make
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="go">    ...</span>
+</span></code></pre></div>
+<p>Once the build is over, generate the dependency graph again and find out the new dependencies
+introduced by using systemd.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a>$ make graph-depends
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a>    ...
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a>$ evince output/graphs/graph-depends.pdf
+</span><span id="__span-5-4"><a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a>$ cp output/graphs/graph-depends.pdf ../graph-depends.pdf
+</span></code></pre></div>
+<p><img alt="graph-depends.pdf viewed through evince" src="../systemd_graph-depends_evince.png"/></p>
+<p>To test the new system, create a new <code>nfsroot</code> directory, extract then new <em>root</em> filesystem into it, and boot your board on it through NFS.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="gp">$ </span>cp<span class="w"> </span>output/images/zImage<span class="w"> </span>/srv/tftp/
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="gp">$ </span>tar<span class="w"> </span>xfv<span class="w"> </span><span class="s2">"../buildroot/output/images/rootfs.tar"</span>
+</span><span id="__span-6-6"><a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="gp">$ </span>sudo<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>/srv/nfs
+</span><span id="__span-6-7"><a href="#__codelineno-6-7" id="__codelineno-6-7" name="__codelineno-6-7"></a><span class="gp">$ </span>sudo<span class="w"> </span>ln<span class="w"> </span>-snv<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span><span class="w"> </span>/srv/nfs
+</span><span id="__span-6-8"><a href="#__codelineno-6-8" id="__codelineno-6-8" name="__codelineno-6-8"></a><span class="go">'/srv/nfs' -&gt; '/home/me/embedded-linux-bbb-labs/integration/nfsroot/'</span>
+</span><span id="__span-6-9"><a href="#__codelineno-6-9" id="__codelineno-6-9" name="__codelineno-6-9"></a><span class="gp">$ </span>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>tftp:tftp<span class="w"> </span>/srv/nfs
+</span><span id="__span-6-10"><a href="#__codelineno-6-10" id="__codelineno-6-10" name="__codelineno-6-10"></a><span class="gp">$ </span>sudo<span class="w"> </span>exportfs<span class="w"> </span>-ar
+</span><span id="__span-6-11"><a href="#__codelineno-6-11" id="__codelineno-6-11" name="__codelineno-6-11"></a><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>nfs-kernel-server
+</span></code></pre></div>
+<p>You should see the system booting through <em>systemd</em>, with all the <em>systemd</em> targets and system services starting one by one, with a total boot time which looks slower than before.<br/>
+That's because the system configuration is more complex, but also more versatile, being ready to run more complex services and applications.</p>
+<p>You can ask <em>systemd</em> to show you the various running services:</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - systemd</span><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="gp"># </span>systemctl<span class="w"> </span>status
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="go">●</span>
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="go">    State: degraded</span>
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="go">     Jobs: 0 queued</span>
+</span><span id="__span-7-5"><a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a><span class="go">   Failed: 1 units</span>
+</span><span id="__span-7-6"><a href="#__codelineno-7-6" id="__codelineno-7-6" name="__codelineno-7-6"></a><span class="go">    Since: Thu 1970-01-01 00:00:13 UTC; 52 years 0 months ago</span>
+</span><span id="__span-7-7"><a href="#__codelineno-7-7" id="__codelineno-7-7" name="__codelineno-7-7"></a><span class="go">   CGroup: /</span>
+</span><span id="__span-7-8"><a href="#__codelineno-7-8" id="__codelineno-7-8" name="__codelineno-7-8"></a><span class="go">           ├─init.scope</span>
+</span><span id="__span-7-9"><a href="#__codelineno-7-9" id="__codelineno-7-9" name="__codelineno-7-9"></a><span class="go">           │ └─1 /sbin/init</span>
+</span><span id="__span-7-10"><a href="#__codelineno-7-10" id="__codelineno-7-10" name="__codelineno-7-10"></a><span class="go">           └─system.slice</span>
+</span><span id="__span-7-11"><a href="#__codelineno-7-11" id="__codelineno-7-11" name="__codelineno-7-11"></a><span class="go">             ├─dbus.service</span>
+</span><span id="__span-7-12"><a href="#__codelineno-7-12" id="__codelineno-7-12" name="__codelineno-7-12"></a><span class="go">             │ └─165 /usr/bin/dbus-daemon --system --address=systemd: --no</span>
+</span><span id="__span-7-13"><a href="#__codelineno-7-13" id="__codelineno-7-13" name="__codelineno-7-13"></a><span class="go">             ├─dropbear.service</span>
+</span><span id="__span-7-14"><a href="#__codelineno-7-14" id="__codelineno-7-14" name="__codelineno-7-14"></a><span class="go">             │ └─171 /usr/sbin/dropbear -F -R</span>
+</span><span id="__span-7-15"><a href="#__codelineno-7-15" id="__codelineno-7-15" name="__codelineno-7-15"></a><span class="go">             ├─mpd.service</span>
+</span><span id="__span-7-16"><a href="#__codelineno-7-16" id="__codelineno-7-16" name="__codelineno-7-16"></a><span class="go">             │ └─167 /usr/bin/mpd --systemd</span>
+</span><span id="__span-7-17"><a href="#__codelineno-7-17" id="__codelineno-7-17" name="__codelineno-7-17"></a><span class="go">             ├─system-serial\x2dgetty.slice</span>
+</span><span id="__span-7-18"><a href="#__codelineno-7-18" id="__codelineno-7-18" name="__codelineno-7-18"></a><span class="go">             │ └─serial-getty@ttyS0.service</span>
+</span><span id="__span-7-19"><a href="#__codelineno-7-19" id="__codelineno-7-19" name="__codelineno-7-19"></a><span class="go">             │   ├─168 -sh</span>
+</span><span id="__span-7-20"><a href="#__codelineno-7-20" id="__codelineno-7-20" name="__codelineno-7-20"></a><span class="go">             │   ├─185 systemctl status</span>
+</span><span id="__span-7-21"><a href="#__codelineno-7-21" id="__codelineno-7-21" name="__codelineno-7-21"></a><span class="go">             │   └─186 less</span>
+</span><span id="__span-7-22"><a href="#__codelineno-7-22" id="__codelineno-7-22" name="__codelineno-7-22"></a><span class="go">             ├─systemd-journald.service</span>
+</span><span id="__span-7-23"><a href="#__codelineno-7-23" id="__codelineno-7-23" name="__codelineno-7-23"></a><span class="go">             │ └─92 /usr/lib/systemd/systemd-journald</span>
+</span><span id="__span-7-24"><a href="#__codelineno-7-24" id="__codelineno-7-24" name="__codelineno-7-24"></a><span class="go">             ├─systemd-networkd.service</span>
+</span><span id="__span-7-25"><a href="#__codelineno-7-25" id="__codelineno-7-25" name="__codelineno-7-25"></a><span class="go">             │ └─113 /usr/lib/systemd/systemd-networkd</span>
+</span><span id="__span-7-26"><a href="#__codelineno-7-26" id="__codelineno-7-26" name="__codelineno-7-26"></a><span class="go">             ├─systemd-resolved.service</span>
+</span><span id="__span-7-27"><a href="#__codelineno-7-27" id="__codelineno-7-27" name="__codelineno-7-27"></a><span class="go">             │ └─130 /usr/lib/systemd/systemd-resolved</span>
+</span><span id="__span-7-28"><a href="#__codelineno-7-28" id="__codelineno-7-28" name="__codelineno-7-28"></a><span class="go">             ├─systemd-timesyncd.service</span>
+</span><span id="__span-7-29"><a href="#__codelineno-7-29" id="__codelineno-7-29" name="__codelineno-7-29"></a><span class="go">             │ └─129 /usr/lib/systemd/systemd-timesyncd</span>
+</span><span id="__span-7-30"><a href="#__codelineno-7-30" id="__codelineno-7-30" name="__codelineno-7-30"></a><span class="go">             └─systemd-udevd.service</span>
+</span><span id="__span-7-31"><a href="#__codelineno-7-31" id="__codelineno-7-31" name="__codelineno-7-31"></a><span class="go">               └─104 /usr/lib/systemd/systemd-udevd</span>
+</span><span id="__span-7-32"><a href="#__codelineno-7-32" id="__codelineno-7-32" name="__codelineno-7-32"></a>
+</span><span id="__span-7-33"><a href="#__codelineno-7-33" id="__codelineno-7-33" name="__codelineno-7-33"></a><span class="go">~</span>
+</span><span id="__span-7-34"><a href="#__codelineno-7-34" id="__codelineno-7-34" name="__codelineno-7-34"></a><span class="go">standard input lines 10-30/30 (END)</span>
+</span></code></pre></div>
+<p>You can also check all the mounted filesystems and be impressed:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="gp"># </span>mount
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="go">192.168.0.15:/srv/nfs on / type nfs (rw,relatime,vers=3,rsize=4096,wsize=4096,namlen=255,hard,nolock,proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=192.168.0.15,mountvers=3,mountproto=tcp,local_lock=all,addr=192.168.0.15)</span>
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="go">devtmpfs on /dev type devtmpfs (rw,relatime,size=242424k,nr_inodes=60606,mode=755)</span>
+</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="go">proc on /proc type proc (rw,nosuid,nodev,noexec,relatime)</span>
+</span><span id="__span-8-5"><a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="go">sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)</span>
+</span><span id="__span-8-6"><a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="go">tmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)</span>
+</span><span id="__span-8-7"><a href="#__codelineno-8-7" id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="go">devpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)</span>
+</span><span id="__span-8-8"><a href="#__codelineno-8-8" id="__codelineno-8-8" name="__codelineno-8-8"></a><span class="go">tmpfs on /run type tmpfs (rw,nosuid,nodev,size=100452k,nr_inodes=819200,mode=755)</span>
+</span><span id="__span-8-9"><a href="#__codelineno-8-9" id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="go">cgroup2 on /sys/fs/cgroup type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate,memory_recursiveprot)</span>
+</span><span id="__span-8-10"><a href="#__codelineno-8-10" id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="go">mqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)</span>
+</span><span id="__span-8-11"><a href="#__codelineno-8-11" id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="go">debugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)</span>
+</span><span id="__span-8-12"><a href="#__codelineno-8-12" id="__codelineno-8-12" name="__codelineno-8-12"></a><span class="go">tracefs on /sys/kernel/tracing type tracefs (rw,nosuid,nodev,noexec,relatime)</span>
+</span><span id="__span-8-13"><a href="#__codelineno-8-13" id="__codelineno-8-13" name="__codelineno-8-13"></a><span class="go">tmpfs on /tmp type tmpfs (rw,nosuid,nodev,nr_inodes=1048576)</span>
+</span><span id="__span-8-14"><a href="#__codelineno-8-14" id="__codelineno-8-14" name="__codelineno-8-14"></a><span class="go">configfs on /sys/kernel/config type configfs (rw,nosuid,nodev,noexec,relatime)</span>
+</span></code></pre></div>
+<h2 id="inspecting-the-system"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.6</span> Inspecting the system</h2>
+<p>On the <em>target</em>, look at the contents of <code>/lib/systemd/</code>.
+You will see the implementation of most <em>systemd</em> targets and services.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - systemd</span><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="gp"># </span>ls<span class="w"> </span>-p<span class="w"> </span>/lib/systemd/
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="go">libsystemd-shared-250.so         systemd-pstore</span>
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="go">network/                         systemd-remount-fs</span>
+</span><span id="__span-9-4"><a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="go">ntp-units.d/                     systemd-reply-password</span>
+</span><span id="__span-9-5"><a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="go">resolv.conf                      systemd-resolved</span>
+</span><span id="__span-9-6"><a href="#__codelineno-9-6" id="__codelineno-9-6" name="__codelineno-9-6"></a><span class="go">system/                          systemd-shutdown</span>
+</span><span id="__span-9-7"><a href="#__codelineno-9-7" id="__codelineno-9-7" name="__codelineno-9-7"></a><span class="go">system-generators/               systemd-sleep</span>
+</span><span id="__span-9-8"><a href="#__codelineno-9-8" id="__codelineno-9-8" name="__codelineno-9-8"></a><span class="go">system-preset/                   systemd-socket-proxyd</span>
+</span><span id="__span-9-9"><a href="#__codelineno-9-9" id="__codelineno-9-9" name="__codelineno-9-9"></a><span class="go">system-shutdown/                 systemd-sulogin-shell</span>
+</span><span id="__span-9-10"><a href="#__codelineno-9-10" id="__codelineno-9-10" name="__codelineno-9-10"></a><span class="go">system-sleep/                    systemd-sysctl</span>
+</span><span id="__span-9-11"><a href="#__codelineno-9-11" id="__codelineno-9-11" name="__codelineno-9-11"></a><span class="go">systemd                          systemd-time-wait-sync</span>
+</span><span id="__span-9-12"><a href="#__codelineno-9-12" id="__codelineno-9-12" name="__codelineno-9-12"></a><span class="go">systemd-ac-power                 systemd-timedated</span>
+</span><span id="__span-9-13"><a href="#__codelineno-9-13" id="__codelineno-9-13" name="__codelineno-9-13"></a><span class="go">systemd-boot-check-no-failures   systemd-timesyncd</span>
+</span><span id="__span-9-14"><a href="#__codelineno-9-14" id="__codelineno-9-14" name="__codelineno-9-14"></a><span class="go">systemd-cgroups-agent            systemd-udevd</span>
+</span><span id="__span-9-15"><a href="#__codelineno-9-15" id="__codelineno-9-15" name="__codelineno-9-15"></a><span class="go">systemd-fsck                     systemd-update-done</span>
+</span><span id="__span-9-16"><a href="#__codelineno-9-16" id="__codelineno-9-16" name="__codelineno-9-16"></a><span class="go">systemd-growfs                   systemd-update-helper</span>
+</span><span id="__span-9-17"><a href="#__codelineno-9-17" id="__codelineno-9-17" name="__codelineno-9-17"></a><span class="go">systemd-hostnamed                systemd-vconsole-setup</span>
+</span><span id="__span-9-18"><a href="#__codelineno-9-18" id="__codelineno-9-18" name="__codelineno-9-18"></a><span class="go">systemd-journald                 systemd-xdg-autostart-condition</span>
+</span><span id="__span-9-19"><a href="#__codelineno-9-19" id="__codelineno-9-19" name="__codelineno-9-19"></a><span class="go">systemd-makefs                   user/</span>
+</span><span id="__span-9-20"><a href="#__codelineno-9-20" id="__codelineno-9-20" name="__codelineno-9-20"></a><span class="go">systemd-modules-load             user-environment-generators/</span>
+</span><span id="__span-9-21"><a href="#__codelineno-9-21" id="__codelineno-9-21" name="__codelineno-9-21"></a><span class="go">systemd-network-generator        user-generators/</span>
+</span><span id="__span-9-22"><a href="#__codelineno-9-22" id="__codelineno-9-22" name="__codelineno-9-22"></a><span class="go">systemd-networkd                 user-preset/</span>
+</span><span id="__span-9-23"><a href="#__codelineno-9-23" id="__codelineno-9-23" name="__codelineno-9-23"></a><span class="go">systemd-networkd-wait-online</span>
+</span></code></pre></div>
+<p>In particular, check out <code>/lib/systemd/user/</code>, containing some unnecessary targets in our case, such as <code>bluetooth.target</code>.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - systemd</span><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="gp"># </span>ls<span class="w"> </span>/lib/systemd/user/
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="go">app.slice                       session.slice</span>
+</span><span id="__span-10-3"><a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="go">background.slice                shutdown.target</span>
+</span><span id="__span-10-4"><a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="go">basic.target                    smartcard.target</span>
+</span><span id="__span-10-5"><a href="#__codelineno-10-5" id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="go">bluetooth.target                sockets.target</span>
+</span><span id="__span-10-6"><a href="#__codelineno-10-6" id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="go">default.target                  sound.target</span>
+</span><span id="__span-10-7"><a href="#__codelineno-10-7" id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="go">exit.target                     systemd-exit.service</span>
+</span><span id="__span-10-8"><a href="#__codelineno-10-8" id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="go">graphical-session-pre.target    systemd-tmpfiles-clean.service</span>
+</span><span id="__span-10-9"><a href="#__codelineno-10-9" id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="go">graphical-session.target        systemd-tmpfiles-clean.timer</span>
+</span><span id="__span-10-10"><a href="#__codelineno-10-10" id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="go">mpd.service                     systemd-tmpfiles-setup.service</span>
+</span><span id="__span-10-11"><a href="#__codelineno-10-11" id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="go">mpd.socket                      timers.target</span>
+</span><span id="__span-10-12"><a href="#__codelineno-10-12" id="__codelineno-10-12" name="__codelineno-10-12"></a><span class="go">paths.target                    xdg-desktop-autostart.target</span>
+</span><span id="__span-10-13"><a href="#__codelineno-10-13" id="__codelineno-10-13" name="__codelineno-10-13"></a><span class="go">printer.target</span>
+</span></code></pre></div>
+<p>However, check the <code>mpd.service</code> file for our <em>MPD</em> server.
+This should help you to realize all the options provided by <em>systemd</em> to start and control system services, while keeping the system secure, and their resources under control.
+You won't be able to match this level of control and security in a <em>hand-made</em> system.</p>
+<div class="language-ini highlight"><span class="filename">File: /lib/systemd/user/mpd.service</span><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="k">[Unit]</span>
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="na">Description</span><span class="o">=</span><span class="s">Music Player Daemon</span>
+</span><span id="__span-11-3"><a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="na">Documentation</span><span class="o">=</span><span class="s">man:mpd(1) man:mpd.conf(5)</span>
+</span><span id="__span-11-4"><a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="na">After</span><span class="o">=</span><span class="s">network.target sound.target</span>
+</span><span id="__span-11-5"><a href="#__codelineno-11-5" id="__codelineno-11-5" name="__codelineno-11-5"></a>
+</span><span id="__span-11-6"><a href="#__codelineno-11-6" id="__codelineno-11-6" name="__codelineno-11-6"></a><span class="k">[Service]</span>
+</span><span id="__span-11-7"><a href="#__codelineno-11-7" id="__codelineno-11-7" name="__codelineno-11-7"></a><span class="na">Type</span><span class="o">=</span><span class="s">notify</span>
+</span><span id="__span-11-8"><a href="#__codelineno-11-8" id="__codelineno-11-8" name="__codelineno-11-8"></a><span class="na">ExecStart</span><span class="o">=</span><span class="s">/usr/bin/mpd --systemd</span>
+</span><span id="__span-11-9"><a href="#__codelineno-11-9" id="__codelineno-11-9" name="__codelineno-11-9"></a>
+</span><span id="__span-11-10"><a href="#__codelineno-11-10" id="__codelineno-11-10" name="__codelineno-11-10"></a><span class="c1"># Enable this setting to ask systemd to watch over MPD, see</span>
+</span><span id="__span-11-11"><a href="#__codelineno-11-11" id="__codelineno-11-11" name="__codelineno-11-11"></a><span class="c1"># systemd.service(5).  This is disabled by default because it causes</span>
+</span><span id="__span-11-12"><a href="#__codelineno-11-12" id="__codelineno-11-12" name="__codelineno-11-12"></a><span class="c1"># periodic wakeups which are unnecessary if MPD is not playing.</span>
+</span><span id="__span-11-13"><a href="#__codelineno-11-13" id="__codelineno-11-13" name="__codelineno-11-13"></a><span class="c1">#WatchdogSec=120</span>
+</span><span id="__span-11-14"><a href="#__codelineno-11-14" id="__codelineno-11-14" name="__codelineno-11-14"></a>
+</span><span id="__span-11-15"><a href="#__codelineno-11-15" id="__codelineno-11-15" name="__codelineno-11-15"></a><span class="c1"># allow MPD to use real-time priority 40</span>
+</span><span id="__span-11-16"><a href="#__codelineno-11-16" id="__codelineno-11-16" name="__codelineno-11-16"></a><span class="na">LimitRTPRIO</span><span class="o">=</span><span class="s">40</span>
+</span><span id="__span-11-17"><a href="#__codelineno-11-17" id="__codelineno-11-17" name="__codelineno-11-17"></a><span class="na">LimitRTTIME</span><span class="o">=</span><span class="s">infinity</span>
+</span><span id="__span-11-18"><a href="#__codelineno-11-18" id="__codelineno-11-18" name="__codelineno-11-18"></a>
+</span><span id="__span-11-19"><a href="#__codelineno-11-19" id="__codelineno-11-19" name="__codelineno-11-19"></a><span class="c1"># for io_uring</span>
+</span><span id="__span-11-20"><a href="#__codelineno-11-20" id="__codelineno-11-20" name="__codelineno-11-20"></a><span class="na">LimitMEMLOCK</span><span class="o">=</span><span class="s">64M</span>
+</span><span id="__span-11-21"><a href="#__codelineno-11-21" id="__codelineno-11-21" name="__codelineno-11-21"></a>
+</span><span id="__span-11-22"><a href="#__codelineno-11-22" id="__codelineno-11-22" name="__codelineno-11-22"></a><span class="c1"># disallow writing to /usr, /bin, /sbin, ...</span>
+</span><span id="__span-11-23"><a href="#__codelineno-11-23" id="__codelineno-11-23" name="__codelineno-11-23"></a><span class="na">ProtectSystem</span><span class="o">=</span><span class="s">yes</span>
+</span><span id="__span-11-24"><a href="#__codelineno-11-24" id="__codelineno-11-24" name="__codelineno-11-24"></a>
+</span><span id="__span-11-25"><a href="#__codelineno-11-25" id="__codelineno-11-25" name="__codelineno-11-25"></a><span class="c1"># more paranoid security settings</span>
+</span><span id="__span-11-26"><a href="#__codelineno-11-26" id="__codelineno-11-26" name="__codelineno-11-26"></a><span class="na">NoNewPrivileges</span><span class="o">=</span><span class="s">yes</span>
+</span><span id="__span-11-27"><a href="#__codelineno-11-27" id="__codelineno-11-27" name="__codelineno-11-27"></a><span class="na">ProtectKernelTunables</span><span class="o">=</span><span class="s">yes</span>
+</span><span id="__span-11-28"><a href="#__codelineno-11-28" id="__codelineno-11-28" name="__codelineno-11-28"></a><span class="na">ProtectControlGroups</span><span class="o">=</span><span class="s">yes</span>
+</span><span id="__span-11-29"><a href="#__codelineno-11-29" id="__codelineno-11-29" name="__codelineno-11-29"></a><span class="c1"># AF_NETLINK is required by libsmbclient, or it will exit() .. *sigh*</span>
+</span><span id="__span-11-30"><a href="#__codelineno-11-30" id="__codelineno-11-30" name="__codelineno-11-30"></a><span class="na">RestrictAddressFamilies</span><span class="o">=</span><span class="s">AF_INET AF_INET6 AF_UNIX AF_NETLINK</span>
+</span><span id="__span-11-31"><a href="#__codelineno-11-31" id="__codelineno-11-31" name="__codelineno-11-31"></a><span class="na">RestrictNamespaces</span><span class="o">=</span><span class="s">yes</span>
+</span><span id="__span-11-32"><a href="#__codelineno-11-32" id="__codelineno-11-32" name="__codelineno-11-32"></a>
+</span><span id="__span-11-33"><a href="#__codelineno-11-33" id="__codelineno-11-33" name="__codelineno-11-33"></a><span class="c1"># Note that "ProtectKernelModules=yes" is missing in the user unit</span>
+</span><span id="__span-11-34"><a href="#__codelineno-11-34" id="__codelineno-11-34" name="__codelineno-11-34"></a><span class="c1"># because systemd 232 is unable to reduce its own capabilities</span>
+</span><span id="__span-11-35"><a href="#__codelineno-11-35" id="__codelineno-11-35" name="__codelineno-11-35"></a><span class="c1"># ("Failed at step CAPABILITIES spawning /usr/bin/mpd: Operation not</span>
+</span><span id="__span-11-36"><a href="#__codelineno-11-36" id="__codelineno-11-36" name="__codelineno-11-36"></a><span class="c1"># permitted")</span>
+</span><span id="__span-11-37"><a href="#__codelineno-11-37" id="__codelineno-11-37" name="__codelineno-11-37"></a>
+</span><span id="__span-11-38"><a href="#__codelineno-11-38" id="__codelineno-11-38" name="__codelineno-11-38"></a><span class="k">[Install]</span>
+</span><span id="__span-11-39"><a href="#__codelineno-11-39" id="__codelineno-11-39" name="__codelineno-11-39"></a><span class="na">WantedBy</span><span class="o">=</span><span class="s">default.target</span>
+</span></code></pre></div>
+<h2 id="automatic-module-loading"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.7</span> Automatic module loading</h2>
+<p>Check the currently loaded modules on your system.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - systemd</span><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="gp"># </span>lsmod
+</span><span id="__span-12-2"><a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="go">Module                  Size  Used by</span>
+</span><span id="__span-12-3"><a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a><span class="go">input_leds             16384  0</span>
+</span><span id="__span-12-4"><a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="go">hid_generic            16384  0</span>
+</span><span id="__span-12-5"><a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="go">snd_usb_audio         217088  0</span>
+</span><span id="__span-12-6"><a href="#__codelineno-12-6" id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="go">snd_hwdep              16384  1 snd_usb_audio</span>
+</span><span id="__span-12-7"><a href="#__codelineno-12-7" id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="go">snd_usbmidi_lib        28672  1 snd_usb_audio</span>
+</span><span id="__span-12-8"><a href="#__codelineno-12-8" id="__codelineno-12-8" name="__codelineno-12-8"></a><span class="go">mc                     36864  1 snd_usb_audio</span>
+</span><span id="__span-12-9"><a href="#__codelineno-12-9" id="__codelineno-12-9" name="__codelineno-12-9"></a><span class="go">snd_rawmidi            28672  1 snd_usbmidi_lib</span>
+</span><span id="__span-12-10"><a href="#__codelineno-12-10" id="__codelineno-12-10" name="__codelineno-12-10"></a><span class="go">usbhid                 32768  0</span>
+</span><span id="__span-12-11"><a href="#__codelineno-12-11" id="__codelineno-12-11" name="__codelineno-12-11"></a><span class="go">joydev                 20480  0</span>
+</span><span id="__span-12-12"><a href="#__codelineno-12-12" id="__codelineno-12-12" name="__codelineno-12-12"></a><span class="go">snd_soc_hdmi_codec     16384  1</span>
+</span><span id="__span-12-13"><a href="#__codelineno-12-13" id="__codelineno-12-13" name="__codelineno-12-13"></a><span class="go">snd_soc_simple_card    16384  0</span>
+</span><span id="__span-12-14"><a href="#__codelineno-12-14" id="__codelineno-12-14" name="__codelineno-12-14"></a><span class="go">snd_soc_simple_card_utils    20480  1 snd_soc_simple_card</span>
+</span><span id="__span-12-15"><a href="#__codelineno-12-15" id="__codelineno-12-15" name="__codelineno-12-15"></a><span class="go">omap_aes_driver        24576  0</span>
+</span><span id="__span-12-16"><a href="#__codelineno-12-16" id="__codelineno-12-16" name="__codelineno-12-16"></a><span class="go">pm33xx                 16384  0</span>
+</span><span id="__span-12-17"><a href="#__codelineno-12-17" id="__codelineno-12-17" name="__codelineno-12-17"></a><span class="go">omap_crypto            16384  1 omap_aes_driver</span>
+</span><span id="__span-12-18"><a href="#__codelineno-12-18" id="__codelineno-12-18" name="__codelineno-12-18"></a><span class="go">omap_sham              28672  0</span>
+</span><span id="__span-12-19"><a href="#__codelineno-12-19" id="__codelineno-12-19" name="__codelineno-12-19"></a><span class="go">libaes                 16384  1 omap_aes_driver</span>
+</span><span id="__span-12-20"><a href="#__codelineno-12-20" id="__codelineno-12-20" name="__codelineno-12-20"></a><span class="go">ti_emif_sram           16384  1 pm33xx</span>
+</span><span id="__span-12-21"><a href="#__codelineno-12-21" id="__codelineno-12-21" name="__codelineno-12-21"></a><span class="go">crypto_engine          16384  2 omap_aes_driver,omap_sham</span>
+</span><span id="__span-12-22"><a href="#__codelineno-12-22" id="__codelineno-12-22" name="__codelineno-12-22"></a><span class="go">snd_soc_davinci_mcasp    28672  2</span>
+</span><span id="__span-12-23"><a href="#__codelineno-12-23" id="__codelineno-12-23" name="__codelineno-12-23"></a><span class="go">snd_soc_ti_udma        16384  1 snd_soc_davinci_mcasp</span>
+</span><span id="__span-12-24"><a href="#__codelineno-12-24" id="__codelineno-12-24" name="__codelineno-12-24"></a><span class="go">snd_soc_ti_edma        16384  1 snd_soc_davinci_mcasp</span>
+</span><span id="__span-12-25"><a href="#__codelineno-12-25" id="__codelineno-12-25" name="__codelineno-12-25"></a><span class="go">snd_soc_ti_sdma        16384  1 snd_soc_davinci_mcasp</span>
+</span><span id="__span-12-26"><a href="#__codelineno-12-26" id="__codelineno-12-26" name="__codelineno-12-26"></a><span class="go">tilcdc                 32768  0</span>
+</span><span id="__span-12-27"><a href="#__codelineno-12-27" id="__codelineno-12-27" name="__codelineno-12-27"></a><span class="go">snd_soc_core          172032  7 snd_soc_davinci_mcasp,snd_soc_hdmi_codec,snd_soc_simple_card_utils,snd_soc_ti_sdma,snd_soc_ti_edma,snd_soc_ti_udma,snd_soc_simple_card</span>
+</span><span id="__span-12-28"><a href="#__codelineno-12-28" id="__codelineno-12-28" name="__codelineno-12-28"></a><span class="go">snd_pcm_dmaengine      16384  1 snd_soc_core</span>
+</span><span id="__span-12-29"><a href="#__codelineno-12-29" id="__codelineno-12-29" name="__codelineno-12-29"></a><span class="go">snd_pcm               106496  5 snd_soc_davinci_mcasp,snd_usb_audio,snd_pcm_dmaengine,snd_soc_hdmi_codec,snd_soc_core</span>
+</span><span id="__span-12-30"><a href="#__codelineno-12-30" id="__codelineno-12-30" name="__codelineno-12-30"></a><span class="go">snd_timer              28672  1 snd_pcm</span>
+</span><span id="__span-12-31"><a href="#__codelineno-12-31" id="__codelineno-12-31" name="__codelineno-12-31"></a><span class="go">snd                    61440  8 snd_hwdep,snd_usb_audio,snd_soc_hdmi_codec,snd_timer,snd_rawmidi,snd_usbmidi_lib,snd_soc_core,snd_pcm</span>
+</span><span id="__span-12-32"><a href="#__codelineno-12-32" id="__codelineno-12-32" name="__codelineno-12-32"></a><span class="go">soundcore              16384  1 snd</span>
+</span><span id="__span-12-33"><a href="#__codelineno-12-33" id="__codelineno-12-33" name="__codelineno-12-33"></a><span class="go">nunchuk                16384  0</span>
+</span><span id="__span-12-34"><a href="#__codelineno-12-34" id="__codelineno-12-34" name="__codelineno-12-34"></a><span class="go">omap_mailbox           20480  1</span>
+</span><span id="__span-12-35"><a href="#__codelineno-12-35" id="__codelineno-12-35" name="__codelineno-12-35"></a><span class="go">tda998x                28672  0</span>
+</span><span id="__span-12-36"><a href="#__codelineno-12-36" id="__codelineno-12-36" name="__codelineno-12-36"></a><span class="go">drm_kms_helper        192512  3 tda998x,tilcdc</span>
+</span><span id="__span-12-37"><a href="#__codelineno-12-37" id="__codelineno-12-37" name="__codelineno-12-37"></a><span class="go">cfbfillrect            16384  1 drm_kms_helper</span>
+</span><span id="__span-12-38"><a href="#__codelineno-12-38" id="__codelineno-12-38" name="__codelineno-12-38"></a><span class="go">syscopyarea            16384  1 drm_kms_helper</span>
+</span><span id="__span-12-39"><a href="#__codelineno-12-39" id="__codelineno-12-39" name="__codelineno-12-39"></a><span class="go">rtc_omap               20480  2 pm33xx</span>
+</span><span id="__span-12-40"><a href="#__codelineno-12-40" id="__codelineno-12-40" name="__codelineno-12-40"></a><span class="go">cfbimgblt              16384  1 drm_kms_helper</span>
+</span><span id="__span-12-41"><a href="#__codelineno-12-41" id="__codelineno-12-41" name="__codelineno-12-41"></a><span class="go">sysfillrect            16384  1 drm_kms_helper</span>
+</span><span id="__span-12-42"><a href="#__codelineno-12-42" id="__codelineno-12-42" name="__codelineno-12-42"></a><span class="go">omap_wdt               16384  0</span>
+</span><span id="__span-12-43"><a href="#__codelineno-12-43" id="__codelineno-12-43" name="__codelineno-12-43"></a><span class="go">sysimgblt              16384  1 drm_kms_helper</span>
+</span><span id="__span-12-44"><a href="#__codelineno-12-44" id="__codelineno-12-44" name="__codelineno-12-44"></a><span class="go">fb_sys_fops            16384  1 drm_kms_helper</span>
+</span><span id="__span-12-45"><a href="#__codelineno-12-45" id="__codelineno-12-45" name="__codelineno-12-45"></a><span class="go">watchdog               20480  1 omap_wdt</span>
+</span><span id="__span-12-46"><a href="#__codelineno-12-46" id="__codelineno-12-46" name="__codelineno-12-46"></a><span class="go">wkup_m3_ipc            16384  1 pm33xx</span>
+</span><span id="__span-12-47"><a href="#__codelineno-12-47" id="__codelineno-12-47" name="__codelineno-12-47"></a><span class="go">cfbcopyarea            16384  1 drm_kms_helper</span>
+</span><span id="__span-12-48"><a href="#__codelineno-12-48" id="__codelineno-12-48" name="__codelineno-12-48"></a><span class="go">tps65218_pwrbutton     16384  0</span>
+</span><span id="__span-12-49"><a href="#__codelineno-12-49" id="__codelineno-12-49" name="__codelineno-12-49"></a><span class="go">drm                   385024  4 tda998x,tilcdc,drm_kms_helper</span>
+</span><span id="__span-12-50"><a href="#__codelineno-12-50" id="__codelineno-12-50" name="__codelineno-12-50"></a><span class="go">drm_panel_orientation_quirks    16384  1 drm</span>
+</span><span id="__span-12-51"><a href="#__codelineno-12-51" id="__codelineno-12-51" name="__codelineno-12-51"></a><span class="go">at24                   20480  0</span>
+</span><span id="__span-12-52"><a href="#__codelineno-12-52" id="__codelineno-12-52" name="__codelineno-12-52"></a><span class="go">wkup_m3_rproc          16384  1</span>
+</span><span id="__span-12-53"><a href="#__codelineno-12-53" id="__codelineno-12-53" name="__codelineno-12-53"></a><span class="go">cpufreq_dt             16384  0</span>
+</span><span id="__span-12-54"><a href="#__codelineno-12-54" id="__codelineno-12-54" name="__codelineno-12-54"></a><span class="go">sha256_generic         16384  0</span>
+</span><span id="__span-12-55"><a href="#__codelineno-12-55" id="__codelineno-12-55" name="__codelineno-12-55"></a><span class="go">libsha256              16384  1 sha256_generic</span>
+</span><span id="__span-12-56"><a href="#__codelineno-12-56" id="__codelineno-12-56" name="__codelineno-12-56"></a><span class="go">sha256_arm             24576  0</span>
+</span><span id="__span-12-57"><a href="#__codelineno-12-57" id="__codelineno-12-57" name="__codelineno-12-57"></a><span class="go">cfg80211              643072  0</span>
+</span></code></pre></div>
+<p>Surprise: both the <em>Nunchuk</em> and USB audio modules are already loaded.
+We didn't have anything to set up and <em>systemd</em> automatically load the modules associated to connected hardware.<br/>
+Let's find out why.</p>
+<p>On the target, go to <code>/lib/udev/rules.d/</code>.
+You will find all the standard rules for <em>Udev</em>, the part of <em>systemd</em> which handles hardware events, takes care of the permissions and ownership of device files, notifies other userspace programs, and among others, loads kernel modules.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - systemd</span><pre><span></span><code><span id="__span-13-1"><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="gp"># </span>ls<span class="w"> </span>/lib/udev/rules.d/
+</span><span id="__span-13-2"><a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="go">50-udev-default.rules             64-btrfs.rules</span>
+</span><span id="__span-13-3"><a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="go">60-autosuspend.rules              70-camera.rules</span>
+</span><span id="__span-13-4"><a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="go">60-block.rules                    70-joystick.rules</span>
+</span><span id="__span-13-5"><a href="#__codelineno-13-5" id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="go">60-cdrom_id.rules                 70-memory.rules</span>
+</span><span id="__span-13-6"><a href="#__codelineno-13-6" id="__codelineno-13-6" name="__codelineno-13-6"></a><span class="go">60-drm.rules                      70-mouse.rules</span>
+</span><span id="__span-13-7"><a href="#__codelineno-13-7" id="__codelineno-13-7" name="__codelineno-13-7"></a><span class="go">60-evdev.rules                    70-touchpad.rules</span>
+</span><span id="__span-13-8"><a href="#__codelineno-13-8" id="__codelineno-13-8" name="__codelineno-13-8"></a><span class="go">60-fido-id.rules                  75-net-description.rules</span>
+</span><span id="__span-13-9"><a href="#__codelineno-13-9" id="__codelineno-13-9" name="__codelineno-13-9"></a><span class="go">60-input-id.rules                 75-probe_mtd.rules</span>
+</span><span id="__span-13-10"><a href="#__codelineno-13-10" id="__codelineno-13-10" name="__codelineno-13-10"></a><span class="go">60-persistent-alsa.rules          78-sound-card.rules</span>
+</span><span id="__span-13-11"><a href="#__codelineno-13-11" id="__codelineno-13-11" name="__codelineno-13-11"></a><span class="go">60-persistent-input.rules         80-drivers.rules</span>
+</span><span id="__span-13-12"><a href="#__codelineno-13-12" id="__codelineno-13-12" name="__codelineno-13-12"></a><span class="go">60-persistent-storage-tape.rules  80-net-setup-link.rules</span>
+</span><span id="__span-13-13"><a href="#__codelineno-13-13" id="__codelineno-13-13" name="__codelineno-13-13"></a><span class="go">60-persistent-storage.rules       81-net-dhcp.rules</span>
+</span><span id="__span-13-14"><a href="#__codelineno-13-14" id="__codelineno-13-14" name="__codelineno-13-14"></a><span class="go">60-persistent-v4l.rules           90-vconsole.rules</span>
+</span><span id="__span-13-15"><a href="#__codelineno-13-15" id="__codelineno-13-15" name="__codelineno-13-15"></a><span class="go">60-sensor.rules                   99-systemd.rules</span>
+</span><span id="__span-13-16"><a href="#__codelineno-13-16" id="__codelineno-13-16" name="__codelineno-13-16"></a><span class="go">60-serial.rules                   README</span>
+</span></code></pre></div>
+<p>Open <code>80-drivers.rules</code>, which is the rule allowing <em>Udev</em> to load kernel modules for detected devices.<br/>
+Its most important line defines <code>MODALIAS</code>:</p>
+<div class="language-make highlight"><span class="filename">File: /lib/udev/rules.d/80-drivers.rules</span><pre><span></span><code><span id="__span-14-1"><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="c"># do not edit this file, it will be overwritten on update</span>
+</span><span id="__span-14-2"><a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a>
+</span><span id="__span-14-3"><a href="#__codelineno-14-3" id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="nv">ACTION</span><span class="o">!=</span><span class="s2">"add"</span>,<span class="w"> </span><span class="nv">GOTO</span><span class="o">=</span><span class="s2">"drivers_end"</span>
+</span><span id="__span-14-4"><a href="#__codelineno-14-4" id="__codelineno-14-4" name="__codelineno-14-4"></a>
+</span><span id="__span-14-5"><a href="#__codelineno-14-5" id="__codelineno-14-5" name="__codelineno-14-5"></a><span class="hll"><span class="nv">ENV{MODALIAS}</span><span class="o">==</span><span class="s2">"?*"</span>,<span class="w"> </span>RUN<span class="o">{</span>builtin<span class="o">}</span>+<span class="o">=</span><span class="s2">"kmod load '</span><span class="nv">$env</span><span class="s2">{MODALIAS}'"</span>
+</span></span><span id="__span-14-6"><a href="#__codelineno-14-6" id="__codelineno-14-6" name="__codelineno-14-6"></a><span class="nv">SUBSYSTEM</span><span class="o">==</span><span class="s2">"tifm"</span>,<span class="w"> </span>ENV<span class="o">{</span>TIFM_CARD_TYPE<span class="o">}==</span><span class="s2">"SD"</span>,<span class="w"> </span>RUN<span class="o">{</span>builtin<span class="o">}</span>+<span class="o">=</span><span class="s2">"kmod load tifm_sd"</span>
+</span><span id="__span-14-7"><a href="#__codelineno-14-7" id="__codelineno-14-7" name="__codelineno-14-7"></a><span class="nv">SUBSYSTEM</span><span class="o">==</span><span class="s2">"tifm"</span>,<span class="w"> </span>ENV<span class="o">{</span>TIFM_CARD_TYPE<span class="o">}==</span><span class="s2">"MS"</span>,<span class="w"> </span>RUN<span class="o">{</span>builtin<span class="o">}</span>+<span class="o">=</span><span class="s2">"kmod load tifm_ms"</span>
+</span><span id="__span-14-8"><a href="#__codelineno-14-8" id="__codelineno-14-8" name="__codelineno-14-8"></a><span class="nv">SUBSYSTEM</span><span class="o">==</span><span class="s2">"memstick"</span>,<span class="w"> </span>RUN<span class="o">{</span>builtin<span class="o">}</span>+<span class="o">=</span><span class="s2">"kmod load ms_block mspro_block"</span>
+</span><span id="__span-14-9"><a href="#__codelineno-14-9" id="__codelineno-14-9" name="__codelineno-14-9"></a><span class="nv">SUBSYSTEM</span><span class="o">==</span><span class="s2">"i2o"</span>,<span class="w"> </span>RUN<span class="o">{</span>builtin<span class="o">}</span>+<span class="o">=</span><span class="s2">"kmod load i2o_block"</span>
+</span><span id="__span-14-10"><a href="#__codelineno-14-10" id="__codelineno-14-10" name="__codelineno-14-10"></a><span class="nv">SUBSYSTEM</span><span class="o">==</span><span class="s2">"module"</span>,<span class="w"> </span><span class="nv">KERNEL</span><span class="o">==</span><span class="s2">"parport_pc"</span>,<span class="w"> </span>RUN<span class="o">{</span>builtin<span class="o">}</span>+<span class="o">=</span><span class="s2">"kmod load ppdev"</span>
+</span><span id="__span-14-11"><a href="#__codelineno-14-11" id="__codelineno-14-11" name="__codelineno-14-11"></a><span class="nv">KERNEL</span><span class="o">==</span><span class="s2">"mtd*ro"</span>,<span class="w"> </span>ENV<span class="o">{</span>MTD_FTL<span class="o">}==</span><span class="s2">"smartmedia"</span>,<span class="w"> </span>RUN<span class="o">{</span>builtin<span class="o">}</span>+<span class="o">=</span><span class="s2">"kmod load sm_ftl"</span>
+</span><span id="__span-14-12"><a href="#__codelineno-14-12" id="__codelineno-14-12" name="__codelineno-14-12"></a>
+</span><span id="__span-14-13"><a href="#__codelineno-14-13" id="__codelineno-14-13" name="__codelineno-14-13"></a><span class="nv">LABEL</span><span class="o">=</span><span class="s2">"drivers_end"</span>
+</span></code></pre></div>
+<p>This is when the <code>modules.alias</code> file comes into play.<br/>
+When a new device is found, the kernel passes a <code>MODALIAS</code> environment variable to <em>Udev</em>, containing which bus this happened on, and the attributes of the device on this bus.
+Thanks to the module aliases, the right module gets loaded.
+We already explained that <a href="../hardware/">in the lectures</a> when talking about the output of <code>make modules_install</code>.</p>
+<p>Find where the <code>modules.alias</code> file is located, and you will find the two lines that allowed to load
+our <code>snd_usb_audio</code> and <code>nunchuk</code> modules:</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - systemd</span><pre><span></span><code><span id="__span-15-1"><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="gp"># </span><span class="nv">modules_alias_path</span><span class="o">=</span><span class="k">$(</span>find<span class="w"> </span>/<span class="w"> </span>-name<span class="w"> </span>modules.alias<span class="k">)</span>
+</span><span id="__span-15-2"><a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="gp"># </span><span class="nb">echo</span><span class="w"> </span><span class="nv">$modules_alias_path</span>
+</span><span id="__span-15-3"><a href="#__codelineno-15-3" id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="go">/usr/lib/modules/5.15.26/modules.alias</span>
+</span><span id="__span-15-4"><a href="#__codelineno-15-4" id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="gp"># </span>cat<span class="w"> </span><span class="nv">$modules_alias_path</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>snd_usb_audio
+</span><span id="__span-15-5"><a href="#__codelineno-15-5" id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="go">    ...</span>
+</span><span id="__span-15-6"><a href="#__codelineno-15-6" id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="go">alias usb:v*p*d*dc*dsc*dp*ic01isc01ip*in* snd_usb_audio</span>
+</span><span id="__span-15-7"><a href="#__codelineno-15-7" id="__codelineno-15-7" name="__codelineno-15-7"></a><span class="go">alias usb:v046Dp0A38d*dc*dsc*dp*ic*isc*ip*in* snd_usb_audio</span>
+</span><span id="__span-15-8"><a href="#__codelineno-15-8" id="__codelineno-15-8" name="__codelineno-15-8"></a><span class="go">    ...</span>
+</span><span id="__span-15-9"><a href="#__codelineno-15-9" id="__codelineno-15-9" name="__codelineno-15-9"></a><span class="gp"># </span>cat<span class="w"> </span><span class="nv">$modules_alias_path</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nunchuk
+</span><span id="__span-15-10"><a href="#__codelineno-15-10" id="__codelineno-15-10" name="__codelineno-15-10"></a><span class="go">alias of:N*T*Cnintendo,nunchukC* nunchuk</span>
+</span><span id="__span-15-11"><a href="#__codelineno-15-11" id="__codelineno-15-11" name="__codelineno-15-11"></a><span class="go">alias of:N*T*Cnintendo,nunchuk nunchuk</span>
+</span></code></pre></div>
+<p>For <code>snd_usb_audio</code>, there are many possible matching values, so it isn't straighforward to be
+sure which matched your particular device.</p>
+<p>However, you can find in <em>sysfs</em> which <code>MODALIAS</code> was emitted for your device:</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - systemd</span><pre><span></span><code><span id="__span-16-1"><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="gp"># </span><span class="nb">cd</span><span class="w"> </span>/sys/class/sound/card0/device/
+</span><span id="__span-16-2"><a href="#__codelineno-16-2" id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="gp"># </span>ls<span class="w"> </span>-la
+</span><span id="__span-16-3"><a href="#__codelineno-16-3" id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="go">total 0</span>
+</span><span id="__span-16-4"><a href="#__codelineno-16-4" id="__codelineno-16-4" name="__codelineno-16-4"></a><span class="go">drwxr-xr-x    4 root     root             0 Jan 18  2022 .</span>
+</span><span id="__span-16-5"><a href="#__codelineno-16-5" id="__codelineno-16-5" name="__codelineno-16-5"></a><span class="go">drwxr-xr-x    8 root     root             0 Jan 18  2022 ..</span>
+</span><span id="__span-16-6"><a href="#__codelineno-16-6" id="__codelineno-16-6" name="__codelineno-16-6"></a><span class="go">-rw-r--r--    1 root     root          4096 May  6 11:15 authorized</span>
+</span><span id="__span-16-7"><a href="#__codelineno-16-7" id="__codelineno-16-7" name="__codelineno-16-7"></a><span class="go">-r--r--r--    1 root     root          4096 May  6 11:15 bAlternateSetting</span>
+</span><span id="__span-16-8"><a href="#__codelineno-16-8" id="__codelineno-16-8" name="__codelineno-16-8"></a><span class="go">-r--r--r--    1 root     root          4096 May  6 11:15 bInterfaceClass</span>
+</span><span id="__span-16-9"><a href="#__codelineno-16-9" id="__codelineno-16-9" name="__codelineno-16-9"></a><span class="go">-r--r--r--    1 root     root          4096 May  6 11:15 bInterfaceNumber</span>
+</span><span id="__span-16-10"><a href="#__codelineno-16-10" id="__codelineno-16-10" name="__codelineno-16-10"></a><span class="go">-r--r--r--    1 root     root          4096 May  6 11:15 bInterfaceProtocol</span>
+</span><span id="__span-16-11"><a href="#__codelineno-16-11" id="__codelineno-16-11" name="__codelineno-16-11"></a><span class="go">-r--r--r--    1 root     root          4096 May  6 11:15 bInterfaceSubClass</span>
+</span><span id="__span-16-12"><a href="#__codelineno-16-12" id="__codelineno-16-12" name="__codelineno-16-12"></a><span class="go">-r--r--r--    1 root     root          4096 May  6 11:15 bNumEndpoints</span>
+</span><span id="__span-16-13"><a href="#__codelineno-16-13" id="__codelineno-16-13" name="__codelineno-16-13"></a><span class="go">lrwxrwxrwx    1 root     root             0 May  6 11:15 driver -&gt; ../../../../../../../../../bus/usb/drivers/snd-usb-audio</span>
+</span><span id="__span-16-14"><a href="#__codelineno-16-14" id="__codelineno-16-14" name="__codelineno-16-14"></a><span class="hll"><span class="go">-r--r--r--    1 root     root          4096 May  6 11:15 modalias</span>
+</span></span><span id="__span-16-15"><a href="#__codelineno-16-15" id="__codelineno-16-15" name="__codelineno-16-15"></a><span class="go">drwxr-xr-x    2 root     root             0 May  6 11:15 power</span>
+</span><span id="__span-16-16"><a href="#__codelineno-16-16" id="__codelineno-16-16" name="__codelineno-16-16"></a><span class="go">drwxr-xr-x    3 root     root             0 May  6 11:15 sound</span>
+</span><span id="__span-16-17"><a href="#__codelineno-16-17" id="__codelineno-16-17" name="__codelineno-16-17"></a><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 subsystem -&gt; ../../../../../../../../../bus/usb</span>
+</span><span id="__span-16-18"><a href="#__codelineno-16-18" id="__codelineno-16-18" name="__codelineno-16-18"></a><span class="go">-r--r--r--    1 root     root          4096 May  6 11:15 supports_autosuspend</span>
+</span><span id="__span-16-19"><a href="#__codelineno-16-19" id="__codelineno-16-19" name="__codelineno-16-19"></a><span class="go">-rw-r--r--    1 root     root          4096 Jan 18  2022 uevent</span>
+</span><span id="__span-16-20"><a href="#__codelineno-16-20" id="__codelineno-16-20" name="__codelineno-16-20"></a><span class="gp"># </span>cat<span class="w"> </span>modalias
+</span><span id="__span-16-21"><a href="#__codelineno-16-21" id="__codelineno-16-21" name="__codelineno-16-21"></a><span class="go">usb:v046Dp0A38d0115dc00dsc00dp00ic01isc01ip00in00</span>
+</span></code></pre></div>
+<p>With a bit of patience, you could find the matching line within the <code>modules.alias</code> file.</p>
+<p>If you want to see the information sent to <em>Udev</em> by the kernel when a new device is plugged in, here are a few debugging commands.</p>
+<p>First unplug your device and run <code>udevadm monitor</code>.<br/>
+Then plug in your headset again. You will find all the events emitted by the kernel, and with the same string (with <code>UDEV</code> instead of <code>KERNEL</code>), the time when <em>Udev</em> finished processing each event.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - systemd</span><pre><span></span><code><span id="__span-17-1"><a href="#__codelineno-17-1" id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="gp"># </span>udevadm<span class="w"> </span>monitor
+</span><span id="__span-17-2"><a href="#__codelineno-17-2" id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="go">monitor will print the received events for:</span>
+</span><span id="__span-17-3"><a href="#__codelineno-17-3" id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="go">UDEV - the event which udev sends out after rule processing</span>
+</span><span id="__span-17-4"><a href="#__codelineno-17-4" id="__codelineno-17-4" name="__codelineno-17-4"></a><span class="go">KERNEL - the kernel uevent</span>
+</span><span id="__span-17-5"><a href="#__codelineno-17-5" id="__codelineno-17-5" name="__codelineno-17-5"></a>
+</span><span id="__span-17-6"><a href="#__codelineno-17-6" id="__codelineno-17-6" name="__codelineno-17-6"></a><span class="go">[ 1602.288834] usb 1-1: new full-speed USB device number 5 using musb-hdrc</span>
+</span><span id="__span-17-7"><a href="#__codelineno-17-7" id="__codelineno-17-7" name="__codelineno-17-7"></a><span class="go">[ 1602.670092] usb 1-1: New USB device found, idVendor=046d, idProduct=0a38, bcdDevice= 1.15</span>
+</span><span id="__span-17-8"><a href="#__codelineno-17-8" id="__codelineno-17-8" name="__codelineno-17-8"></a><span class="go">[ 1602.678406] usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0</span>
+</span><span id="__span-17-9"><a href="#__codelineno-17-9" id="__codelineno-17-9" name="__codelineno-17-9"></a><span class="go">[ 1602.685741] usb 1-1: Product: Logitech USB Headset H340</span>
+</span><span id="__span-17-10"><a href="#__codelineno-17-10" id="__codelineno-17-10" name="__codelineno-17-10"></a><span class="go">[ 1602.691101] usb 1-1: Manufacturer: Logitech Inc.</span>
+</span><span id="__span-17-11"><a href="#__codelineno-17-11" id="__codelineno-17-11" name="__codelineno-17-11"></a><span class="go">KERNEL[1602.716705] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1 (usb)</span>
+</span><span id="__span-17-12"><a href="#__codelineno-17-12" id="__codelineno-17-12" name="__codelineno-17-12"></a><span class="go">KERNEL[1602.722002] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0 (usb)</span>
+</span><span id="__span-17-13"><a href="#__codelineno-17-13" id="__codelineno-17-13" name="__codelineno-17-13"></a><span class="go">KERNEL[1602.849792] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0 (sound)</span>
+</span><span id="__span-17-14"><a href="#__codelineno-17-14" id="__codelineno-17-14" name="__codelineno-17-14"></a><span class="go">KERNEL[1602.853994] add      /devices/platform/ocp/4740[ 1602.870857] PM: Cannot get wkup_m3_ipc handle</span>
+</span><span id="__span-17-15"><a href="#__codelineno-17-15" id="__codelineno-17-15" name="__codelineno-17-15"></a><span class="go">0000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0/pcmC0D0p (sound)</span>
+</span><span id="__span-17-16"><a href="#__codelineno-17-16" id="__codelineno-17-16" name="__codelineno-17-16"></a><span class="go">KERNEL[1602.858805] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0/pcmC0D0c (sound)</span>
+</span><span id="__span-17-17"><a href="#__codelineno-17-17" id="__codelineno-17-17" name="__codelineno-17-17"></a><span class="go">KERNEL[1602.872313] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0/controlC0 (sound)</span>
+</span><span id="__span-17-18"><a href="#__codelineno-17-18" id="__codelineno-17-18" name="__codelineno-17-18"></a><span class="go">KERNEL[1602.873192] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0 (usb)</span>
+</span><span id="__span-17-19"><a href="#__codelineno-17-19" id="__codelineno-17-19" name="__codelineno-17-19"></a><span class="go">KERNEL[1602.873919] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.1 (usb)</span>
+</span><span id="__span-17-20"><a href="#__codelineno-17-20" id="__codelineno-17-20" name="__codelineno-17-20"></a><span class="go">KERNEL[1602.874634] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.1 (usb)</span>
+</span><span id="__span-17-21"><a href="#__codelineno-17-21" id="__codelineno-17-21" name="__codelineno-17-21"></a><span class="go">KERNEL[1602.875370] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.2 (usb)</span>
+</span><span id="__span-17-22"><a href="#__codelineno-17-22" id="__codelineno-17-22" name="__codelineno-17-22"></a><span class="go">KERNEL[1602.876096] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.2 (usb)</span>
+</span><span id="__span-17-23"><a href="#__codelineno-17-23" id="__codelineno-17-23" name="__codelineno-17-23"></a><span class="go">KERNEL[1602.876771] add  [ 1602.964976] input: Logitech Inc. Logitech USB Headset H340 Consumer Control as /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input7</span>
+</span><span id="__span-17-24"><a href="#__codelineno-17-24" id="__codelineno-17-24" name="__codelineno-17-24"></a><span class="go">    /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3 (usb)</span>
+</span><span id="__span-17-25"><a href="#__codelineno-17-25" id="__codelineno-17-25" name="__codelineno-17-25"></a><span class="go">KERNEL[1602.949111] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004 (hid)</span>
+</span><span id="__span-17-26"><a href="#__codelineno-17-26" id="__codelineno-17-26" name="__codelineno-17-26"></a><span class="go">KERNEL[1602.980402] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input7 (input)</span>
+</span><span id="__span-17-27"><a href="#__codelineno-17-27" id="__codelineno-17-27" name="__codelineno-17-27"></a><span class="go">[ 1603.049480] input: Logitech Inc. Logitech USB Headset H340 as /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8</span>
+</span><span id="__span-17-28"><a href="#__codelineno-17-28" id="__codelineno-17-28" name="__codelineno-17-28"></a><span class="go">KERNEL[1603.057724] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A[ 1603.076705] hid-generic 0003:046D:0A38.0004: input,hiddev96: USB HID v1.11 Device [Logitech Inc. Logitech USB Headset H340] on usb-musb-hdrc.1-1/input3</span>
+</span><span id="__span-17-29"><a href="#__codelineno-17-29" id="__codelineno-17-29" name="__codelineno-17-29"></a><span class="go">38.0004/input/input7/event1 (input)</span>
+</span><span id="__span-17-30"><a href="#__codelineno-17-30" id="__codelineno-17-30" name="__codelineno-17-30"></a><span class="go">KERNEL[1603.058370] add    [ 1603.094087] PM: Cannot get wkup_m3_ipc handle</span>
+</span><span id="__span-17-31"><a href="#__codelineno-17-31" id="__codelineno-17-31" name="__codelineno-17-31"></a><span class="go">  /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8 (input)</span>
+</span><span id="__span-17-32"><a href="#__codelineno-17-32" id="__codelineno-17-32" name="__codelineno-17-32"></a><span class="go">KERNEL[1603.063218] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8/event2 (input)</span>
+</span><span id="__span-17-33"><a href="#__codelineno-17-33" id="__codelineno-17-33" name="__codelineno-17-33"></a><span class="go">KERNEL[1603.063593] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8/input8::mute (leds)</span>
+</span><span id="__span-17-34"><a href="#__codelineno-17-34" id="__codelineno-17-34" name="__codelineno-17-34"></a><span class="go">KERNEL[1603.063797] add      /class/usbmisc (class)</span>
+</span><span id="__span-17-35"><a href="#__codelineno-17-35" id="__codelineno-17-35" name="__codelineno-17-35"></a><span class="go">KERNEL[1603.083788] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/usbmisc/hiddev0 (usbmisc)</span>
+</span><span id="__span-17-36"><a href="#__codelineno-17-36" id="__codelineno-17-36" name="__codelineno-17-36"></a><span class="go">KERNEL[1603.084236] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004 (hid)</span>
+</span><span id="__span-17-37"><a href="#__codelineno-17-37" id="__codelineno-17-37" name="__codelineno-17-37"></a><span class="go">KERNEL[1603.084543] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3 (usb)</span>
+</span><span id="__span-17-38"><a href="#__codelineno-17-38" id="__codelineno-17-38" name="__codelineno-17-38"></a><span class="go">KERNEL[1603.084907] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1 (usb)</span>
+</span><span id="__span-17-39"><a href="#__codelineno-17-39" id="__codelineno-17-39" name="__codelineno-17-39"></a><span class="go">UDEV  [1603.110810] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1 (usb)</span>
+</span><span id="__span-17-40"><a href="#__codelineno-17-40" id="__codelineno-17-40" name="__codelineno-17-40"></a><span class="go">UDEV  [1603.118580] add      /class/usbmisc (class)</span>
+</span><span id="__span-17-41"><a href="#__codelineno-17-41" id="__codelineno-17-41" name="__codelineno-17-41"></a><span class="go">UDEV  [1603.129548] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0 (usb)</span>
+</span><span id="__span-17-42"><a href="#__codelineno-17-42" id="__codelineno-17-42" name="__codelineno-17-42"></a><span class="go">UDEV  [1603.163585] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0 (sound)</span>
+</span><span id="__span-17-43"><a href="#__codelineno-17-43" id="__codelineno-17-43" name="__codelineno-17-43"></a><span class="go">UDEV  [1603.177859] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0/pcmC0D0c (sound)</span>
+</span><span id="__span-17-44"><a href="#__codelineno-17-44" id="__codelineno-17-44" name="__codelineno-17-44"></a><span class="go">UDEV  [1603.183681] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0/pcmC0D0p (sound)</span>
+</span><span id="__span-17-45"><a href="#__codelineno-17-45" id="__codelineno-17-45" name="__codelineno-17-45"></a><span class="go">UDEV  [1603.195790] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.2 (usb)</span>
+</span><span id="__span-17-46"><a href="#__codelineno-17-46" id="__codelineno-17-46" name="__codelineno-17-46"></a><span class="go">UDEV  [1603.203962] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.1 (usb)</span>
+</span><span id="__span-17-47"><a href="#__codelineno-17-47" id="__codelineno-17-47" name="__codelineno-17-47"></a><span class="go">UDEV  [1603.218135] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.1 (usb)</span>
+</span><span id="__span-17-48"><a href="#__codelineno-17-48" id="__codelineno-17-48" name="__codelineno-17-48"></a><span class="go">UDEV  [1603.221134] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3 (usb)</span>
+</span><span id="__span-17-49"><a href="#__codelineno-17-49" id="__codelineno-17-49" name="__codelineno-17-49"></a><span class="go">UDEV  [1603.227523] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004 (hid)</span>
+</span><span id="__span-17-50"><a href="#__codelineno-17-50" id="__codelineno-17-50" name="__codelineno-17-50"></a><span class="go">UDEV  [1603.236292] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.2 (usb)</span>
+</span><span id="__span-17-51"><a href="#__codelineno-17-51" id="__codelineno-17-51" name="__codelineno-17-51"></a><span class="go">UDEV  [1603.251374] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/usbmisc/hiddev0 (usbmisc)</span>
+</span><span id="__span-17-52"><a href="#__codelineno-17-52" id="__codelineno-17-52" name="__codelineno-17-52"></a><span class="go">KERNEL[1603.267946] change   /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0 (sound)</span>
+</span><span id="__span-17-53"><a href="#__codelineno-17-53" id="__codelineno-17-53" name="__codelineno-17-53"></a><span class="go">UDEV  [1603.293198] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8 (input)</span>
+</span><span id="__span-17-54"><a href="#__codelineno-17-54" id="__codelineno-17-54" name="__codelineno-17-54"></a><span class="go">UDEV  [1603.300618] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input7 (input)</span>
+</span><span id="__span-17-55"><a href="#__codelineno-17-55" id="__codelineno-17-55" name="__codelineno-17-55"></a><span class="go">UDEV  [1603.301505] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0/controlC0 (sound)</span>
+</span><span id="__span-17-56"><a href="#__codelineno-17-56" id="__codelineno-17-56" name="__codelineno-17-56"></a><span class="go">UDEV  [1603.317818] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0 (usb)</span>
+</span><span id="__span-17-57"><a href="#__codelineno-17-57" id="__codelineno-17-57" name="__codelineno-17-57"></a><span class="go">UDEV  [1603.332349] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8/input8::mute (leds)</span>
+</span><span id="__span-17-58"><a href="#__codelineno-17-58" id="__codelineno-17-58" name="__codelineno-17-58"></a><span class="go">UDEV  [1603.387225] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input7/event1 (input)</span>
+</span><span id="__span-17-59"><a href="#__codelineno-17-59" id="__codelineno-17-59" name="__codelineno-17-59"></a><span class="go">UDEV  [1603.396360] add      /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004/input/input8/event2 (input)</span>
+</span><span id="__span-17-60"><a href="#__codelineno-17-60" id="__codelineno-17-60" name="__codelineno-17-60"></a><span class="go">UDEV  [1603.396747] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3/0003:046D:0A38.0004 (hid)</span>
+</span><span id="__span-17-61"><a href="#__codelineno-17-61" id="__codelineno-17-61" name="__codelineno-17-61"></a><span class="go">UDEV  [1603.407306] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.3 (usb)</span>
+</span><span id="__span-17-62"><a href="#__codelineno-17-62" id="__codelineno-17-62" name="__codelineno-17-62"></a><span class="go">UDEV  [1603.417180] bind     /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1 (usb)</span>
+</span><span id="__span-17-63"><a href="#__codelineno-17-63" id="__codelineno-17-63" name="__codelineno-17-63"></a><span class="go">UDEV  [1603.427970] change   /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0 (sound)</span>
+</span></code></pre></div>
+<p>You can also see the <code>MODALIAS</code> values carried by these events:</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - systemd</span><pre><span></span><code><span id="__span-18-1"><a href="#__codelineno-18-1" id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="gp"># </span>udevadm<span class="w"> </span>monitor<span class="w"> </span>--env
+</span><span id="__span-18-2"><a href="#__codelineno-18-2" id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="go">    ...</span>
+</span><span id="__span-18-3"><a href="#__codelineno-18-3" id="__codelineno-18-3" name="__codelineno-18-3"></a>
+</span><span id="__span-18-4"><a href="#__codelineno-18-4" id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="go">UDEV  [1763.405675] change   /devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0 (sound)</span>
+</span><span id="__span-18-5"><a href="#__codelineno-18-5" id="__codelineno-18-5" name="__codelineno-18-5"></a><span class="go">ACTION=change</span>
+</span><span id="__span-18-6"><a href="#__codelineno-18-6" id="__codelineno-18-6" name="__codelineno-18-6"></a><span class="go">DEVPATH=/devices/platform/ocp/47400000.target-module/47401c00.usb/musb-hdrc.1/usb1/1-1/1-1:1.0/sound/card0</span>
+</span><span id="__span-18-7"><a href="#__codelineno-18-7" id="__codelineno-18-7" name="__codelineno-18-7"></a><span class="go">SUBSYSTEM=sound</span>
+</span><span id="__span-18-8"><a href="#__codelineno-18-8" id="__codelineno-18-8" name="__codelineno-18-8"></a><span class="go">SYNTH_UUID=0</span>
+</span><span id="__span-18-9"><a href="#__codelineno-18-9" id="__codelineno-18-9" name="__codelineno-18-9"></a><span class="go">SEQNUM=2433</span>
+</span><span id="__span-18-10"><a href="#__codelineno-18-10" id="__codelineno-18-10" name="__codelineno-18-10"></a><span class="go">USEC_INITIALIZED=1761986039</span>
+</span><span id="__span-18-11"><a href="#__codelineno-18-11" id="__codelineno-18-11" name="__codelineno-18-11"></a><span class="go">SOUND_INITIALIZED=1</span>
+</span><span id="__span-18-12"><a href="#__codelineno-18-12" id="__codelineno-18-12" name="__codelineno-18-12"></a><span class="go">ID_VENDOR=Logitech_Inc.</span>
+</span><span id="__span-18-13"><a href="#__codelineno-18-13" id="__codelineno-18-13" name="__codelineno-18-13"></a><span class="go">ID_VENDOR_ENC=Logitech\x20Inc.</span>
+</span><span id="__span-18-14"><a href="#__codelineno-18-14" id="__codelineno-18-14" name="__codelineno-18-14"></a><span class="go">ID_VENDOR_ID=046d</span>
+</span><span id="__span-18-15"><a href="#__codelineno-18-15" id="__codelineno-18-15" name="__codelineno-18-15"></a><span class="go">ID_MODEL=Logitech_USB_Headset_H340</span>
+</span><span id="__span-18-16"><a href="#__codelineno-18-16" id="__codelineno-18-16" name="__codelineno-18-16"></a><span class="go">ID_MODEL_ENC=Logitech\x20USB\x20Headset\x20H340</span>
+</span><span id="__span-18-17"><a href="#__codelineno-18-17" id="__codelineno-18-17" name="__codelineno-18-17"></a><span class="go">ID_MODEL_ID=0a38</span>
+</span><span id="__span-18-18"><a href="#__codelineno-18-18" id="__codelineno-18-18" name="__codelineno-18-18"></a><span class="go">ID_REVISION=0115</span>
+</span><span id="__span-18-19"><a href="#__codelineno-18-19" id="__codelineno-18-19" name="__codelineno-18-19"></a><span class="go">ID_SERIAL=Logitech_Inc._Logitech_USB_Headset_H340</span>
+</span><span id="__span-18-20"><a href="#__codelineno-18-20" id="__codelineno-18-20" name="__codelineno-18-20"></a><span class="go">ID_TYPE=audio</span>
+</span><span id="__span-18-21"><a href="#__codelineno-18-21" id="__codelineno-18-21" name="__codelineno-18-21"></a><span class="go">ID_BUS=usb</span>
+</span><span id="__span-18-22"><a href="#__codelineno-18-22" id="__codelineno-18-22" name="__codelineno-18-22"></a><span class="go">ID_USB_INTERFACES=:010100:010200:030000:</span>
+</span><span id="__span-18-23"><a href="#__codelineno-18-23" id="__codelineno-18-23" name="__codelineno-18-23"></a><span class="go">ID_USB_INTERFACE_NUM=00</span>
+</span><span id="__span-18-24"><a href="#__codelineno-18-24" id="__codelineno-18-24" name="__codelineno-18-24"></a><span class="go">ID_USB_DRIVER=snd-usb-audio</span>
+</span><span id="__span-18-25"><a href="#__codelineno-18-25" id="__codelineno-18-25" name="__codelineno-18-25"></a><span class="go">ID_ID=usb-Logitech_Inc._Logitech_USB_Headset_H340-00</span>
+</span><span id="__span-18-26"><a href="#__codelineno-18-26" id="__codelineno-18-26" name="__codelineno-18-26"></a><span class="go">ID_PATH=platform-musb-hdrc.1-usb-0:1:1.0</span>
+</span><span id="__span-18-27"><a href="#__codelineno-18-27" id="__codelineno-18-27" name="__codelineno-18-27"></a><span class="go">ID_PATH_TAG=platform-musb-hdrc_1-usb-0_1_1_0</span>
+</span><span id="__span-18-28"><a href="#__codelineno-18-28" id="__codelineno-18-28" name="__codelineno-18-28"></a><span class="go">SOUND_FORM_FACTOR=headset</span>
+</span></code></pre></div>
+<p>As far as the <em>Nunchuk</em> is concerned, we cannot easily remove it from the <em>Device Tree</em> and add it back, but it's easier to find its <code>MODALIAS</code> value:</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - systemd</span><pre><span></span><code><span id="__span-19-1"><a href="#__codelineno-19-1" id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="gp"># </span><span class="nb">cd</span><span class="w"> </span>/sys/bus/i2c/devices/
+</span><span id="__span-19-2"><a href="#__codelineno-19-2" id="__codelineno-19-2" name="__codelineno-19-2"></a><span class="gp"># </span>ls<span class="w"> </span>-la
+</span><span id="__span-19-3"><a href="#__codelineno-19-3" id="__codelineno-19-3" name="__codelineno-19-3"></a><span class="go">total 0</span>
+</span><span id="__span-19-4"><a href="#__codelineno-19-4" id="__codelineno-19-4" name="__codelineno-19-4"></a><span class="go">drwxr-xr-x    2 root     root             0 Jan 18  2022 .</span>
+</span><span id="__span-19-5"><a href="#__codelineno-19-5" id="__codelineno-19-5" name="__codelineno-19-5"></a><span class="go">drwxr-xr-x    4 root     root             0 Jan 18  2022 ..</span>
+</span><span id="__span-19-6"><a href="#__codelineno-19-6" id="__codelineno-19-6" name="__codelineno-19-6"></a><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 0-0024 -&gt; ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0024</span>
+</span><span id="__span-19-7"><a href="#__codelineno-19-7" id="__codelineno-19-7" name="__codelineno-19-7"></a><span class="go">lrwxrwxrwx    1 root     root             0 May  6 11:18 0-0034 -&gt; ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0034</span>
+</span><span id="__span-19-8"><a href="#__codelineno-19-8" id="__codelineno-19-8" name="__codelineno-19-8"></a><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 0-0050 -&gt; ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0050</span>
+</span><span id="__span-19-9"><a href="#__codelineno-19-9" id="__codelineno-19-9" name="__codelineno-19-9"></a><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 0-0070 -&gt; ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0070</span>
+</span><span id="__span-19-10"><a href="#__codelineno-19-10" id="__codelineno-19-10" name="__codelineno-19-10"></a><span class="hll"><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 1-0052 -&gt; ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@0/4802a000.target-module/4802a000.i2c/i2c-1/1-0052</span>
+</span></span><span id="__span-19-11"><a href="#__codelineno-19-11" id="__codelineno-19-11" name="__codelineno-19-11"></a><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 2-0054 -&gt; ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0054</span>
+</span><span id="__span-19-12"><a href="#__codelineno-19-12" id="__codelineno-19-12" name="__codelineno-19-12"></a><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 2-0055 -&gt; ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0055</span>
+</span><span id="__span-19-13"><a href="#__codelineno-19-13" id="__codelineno-19-13" name="__codelineno-19-13"></a><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 2-0056 -&gt; ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0056</span>
+</span><span id="__span-19-14"><a href="#__codelineno-19-14" id="__codelineno-19-14" name="__codelineno-19-14"></a><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 2-0057 -&gt; ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0057</span>
+</span><span id="__span-19-15"><a href="#__codelineno-19-15" id="__codelineno-19-15" name="__codelineno-19-15"></a><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 i2c-0 -&gt; ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0</span>
+</span><span id="__span-19-16"><a href="#__codelineno-19-16" id="__codelineno-19-16" name="__codelineno-19-16"></a><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 i2c-1 -&gt; ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@0/4802a000.target-module/4802a000.i2c/i2c-1</span>
+</span><span id="__span-19-17"><a href="#__codelineno-19-17" id="__codelineno-19-17" name="__codelineno-19-17"></a><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 i2c-2 -&gt; ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2</span>
+</span></code></pre></div>
+<p>Here you will recognize our <em>Nunchuk</em> device through its <code>0x52</code> address.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - systemd</span><pre><span></span><code><span id="__span-20-1"><a href="#__codelineno-20-1" id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="gp"># </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"1-0052/"</span>
+</span><span id="__span-20-2"><a href="#__codelineno-20-2" id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="gp"># </span>ls<span class="w"> </span>-la
+</span><span id="__span-20-3"><a href="#__codelineno-20-3" id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="go">total 0</span>
+</span><span id="__span-20-4"><a href="#__codelineno-20-4" id="__codelineno-20-4" name="__codelineno-20-4"></a><span class="go">drwxr-xr-x    4 root     root             0 Jan 18  2022 .</span>
+</span><span id="__span-20-5"><a href="#__codelineno-20-5" id="__codelineno-20-5" name="__codelineno-20-5"></a><span class="go">drwxr-xr-x    5 root     root             0 Jan 18  2022 ..</span>
+</span><span id="__span-20-6"><a href="#__codelineno-20-6" id="__codelineno-20-6" name="__codelineno-20-6"></a><span class="go">lrwxrwxrwx    1 root     root             0 May  6 11:15 driver -&gt; ../../../../../../../../../bus/i2c/drivers/nunchuk</span>
+</span><span id="__span-20-7"><a href="#__codelineno-20-7" id="__codelineno-20-7" name="__codelineno-20-7"></a><span class="go">drwxr-xr-x    3 root     root             0 May  6 11:15 input</span>
+</span><span id="__span-20-8"><a href="#__codelineno-20-8" id="__codelineno-20-8" name="__codelineno-20-8"></a><span class="go">-r--r--r--    1 root     root          4096 May  6 11:19 modalias</span>
+</span><span id="__span-20-9"><a href="#__codelineno-20-9" id="__codelineno-20-9" name="__codelineno-20-9"></a><span class="go">-r--r--r--    1 root     root          4096 Jan  1  2000 name</span>
+</span><span id="__span-20-10"><a href="#__codelineno-20-10" id="__codelineno-20-10" name="__codelineno-20-10"></a><span class="go">lrwxrwxrwx    1 root     root             0 May  6 11:19 of_node -&gt; ../../../../../../../../../firmware/devicetree/base/ocp/interconnect@48000000/segment@0/target-module@2a000/i2c@0/joystick@52</span>
+</span><span id="__span-20-11"><a href="#__codelineno-20-11" id="__codelineno-20-11" name="__codelineno-20-11"></a><span class="go">drwxr-xr-x    2 root     root             0 May  6 11:19 power</span>
+</span><span id="__span-20-12"><a href="#__codelineno-20-12" id="__codelineno-20-12" name="__codelineno-20-12"></a><span class="go">lrwxrwxrwx    1 root     root             0 Jan 18  2022 subsystem -&gt; ../../../../../../../../../bus/i2c</span>
+</span><span id="__span-20-13"><a href="#__codelineno-20-13" id="__codelineno-20-13" name="__codelineno-20-13"></a><span class="go">-rw-r--r--    1 root     root          4096 Jan 18  2022 uevent</span>
+</span><span id="__span-20-14"><a href="#__codelineno-20-14" id="__codelineno-20-14" name="__codelineno-20-14"></a><span class="gp"># </span>cat<span class="w"> </span>modalias
+</span><span id="__span-20-15"><a href="#__codelineno-20-15" id="__codelineno-20-15" name="__codelineno-20-15"></a><span class="go">of:NjoystickT(null)Cnintendo,nunchuk</span>
+</span></code></pre></div>
+<p>Here the bus is <code>of</code>, meaning <em>Open Firmware</em>, which was the former name of the <em>Device Tree</em>.<br/>
+When an event was emitted by the kernel with this <code>MODALIAS</code> string, the <code>nunchuk</code> module got loaded by <em>Udev</em> thanks to the matching alias.</p>
+<p>This actually happened when <em>systemd</em> ran the <em>coldplugging</em> operation: at system startup, it asked the kernel to emit <em>hotplug</em> events for devices already present when the system booted:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-21-1"><a href="#__codelineno-21-1" id="__codelineno-21-1" name="__codelineno-21-1"></a>[ OK ] Finished Coldplug All udev Devices.
+</span></code></pre></div>
+<p>On non-<em>x86</em> platforms, that's typically for devices described in the <em>Device Tree</em>.<br/>
+This way, both <em>static</em> and <em>hotplugged</em> devices can be handled in the same way, using the same <em>Udev</em> rules.</p>
+<h2 id="testing"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.8</span> Testing</h2>
+<p>Make sure that audio playback still works on your system:</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - systemd</span><pre><span></span><code><span id="__span-22-1"><a href="#__codelineno-22-1" id="__codelineno-22-1" name="__codelineno-22-1"></a><span class="gp"># </span>mpc<span class="w"> </span>update
+</span><span id="__span-22-2"><a href="#__codelineno-22-2" id="__codelineno-22-2" name="__codelineno-22-2"></a><span class="go">Updating DB (#1) ...</span>
+</span><span id="__span-22-3"><a href="#__codelineno-22-3" id="__codelineno-22-3" name="__codelineno-22-3"></a><span class="gp">volume:100%   </span>repeat:<span class="w"> </span>off<span class="w">   </span>random:<span class="w"> </span>off<span class="w">   </span>single:<span class="w"> </span>off<span class="w">   </span>consume:<span class="w"> </span>off
+</span><span id="__span-22-4"><a href="#__codelineno-22-4" id="__codelineno-22-4" name="__codelineno-22-4"></a><span class="gp"># </span>mpc<span class="w"> </span>add<span class="w"> </span>/
+</span><span id="__span-22-5"><a href="#__codelineno-22-5" id="__codelineno-22-5" name="__codelineno-22-5"></a><span class="gp"># </span>mpc<span class="w"> </span>play
+</span><span id="__span-22-6"><a href="#__codelineno-22-6" id="__codelineno-22-6" name="__codelineno-22-6"></a><span class="go">1-sample.ogg</span>
+</span><span id="__span-22-7"><a href="#__codelineno-22-7" id="__codelineno-22-7" name="__codelineno-22-7"></a><span class="gp">[playing] #</span><span class="m">1</span>/7<span class="w">   </span><span class="m">0</span>:00/0:19<span class="w"> </span><span class="o">(</span><span class="m">0</span>%<span class="o">)</span>
+</span><span id="__span-22-8"><a href="#__codelineno-22-8" id="__codelineno-22-8" name="__codelineno-22-8"></a><span class="gp">volume:100%   </span>repeat:<span class="w"> </span>off<span class="w">   </span>random:<span class="w"> </span>off<span class="w">   </span>single:<span class="w"> </span>off<span class="w">   </span>consume:<span class="w"> </span>off
+</span><span id="__span-22-9"><a href="#__codelineno-22-9" id="__codelineno-22-9" name="__codelineno-22-9"></a><span class="gp"># </span>mpc<span class="w"> </span>stop
+</span><span id="__span-22-10"><a href="#__codelineno-22-10" id="__codelineno-22-10" name="__codelineno-22-10"></a><span class="gp">volume:100%   </span>repeat:<span class="w"> </span>off<span class="w">   </span>random:<span class="w"> </span>off<span class="w">   </span>single:<span class="w"> </span>off<span class="w">   </span>consume:<span class="w"> </span>off
+</span></code></pre></div>
+<p>If it doesn't, look at the <em>systemd</em> logs in your serial console history (<code>dmesg</code>).
+<em>systemd</em> should let you know about the failing services and the commands to run to get more details.</p>
+<h2 id="backup-and-restore"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.9</span> Backup and restore</h2>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-23-1"><a href="#__codelineno-23-1" id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/output/images/"</span>
+</span><span id="__span-23-2"><a href="#__codelineno-23-2" id="__codelineno-23-2" name="__codelineno-23-2"></a><span class="gp">$ </span>tar<span class="w"> </span>cfJv<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/integration-images.tar.xz"</span><span class="w"> </span>*
+</span></code></pre></div>
+<h2 id="licensing"><span class="enumerate-headings-plugin enumerate-heading-plugin">23.10</span> Licensing</h2>
+<p>This document is an extension to: <a href="https://bootlin.com/doc/training/embedded-linux-bbb/"><em>Embedded Linux System Development - Practical Labs - BeagleBone Black Variant</em></a>
+ — © 2004-2023, <em>Bootlin</em> <a href="https://bootlin.com">https://bootlin.com/</a>, <a href="(https://creativecommons.org/licenses/by-sa/3.0/)"><code>CC-BY-SA-3.0</code></a> license.</p>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.fac441b0.min.js"></script>
+</body>
+</html>

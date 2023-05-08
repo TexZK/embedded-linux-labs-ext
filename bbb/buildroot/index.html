@@ -1,0 +1,1224 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../thirdparty/" rel="prev"/>
+<link href="../integration/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.4.3, mkdocs-material-9.1.11" name="generator"/>
+<title>Buildroot - Embedded Systems Linux Development Notes</title>
+<link href="../../assets/stylesheets/main.85bb2934.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#buildroot">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Embedded Systems Linux Development Notes" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Embedded Systems Linux Development Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Embedded Systems Linux Development Notes
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Buildroot
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Embedded Systems Linux Development Notes" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Embedded Systems Linux Development Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    Embedded Systems Linux Development Notes
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+        Overview
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          QEMU variant
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+          QEMU variant
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/virtualbox/">
+        Host VM
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/toolchain/">
+        Building a cross-compile toolchain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/bootloader/">
+        Bootloader - U-Boot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/kernel/">
+        Linux Kernel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/tinysystem/">
+        Tiny embedded system with BusyBox
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/hardware/">
+        Accessing Hardware Devices
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/blockfs/">
+        Block Filesystems
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/thirdparty/">
+        Third-party libraries and apps
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/buildroot/">
+        Buildroot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/appdev/">
+        App - Development
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/debugging/">
+        App - Remote debug
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../qemu/debootstrap/">
+        debootstrap
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          BeagleBone Black variant
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+          BeagleBone Black variant
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../virtualbox/">
+        Host VM
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../toolchain/">
+        Building a cross-compile toolchain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../bootloader/">
+        Bootloader - U-Boot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../kernel/">
+        Linux Kernel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tinysystem/">
+        Tiny embedded system with BusyBox
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hardware/">
+        Accessing Hardware Devices
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../blockfs/">
+        Block Filesystems
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../thirdparty/">
+        Third-party libraries and apps
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Buildroot
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        Buildroot
+      </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#objectives">
+    Objectives
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#required-tools">
+    Required tools
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#source-code">
+    Source code
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration">
+    Configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#build">
+    Build
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#run-the-generated-system">
+    Run the generated system
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#loading-the-usb-audio-module">
+    Loading the USB audio module
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing-mpd-and-mpc">
+    Testing mpd and mpc
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#analyzing-dependencies">
+    Analyzing dependencies
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adding-a-package">
+    Adding a package
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing-the-nunchuk">
+    Testing the Nunchuk
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#commit-your-changes">
+    Commit your changes
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#going-further">
+    Going further
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup-and-restore">
+    Backup and restore
+  </a>
+<nav aria-label="Backup and restore" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#git-bundle">
+    git bundle
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing">
+    Licensing
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../integration/">
+        System integration
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../appdev/">
+        App - Development
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Knowledge Base
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          Knowledge Base
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/git-hash/">
+        git commit hash expansion
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/menuconfig/">
+        menuconfig
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/processors/">
+        Processors
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../copying/">
+        Copying this document
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#objectives">
+    Objectives
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#required-tools">
+    Required tools
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#source-code">
+    Source code
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration">
+    Configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#build">
+    Build
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#run-the-generated-system">
+    Run the generated system
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#loading-the-usb-audio-module">
+    Loading the USB audio module
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing-mpd-and-mpc">
+    Testing mpd and mpc
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#analyzing-dependencies">
+    Analyzing dependencies
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adding-a-package">
+    Adding a package
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing-the-nunchuk">
+    Testing the Nunchuk
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#commit-your-changes">
+    Commit your changes
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#going-further">
+    Going further
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup-and-restore">
+    Backup and restore
+  </a>
+<nav aria-label="Backup and restore" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#git-bundle">
+    git bundle
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing">
+    Licensing
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="buildroot"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.</span> Buildroot</h1>
+<h2 id="objectives"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.1</span> Objectives</h2>
+<ul>
+<li>discover how a build system is used and how it works, with the example of the Buildroot build system.</li>
+</ul>
+<p>Compared to the previous lab, we are going to build a more elaborate system, still containing <code>alsa-utils</code> (and of course its <code>alsa-lib</code> dependency), but this time using <em>Buildroot</em>, an automated build system.</p>
+<p>The automated build system will also allow us to add more packages and play real audio on our system, thanks to the <a href="https://www.musicpd.org/"><em>Music Player Daemon</em> (<code>mpd</code>)</a> and its <code>mpc</code> client.</p>
+<h2 id="required-tools"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.2</span> Required tools</h2>
+<ul>
+<li>
+<p>Our <a href="../toolchain/"><em>cross-compile toolchain</em></a></p>
+</li>
+<li>
+<p>Ubuntu packages:</p>
+<p><code>evince</code>
+<code>graphviz</code></p>
+<p>plus those from the previous labs.</p>
+</li>
+<li>
+<p><a href="https://buildroot.org/"><em>Buildroot</em></a>, either as:</p>
+<ul>
+<li>
+<p><a href="https://git.buildroot.net/buildroot/"><em>git</em> repository</a> tag <code>v2022.02</code></p>
+</li>
+<li>
+<p><a href="https://git.buildroot.net/buildroot/snapshot/buildroot-2022.02.tar.bz2">Source code archive for release <code>v2022.02</code></a></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="source-code"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.3</span> Source code</h2>
+<p>The official <em>Buildroot</em> website is available at <a href="https://buildroot.org/">https://buildroot.org/</a>.<br/>
+Let's clone the <em>git</em> repository, branching the <code>2022.02</code> release, which is a <em>LTS</em> (<em>Long Term Support</em>, we're just sticking to the original one), naming after this lab.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="gp">$ </span><span class="nv">LAB_PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/embedded-linux-bbb-labs/buildroot"</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="gp">$ </span><span class="nv">label</span><span class="o">=</span><span class="s2">"2022.02"</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://git.buildroot.net/buildroot/
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>buildroot/
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="gp">$ </span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>embedded-linux-bbb<span class="w"> </span><span class="nv">$label</span>
+</span></code></pre></div>
+<p>Several subdirectories or files are visible. The most important ones are:</p>
+<ul>
+<li>
+<p><code>boot</code> contains the <em>Makefiles</em> and configuration items related to the compilation of common bootloaders (<em>GRUB</em>, <em>U-Boot</em>, <em>Barebox</em>, etc.)</p>
+</li>
+<li>
+<p><code>board</code> contains board specific configurations and <em>root</em> filesystem <em>overlays</em>.</p>
+</li>
+<li>
+<p><code>configs</code> contains a set of predefined configurations, similar to the concept of <em>defconfig</em> in the kernel.</p>
+</li>
+<li>
+<p><code>docs</code> contains the documentation for <em>Buildroot</em>.</p>
+</li>
+<li>
+<p><code>fs</code> contains the code used to generate the various <em>root</em> filesystem image formats.</p>
+</li>
+<li>
+<p><code>linux</code> contains the <em>Makefile</em> and configuration items related to the compilation of the Linux kernel.</p>
+</li>
+<li>
+<p><code>Makefile</code> is the main <em>Makefile</em> that we will use to use <em>Buildroot</em>: everything works through <em>Makefiles</em> in Buildroot;</p>
+</li>
+<li>
+<p><code>package</code> is a directory that contains all the <em>Makefiles</em>, patches, and configuration items to compile the <em>user space</em> applications and libraries of your embedded Linux system.<br/>
+  Have a look at various subdirectories and see what they contain.</p>
+</li>
+<li>
+<p><code>system</code> contains the root filesystem skeleton and the <em>device tables</em> used for a static <code>/dev</code>.</p>
+</li>
+<li>
+<p><code>toolchain</code> contains the <em>Makefiles</em>, patches and configuration items to generate the cross-compiling toolchain.</p>
+</li>
+</ul>
+<h2 id="configuration"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.4</span> Configuration</h2>
+<p>As we will want Buildroot to build a kernel with a custom configuration, and our custom patch, let's add our own subdirectory under <code>board</code>.<br/>
+Then, copy our kernel configuration (<a href="../blockfs/">latest</a>) and kernel patch (<a href="../hardware/">latest</a>).</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>board/bootlin/training/
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="gp">$ </span>cp<span class="w"> </span>../../tinysystem/kernel-blockfs.config<span class="w">  </span>board/bootlin/training/linux.config
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="gp">$ </span>cp<span class="w"> </span>../../hardware/0001-Custom-DTS-for-Bootlin-lab.patch<span class="w">  </span>board/bootlin/training/
+</span></code></pre></div>
+<p>In our case, we would like to:</p>
+<ul>
+<li>
+<p>Generate an embedded Linux system for ARM.</p>
+</li>
+<li>
+<p>Use an already existing external toolchain instead of having <em>Buildroot</em> generating one for us.</p>
+</li>
+<li>
+<p>Compile the Linux kernel and deploy its modules in the <em>root</em> filesystem.</p>
+</li>
+<li>
+<p>Integrate <em>BusyBox</em>, <code>alsa-utils</code>, <code>mpd</code>, <code>mpc</code> and <code>evtest</code> in our embedded Linux system.</p>
+</li>
+<li>
+<p>Integrate the target filesystem into a <em>tarball</em>.</p>
+</li>
+</ul>
+<p>To run the configuration utility of <em>Buildroot</em>, simply run:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a><span class="gp">$ </span>make<span class="w"> </span>menuconfig
+</span></code></pre></div>
+<p>Set the following options. Don't hesitate to press the <code>Help</code> button whenever you need more details about a given option!</p>
+<p>In <code>Target options</code>:</p>
+<ul>
+<li>
+<p><code>Target Architecture</code> = <code>ARM (little endian)</code>.</p>
+</li>
+<li>
+<p><code>Target Architecture Variant</code> = <code>cortex-A8</code>.</p>
+</li>
+<li>
+<p><code>Target ABI</code> = <code>EABIhf</code>.</p>
+</li>
+<li>
+<p><code>Floating point strategy</code> = <code>VFPv3-D16</code>.</p>
+</li>
+</ul>
+<p>In <code>Toolchain</code>:</p>
+<ul>
+<li>
+<p><code>Toolchain type</code> = <code>External toolchain</code>.</p>
+</li>
+<li>
+<p><code>Toolchain</code> = <code>Custom toolchain</code>.</p>
+</li>
+<li>
+<p><code>Toolchain path</code> = <code>$(HOME)/x-tools/arm-training-linux-uclibcgnueabihf</code>, which is the one we built.</p>
+</li>
+<li>
+<p><code>External toolchain gcc version</code> = <code>11.x</code>.</p>
+</li>
+<li>
+<p><code>External toolchain kernel headers series</code> = <code>5.15.x</code>.</p>
+</li>
+<li>
+<p><code>External toolchain C library</code> = <code>uClibc/uClibc-ng</code>.</p>
+</li>
+<li>
+<p>Enable <code>Toolchain has WCHAR support?</code>.</p>
+</li>
+<li>
+<p>Enable <code>Toolchain has SSP support?</code>.</p>
+</li>
+<li>
+<p>Enable <code>Toolchain has C++ support?</code>.</p>
+</li>
+</ul>
+<p>In <code>Kernel</code>:</p>
+<ul>
+<li>
+<p>Enable <code>Linux Kernel</code>.</p>
+</li>
+<li>
+<p><code>Kernel version</code> = <code>Latest version (5.15)</code>.</p>
+</li>
+<li>
+<p><code>Custom kernel patches</code> = <code>board/bootlin/training/0001-Custom-DTS-for-Bootlin-lab.patch</code>,
+  our hand-made patch.</p>
+</li>
+<li>
+<p><code>Kernel configuration</code> = <code>Using a custom (def)config file</code>.</p>
+</li>
+<li>
+<p><code>Configuration file path</code> = <code>board/bootlin/training/linux.config</code>.</p>
+</li>
+<li>
+<p>Enable <code>Build a Device Tree Blob (DTB)</code>.</p>
+</li>
+<li>
+<p><code>In-tree Device Tree Source file names</code> = <code>am335x-boneblack-custom</code>.</p>
+</li>
+</ul>
+<p>In <code>Target packages</code>:</p>
+<ul>
+<li>
+<p>Keep <code>BusyBox (default version)</code> and keep the <em>BusyBox</em> configuration proposed by <em>Buildroot</em>.</p>
+</li>
+<li>
+<p>Under <code>Audio and video applications</code>:</p>
+<ul>
+<li>
+<p>Enable <code>alsa-utils</code>, and in the submenu:</p>
+<ul>
+<li>Only keep <code>speaker-test</code>.</li>
+</ul>
+</li>
+<li>
+<p>Enable <code>mpd</code>, and in the submenu:</p>
+<ul>
+<li>Keep only <code>alsa</code>, <code>vorbis</code> and <code>tcp sockets</code>.</li>
+</ul>
+</li>
+<li>
+<p>Enable <code>mpd-mpc</code>.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Under <code>Hardware handling</code>:</p>
+<ul>
+<li>Enable <code>evtest</code>.<br/>
+  This userspace application allows to test events from input devices.
+  This way we will be able to test the <em>Nunchuk</em> by getting details about which buttons were pressed.</li>
+</ul>
+</li>
+</ul>
+<p>In <code>Filesystem images</code>:</p>
+<ul>
+<li>Enable <code>tar the root filesystem</code>.</li>
+</ul>
+<p>Exit the <code>menuconfig</code> interface saving into the usual <code>.config</code> file. Also make a backup copy for reference.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="gp">$ </span>cp<span class="w"> </span>.config<span class="w"> </span>../buildroot.config
+</span></code></pre></div>
+<h2 id="build"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.5</span> Build</h2>
+<p>Just run the canonical <code>make</code>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="gp">$ </span>make
+</span></code></pre></div>
+<p><em>Buildroot</em> will first create a small environment with the external toolchain, then download,
+extract, configure, compile, and install each component of the embedded system.</p>
+<p>All the compilation has taken place in the <code>output/</code> subdirectory. Let's explore its content:</p>
+<ul>
+<li>
+<p><code>build</code> is the directory in which each component built by <em>Buildroot</em> is extracted, and where the build actually takes place.</p>
+</li>
+<li>
+<p><code>host</code> is the directory where <em>Buildroot</em> installs some components for the host.<br/>
+  As <em>Buildroot</em> doesn't want to depend on too many things installed in the developer machines, it installs some tools needed to compile the packages for the target.<br/>
+  In our case it installed <code>pkg-config</code> (since the version of the host may be ancient) and tools to generate the root filesystem image (<code>genext2fs</code>, <code>makedevs</code>, <code>fakeroot</code>).</p>
+</li>
+<li>
+<p><code>images</code> which contains the final images produced by <em>Buildroot</em>. In our case it contains a <em>tarball</em> of the filesystem, called <code>rootfs.tar</code>, plus the compressed kernel and <em>DTB</em> (<em>Device Tree Binary</em>).<br/>
+  Depending on the configuration, there could also a bootloader binary or a full SD card image.</p>
+</li>
+<li>
+<p><code>staging</code>, which contains the "build" space of the target system, all the target libraries, with headers and documentation.<br/>
+  It also contains the system headers and the C library, which in our case have been copied from the cross-compiling toolchain.</p>
+</li>
+<li>
+<p><code>target</code> is the target <em>root</em> filesystem. All the applications and libraries, usually <em>stripped</em>, are
+installed in this directory.<br/>
+  However, it cannot be used directly as the <em>root</em> filesystem, as all the device files are missing: it is not possible to create them without being <em>root</em>, and <em>Buildroot</em> has a policy of not running anything as <em>root</em>.</p>
+</li>
+</ul>
+<h2 id="run-the-generated-system"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.6</span> Run the generated system</h2>
+<p>Go back to the <code>$HOME/embedded-linux-bbb-labs/buildroot/</code> directory.<br/>
+Create a new <code>nfsroot</code> directory that is going to hold our system, exported over NFS.<br/>
+Go into this directory, and untar the <em>rootfs</em>.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="gp">$ </span>tar<span class="w"> </span>xfv<span class="w"> </span><span class="s2">"../buildroot/output/images/rootfs.tar"</span>
+</span></code></pre></div>
+<p>Add this new <code>nfsroot</code> directory to the list of directories exported by NFS in <code>/etc/exports</code>.
+You could just replace the <em>symlink</em> we used for <em>BusyBox</em>, pointing instead to this new <code>nfsroot</code>.<br/></p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>/srv/nfs
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a><span class="gp">$ </span>sudo<span class="w"> </span>ln<span class="w"> </span>-snv<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span><span class="w"> </span>/srv/nfs
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a><span class="go">'/srv/nfs' -&gt; '/home/me/embedded-linux-bbb-labs/buildroot/nfsroot/'</span>
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a><span class="gp">$ </span>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>tftp:tftp<span class="w"> </span>/srv/nfs
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a><span class="gp">$ </span>sudo<span class="w"> </span>exportfs<span class="w"> </span>-ar
+</span><span id="__span-6-6"><a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>nfs-kernel-server
+</span></code></pre></div>
+<p>Also update the kernel and <em>Device Tree Binaries</em> used by your board, from the ones compiled by <em>Buildroot</em> in <code>output/images/</code>.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/output/"</span>
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a><span class="gp">$ </span>cp<span class="w"> </span>images/zImage<span class="w"> </span>/srv/tftp/zImage-buildroot
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a><span class="gp">$ </span>cp<span class="w"> </span>images/zImage<span class="w"> </span>/srv/tftp/zImage
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a><span class="gp">$ </span>cp<span class="w"> </span><span class="k">$(</span>find<span class="w"> </span>images<span class="w"> </span>-name<span class="w"> </span><span class="s2">"am335x-boneblack-custom.dtb"</span><span class="k">)</span><span class="w"> </span>/srv/tftp/
+</span></code></pre></div>
+<p>You should restore <em>U-Boot</em> to work with TFTP and NFS. Run the board, press a key to reach the <em>U-Boot</em> prompt, and restore the environment variables. Finally, reset the board.<br/>
+You should now be able to log in (<code>root</code> account, no password) to reach a shell.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - U-Boot</span><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="go">    ...</span>
+</span><span id="__span-8-2"><a href="#__codelineno-8-2" id="__codelineno-8-2" name="__codelineno-8-2"></a><span class="go">Hit any key to stop autoboot:  0</span>
+</span><span id="__span-8-3"><a href="#__codelineno-8-3" id="__codelineno-8-3" name="__codelineno-8-3"></a><span class="go">=&gt; setenv bootcmd $bootcmd_tftp</span>
+</span><span id="__span-8-4"><a href="#__codelineno-8-4" id="__codelineno-8-4" name="__codelineno-8-4"></a><span class="go">=&gt; setenv bootargs $bootargs_nfs</span>
+</span><span id="__span-8-5"><a href="#__codelineno-8-5" id="__codelineno-8-5" name="__codelineno-8-5"></a><span class="go">=&gt; saveenv</span>
+</span><span id="__span-8-6"><a href="#__codelineno-8-6" id="__codelineno-8-6" name="__codelineno-8-6"></a><span class="go">=&gt; reset</span>
+</span><span id="__span-8-7"><a href="#__codelineno-8-7" id="__codelineno-8-7" name="__codelineno-8-7"></a><span class="go">    ...</span>
+</span><span id="__span-8-8"><a href="#__codelineno-8-8" id="__codelineno-8-8" name="__codelineno-8-8"></a>
+</span><span id="__span-8-9"><a href="#__codelineno-8-9" id="__codelineno-8-9" name="__codelineno-8-9"></a><span class="go">Welcome to Buildroot</span>
+</span><span id="__span-8-10"><a href="#__codelineno-8-10" id="__codelineno-8-10" name="__codelineno-8-10"></a><span class="go">buildroot login: root</span>
+</span><span id="__span-8-11"><a href="#__codelineno-8-11" id="__codelineno-8-11" name="__codelineno-8-11"></a><span class="gp">#</span>
+</span></code></pre></div>
+<h2 id="loading-the-usb-audio-module"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.7</span> Loading the USB audio module</h2>
+<p>You can check that no kernel module is loaded yet.
+Try to load the <code>snd_usb_audio</code> module from the command line.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - Buildroot</span><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="gp"># </span>lsmod
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="go">Module                  Size  Used by    Not tainted</span>
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="gp"># </span>modprobe<span class="w"> </span>snd_usb_audio
+</span><span id="__span-9-4"><a href="#__codelineno-9-4" id="__codelineno-9-4" name="__codelineno-9-4"></a><span class="go">mc: Linux media interface: v0.10</span>
+</span><span id="__span-9-5"><a href="#__codelineno-9-5" id="__codelineno-9-5" name="__codelineno-9-5"></a><span class="go">usbcore: registered new interface driver snd-usb-audio</span>
+</span></code></pre></div>
+<p>Check that <em>Buildroot</em> has deployed the modules for your kernel in <code>/lib/modules/</code>.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - Buildroot</span><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="gp"># </span>find<span class="w"> </span>/lib/modules/<span class="w"> </span>-name<span class="w"> </span>snd-usb-audio.ko
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="go">/lib/modules/5.15.26/kernel/sound/usb/snd-usb-audio.ko</span>
+</span></code></pre></div>
+<p>Let's automate this now!<br/>
+Look at the <code>/etc/inittab</code> file generated by <em>Buildroot</em> (<span class="keys"><kbd class="key-q">Q</kbd></span> to quit <code>less</code>), and at the contents of the <code>/etc/init.d/</code> directory, in particular of the <code>rcS</code> file.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="gp">$ </span>less<span class="w"> </span>etc/inittab
+</span><span id="__span-11-3"><a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="gp">$ </span>ls<span class="w"> </span>etc/init.d/
+</span><span id="__span-11-4"><a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="go">rcK  rcS  S01syslogd  S02klogd  S02sysctl  S20urandom  S40network  S95mpd</span>
+</span></code></pre></div>
+<div class="language-sh highlight"><span class="filename">File: etc/init.d/rcS</span><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="ch">#!/bin/sh</span>
+</span><span id="__span-12-2"><a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a>
+</span><span id="__span-12-3"><a href="#__codelineno-12-3" id="__codelineno-12-3" name="__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a href="#__codelineno-12-4" id="__codelineno-12-4" name="__codelineno-12-4"></a><span class="c1"># Start all init scripts in /etc/init.d</span>
+</span><span id="__span-12-5"><a href="#__codelineno-12-5" id="__codelineno-12-5" name="__codelineno-12-5"></a><span class="c1"># executing them in numerical order.</span>
+</span><span id="__span-12-6"><a href="#__codelineno-12-6" id="__codelineno-12-6" name="__codelineno-12-6"></a><span class="c1">#</span>
+</span><span id="__span-12-7"><a href="#__codelineno-12-7" id="__codelineno-12-7" name="__codelineno-12-7"></a><span class="hll"><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span>/etc/init.d/S??*<span class="w"> </span><span class="p">;</span><span class="k">do</span>
+</span></span><span id="__span-12-8"><a href="#__codelineno-12-8" id="__codelineno-12-8" name="__codelineno-12-8"></a>
+</span><span id="__span-12-9"><a href="#__codelineno-12-9" id="__codelineno-12-9" name="__codelineno-12-9"></a><span class="w">     </span><span class="c1"># Ignore dangling symlinks (if any).</span>
+</span><span id="__span-12-10"><a href="#__codelineno-12-10" id="__codelineno-12-10" name="__codelineno-12-10"></a><span class="w">     </span><span class="o">[</span><span class="w"> </span>!<span class="w"> </span>-f<span class="w"> </span><span class="s2">"</span><span class="nv">$i</span><span class="s2">"</span><span class="w"> </span><span class="o">]</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="k">continue</span>
+</span><span id="__span-12-11"><a href="#__codelineno-12-11" id="__codelineno-12-11" name="__codelineno-12-11"></a>
+</span><span id="__span-12-12"><a href="#__codelineno-12-12" id="__codelineno-12-12" name="__codelineno-12-12"></a><span class="w">     </span><span class="k">case</span><span class="w"> </span><span class="s2">"</span><span class="nv">$i</span><span class="s2">"</span><span class="w"> </span><span class="k">in</span>
+</span><span id="__span-12-13"><a href="#__codelineno-12-13" id="__codelineno-12-13" name="__codelineno-12-13"></a><span class="w">        </span>*.sh<span class="o">)</span>
+</span><span id="__span-12-14"><a href="#__codelineno-12-14" id="__codelineno-12-14" name="__codelineno-12-14"></a><span class="w">            </span><span class="c1"># Source shell script for speed.</span>
+</span><span id="__span-12-15"><a href="#__codelineno-12-15" id="__codelineno-12-15" name="__codelineno-12-15"></a><span class="w">            </span><span class="o">(</span>
+</span><span id="__span-12-16"><a href="#__codelineno-12-16" id="__codelineno-12-16" name="__codelineno-12-16"></a><span class="w">                </span><span class="nb">trap</span><span class="w"> </span>-<span class="w"> </span>INT<span class="w"> </span>QUIT<span class="w"> </span>TSTP
+</span><span id="__span-12-17"><a href="#__codelineno-12-17" id="__codelineno-12-17" name="__codelineno-12-17"></a><span class="w">                </span><span class="nb">set</span><span class="w"> </span>start
+</span><span id="__span-12-18"><a href="#__codelineno-12-18" id="__codelineno-12-18" name="__codelineno-12-18"></a><span class="hll"><span class="w">                </span>.<span class="w"> </span><span class="nv">$i</span>
+</span></span><span id="__span-12-19"><a href="#__codelineno-12-19" id="__codelineno-12-19" name="__codelineno-12-19"></a><span class="w">            </span><span class="o">)</span>
+</span><span id="__span-12-20"><a href="#__codelineno-12-20" id="__codelineno-12-20" name="__codelineno-12-20"></a><span class="w">            </span><span class="p">;;</span>
+</span><span id="__span-12-21"><a href="#__codelineno-12-21" id="__codelineno-12-21" name="__codelineno-12-21"></a><span class="w">        </span>*<span class="o">)</span>
+</span><span id="__span-12-22"><a href="#__codelineno-12-22" id="__codelineno-12-22" name="__codelineno-12-22"></a><span class="w">            </span><span class="c1"># No sh extension, so fork subprocess.</span>
+</span><span id="__span-12-23"><a href="#__codelineno-12-23" id="__codelineno-12-23" name="__codelineno-12-23"></a><span class="hll"><span class="w">            </span><span class="nv">$i</span><span class="w"> </span>start
+</span></span><span id="__span-12-24"><a href="#__codelineno-12-24" id="__codelineno-12-24" name="__codelineno-12-24"></a><span class="w">            </span><span class="p">;;</span>
+</span><span id="__span-12-25"><a href="#__codelineno-12-25" id="__codelineno-12-25" name="__codelineno-12-25"></a><span class="w">    </span><span class="k">esac</span>
+</span><span id="__span-12-26"><a href="#__codelineno-12-26" id="__codelineno-12-26" name="__codelineno-12-26"></a><span class="k">done</span>
+</span></code></pre></div>
+<p>You can see that <code>rcS</code> executes or sources all the <code>/etc/init.d/S??*</code> files.
+We can add our own which will load the top-level modules that we need.</p>
+<p>Let's do this by creating an <em>overlay directory</em>, typically under our board-specific directory, that <em>Buildroot</em> adds after building the <em>root</em> filesystem.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-13-1"><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-13-2"><a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>board/bootlin/training/rootfs-overlay/
+</span></code></pre></div>
+<p>Then add a custom startup script, by adding an <code>etc/init.d/S03modprobe</code> executable file to the overlay directory, with content:</p>
+<div class="language-sh highlight"><span class="filename">File: etc/init.d/S03modprobe</span><pre><span></span><code><span id="__span-14-1"><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="ch">#!/bin/sh</span>
+</span><span id="__span-14-2"><a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a>modprobe<span class="w"> </span>snd-usb-audio
+</span></code></pre></div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-15-1"><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>board/bootlin/training/rootfs-overlay/
+</span><span id="__span-15-2"><a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>etc/init.d/
+</span><span id="__span-15-3"><a href="#__codelineno-15-3" id="__codelineno-15-3" name="__codelineno-15-3"></a><span class="gp">$ </span>cat<span class="w"> </span>&gt;<span class="w"> </span>etc/init.d/S03modprobe<span class="w"> </span>&lt;&lt;<span class="s1">'EOF'</span>
+</span><span id="__span-15-4"><a href="#__codelineno-15-4" id="__codelineno-15-4" name="__codelineno-15-4"></a><span class="gp">#</span>!/bin/sh
+</span><span id="__span-15-5"><a href="#__codelineno-15-5" id="__codelineno-15-5" name="__codelineno-15-5"></a><span class="go">modprobe snd-usb-audio</span>
+</span><span id="__span-15-6"><a href="#__codelineno-15-6" id="__codelineno-15-6" name="__codelineno-15-6"></a><span class="go">EOF</span>
+</span><span id="__span-15-7"><a href="#__codelineno-15-7" id="__codelineno-15-7" name="__codelineno-15-7"></a><span class="gp">$ </span>chmod<span class="w"> </span>+x<span class="w"> </span>etc/init.d/S03modprobe
+</span></code></pre></div>
+<p>Then, go back to <em>Buildroot</em>'s configuration interface.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-16-1"><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-16-2"><a href="#__codelineno-16-2" id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="gp">$ </span>make<span class="w"> </span>menuconfig
+</span><span id="__span-16-3"><a href="#__codelineno-16-3" id="__codelineno-16-3" name="__codelineno-16-3"></a><span class="gp">$ </span>cp<span class="w"> </span>.config<span class="w"> </span>../buildroot-rootfs-overlay.config
+</span></code></pre></div>
+<p>In <code>System configuration</code>:</p>
+<ul>
+<li>Set <code>Root filesystem overlay directories</code> = <code>board/bootlin/training/rootfs-overlay</code>.</li>
+</ul>
+<p>Build your image again. This should be quick as <em>Buildroot</em> doesn't need to recompile anything.
+It will just apply the <em>root</em> filesystem overlay.</p>
+<p>Update your <code>nfsroot</code> directory, reboot the board, and check that the <code>snd_usb_audio</code> module is loaded as expected.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-17-1"><a href="#__codelineno-17-1" id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-17-2"><a href="#__codelineno-17-2" id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="gp">$ </span>make
+</span><span id="__span-17-3"><a href="#__codelineno-17-3" id="__codelineno-17-3" name="__codelineno-17-3"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-17-4"><a href="#__codelineno-17-4" id="__codelineno-17-4" name="__codelineno-17-4"></a><span class="gp">$ </span>rm<span class="w"> </span>-rf<span class="w"> </span>*
+</span><span id="__span-17-5"><a href="#__codelineno-17-5" id="__codelineno-17-5" name="__codelineno-17-5"></a><span class="gp">$ </span>tar<span class="w"> </span>xfv<span class="w"> </span><span class="s2">"../buildroot/output/images/rootfs.tar"</span>
+</span></code></pre></div>
+<div class="language-console highlight"><span class="filename">picocomBBB - Buildroot</span><pre><span></span><code><span id="__span-18-1"><a href="#__codelineno-18-1" id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="gp"># </span>reboot
+</span><span id="__span-18-2"><a href="#__codelineno-18-2" id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="go">    ...</span>
+</span><span id="__span-18-3"><a href="#__codelineno-18-3" id="__codelineno-18-3" name="__codelineno-18-3"></a><span class="gp"># </span>lsmod
+</span><span id="__span-18-4"><a href="#__codelineno-18-4" id="__codelineno-18-4" name="__codelineno-18-4"></a><span class="go">Module                  Size  Used by    Not tainted</span>
+</span><span id="__span-18-5"><a href="#__codelineno-18-5" id="__codelineno-18-5" name="__codelineno-18-5"></a><span class="hll"><span class="go">snd_usb_audio         217088  0</span>
+</span></span><span id="__span-18-6"><a href="#__codelineno-18-6" id="__codelineno-18-6" name="__codelineno-18-6"></a><span class="go">snd_hwdep              16384  1 snd_usb_audio</span>
+</span><span id="__span-18-7"><a href="#__codelineno-18-7" id="__codelineno-18-7" name="__codelineno-18-7"></a><span class="go">snd_usbmidi_lib        28672  1 snd_usb_audio</span>
+</span><span id="__span-18-8"><a href="#__codelineno-18-8" id="__codelineno-18-8" name="__codelineno-18-8"></a><span class="go">mc                     36864  1 snd_usb_audio</span>
+</span><span id="__span-18-9"><a href="#__codelineno-18-9" id="__codelineno-18-9" name="__codelineno-18-9"></a><span class="go">snd_rawmidi            28672  1 snd_usbmidi_lib</span>
+</span><span id="__span-18-10"><a href="#__codelineno-18-10" id="__codelineno-18-10" name="__codelineno-18-10"></a><span class="go">snd_pcm               106496  1 snd_usb_audio</span>
+</span><span id="__span-18-11"><a href="#__codelineno-18-11" id="__codelineno-18-11" name="__codelineno-18-11"></a><span class="go">snd_timer              28672  1 snd_pcm</span>
+</span><span id="__span-18-12"><a href="#__codelineno-18-12" id="__codelineno-18-12" name="__codelineno-18-12"></a><span class="go">snd                    61440  6 snd_usb_audio,snd_hwdep,snd_usbmidi_lib,snd_rawmidi,snd_pcm,snd_timer</span>
+</span><span id="__span-18-13"><a href="#__codelineno-18-13" id="__codelineno-18-13" name="__codelineno-18-13"></a><span class="go">soundcore              16384  1 snd</span>
+</span></code></pre></div>
+<p>You can run <code>speaker-test</code> to check that this application works with the USB headset.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - Buildroot</span><pre><span></span><code><span id="__span-19-1"><a href="#__codelineno-19-1" id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="gp"># </span>speaker-test<span class="w"> </span>-t<span class="w"> </span>sine<span class="w"> </span>-l<span class="w"> </span><span class="m">1</span>
+</span><span id="__span-19-2"><a href="#__codelineno-19-2" id="__codelineno-19-2" name="__codelineno-19-2"></a>
+</span><span id="__span-19-3"><a href="#__codelineno-19-3" id="__codelineno-19-3" name="__codelineno-19-3"></a><span class="go">speaker-test 1.2.6</span>
+</span><span id="__span-19-4"><a href="#__codelineno-19-4" id="__codelineno-19-4" name="__codelineno-19-4"></a>
+</span><span id="__span-19-5"><a href="#__codelineno-19-5" id="__codelineno-19-5" name="__codelineno-19-5"></a><span class="go">Playback device is default</span>
+</span><span id="__span-19-6"><a href="#__codelineno-19-6" id="__codelineno-19-6" name="__codelineno-19-6"></a><span class="go">Stream parameters are 48000Hz, S16_LE, 1 channels</span>
+</span><span id="__span-19-7"><a href="#__codelineno-19-7" id="__codelineno-19-7" name="__codelineno-19-7"></a><span class="go">Sine wave rate is 440.0000Hz</span>
+</span><span id="__span-19-8"><a href="#__codelineno-19-8" id="__codelineno-19-8" name="__codelineno-19-8"></a><span class="go">Rate set to 48000Hz (requested 48000Hz)</span>
+</span><span id="__span-19-9"><a href="#__codelineno-19-9" id="__codelineno-19-9" name="__codelineno-19-9"></a><span class="go">Buffer size range from 2229 to 17832</span>
+</span><span id="__span-19-10"><a href="#__codelineno-19-10" id="__codelineno-19-10" name="__codelineno-19-10"></a><span class="go">Period size range from 1114 to 1115</span>
+</span><span id="__span-19-11"><a href="#__codelineno-19-11" id="__codelineno-19-11" name="__codelineno-19-11"></a><span class="go">Using max buffer size 17832</span>
+</span><span id="__span-19-12"><a href="#__codelineno-19-12" id="__codelineno-19-12" name="__codelineno-19-12"></a><span class="go">Periods = 4</span>
+</span><span id="__span-19-13"><a href="#__codelineno-19-13" id="__codelineno-19-13" name="__codelineno-19-13"></a><span class="go">was set period_size = 1114</span>
+</span><span id="__span-19-14"><a href="#__codelineno-19-14" id="__codelineno-19-14" name="__codelineno-19-14"></a><span class="go">was set buffer_size = 17832</span>
+</span><span id="__span-19-15"><a href="#__codelineno-19-15" id="__codelineno-19-15" name="__codelineno-19-15"></a><span class="go"> 0 - Front Left</span>
+</span><span id="__span-19-16"><a href="#__codelineno-19-16" id="__codelineno-19-16" name="__codelineno-19-16"></a><span class="go">Time per period = 2.647185</span>
+</span></code></pre></div>
+<h2 id="testing-mpd-and-mpc"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.8</span> Testing <code>mpd</code> and <code>mpc</code></h2>
+<p>The next thing we want to do is play real sound samples with the <em>Music Player Daemon</em> (<em>MPD</em>).<br/>
+So, let's add music files for <em>MPD</em> to play. Update your <em>root</em> filesystem, and restart your system.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-20-1"><a href="#__codelineno-20-1" id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-20-2"><a href="#__codelineno-20-2" id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>board/bootlin/training/rootfs-overlay/var/lib/mpd/music
+</span><span id="__span-20-3"><a href="#__codelineno-20-3" id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="hll"><span class="gp">$ </span>cp<span class="w"> </span>../data/music/*<span class="w"> </span>board/bootlin/training/rootfs-overlay/var/lib/mpd/music
+</span></span><span id="__span-20-4"><a href="#__codelineno-20-4" id="__codelineno-20-4" name="__codelineno-20-4"></a><span class="gp">$ </span>make
+</span><span id="__span-20-5"><a href="#__codelineno-20-5" id="__codelineno-20-5" name="__codelineno-20-5"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-20-6"><a href="#__codelineno-20-6" id="__codelineno-20-6" name="__codelineno-20-6"></a><span class="gp">$ </span>rm<span class="w"> </span>-rf<span class="w"> </span>*
+</span><span id="__span-20-7"><a href="#__codelineno-20-7" id="__codelineno-20-7" name="__codelineno-20-7"></a><span class="gp">$ </span>tar<span class="w"> </span>xfv<span class="w"> </span><span class="s2">"../buildroot/output/images/rootfs.tar"</span>
+</span></code></pre></div>
+<p>Using the <code>ps</code> command, check that the <code>mpd</code> server was started by the system, as implemented by the <code>/etc/init.d/S95mpd</code> script.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - Buildroot</span><pre><span></span><code><span id="__span-21-1"><a href="#__codelineno-21-1" id="__codelineno-21-1" name="__codelineno-21-1"></a><span class="gp"># </span>reboot
+</span><span id="__span-21-2"><a href="#__codelineno-21-2" id="__codelineno-21-2" name="__codelineno-21-2"></a><span class="go">    ...</span>
+</span><span id="__span-21-3"><a href="#__codelineno-21-3" id="__codelineno-21-3" name="__codelineno-21-3"></a><span class="gp"># </span>ps<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>mpd
+</span><span id="__span-21-4"><a href="#__codelineno-21-4" id="__codelineno-21-4" name="__codelineno-21-4"></a><span class="hll"><span class="go">  126 root     /usr/bin/mpd</span>
+</span></span><span id="__span-21-5"><a href="#__codelineno-21-5" id="__codelineno-21-5" name="__codelineno-21-5"></a><span class="go">  134 root     grep mpd</span>
+</span></code></pre></div>
+<p>If that's the case, you are now ready to run <code>mpc</code> client commands to control music playback.
+First, let's make <code>mpd</code> process the newly added music files.
+Run <code>mpc update</code> on the target:</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - Buildroot</span><pre><span></span><code><span id="__span-22-1"><a href="#__codelineno-22-1" id="__codelineno-22-1" name="__codelineno-22-1"></a><span class="gp"># </span>mpc<span class="w"> </span>update
+</span><span id="__span-22-2"><a href="#__codelineno-22-2" id="__codelineno-22-2" name="__codelineno-22-2"></a><span class="go">Updating DB (#2) ...</span>
+</span><span id="__span-22-3"><a href="#__codelineno-22-3" id="__codelineno-22-3" name="__codelineno-22-3"></a><span class="gp">volume:100%   </span>repeat:<span class="w"> </span>off<span class="w">   </span>random:<span class="w"> </span>off<span class="w">   </span>single:<span class="w"> </span>off<span class="w">   </span>consume:<span class="w"> </span>off
+</span></code></pre></div>
+<p>You should see the files getting indexed by displaying the contents of the <code>/var/log/mpd.log</code> file.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - Buildroot</span><pre><span></span><code><span id="__span-23-1"><a href="#__codelineno-23-1" id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="gp"># </span>cat<span class="w"> </span>/var/log/mpd.log
+</span><span id="__span-23-2"><a href="#__codelineno-23-2" id="__codelineno-23-2" name="__codelineno-23-2"></a><span class="go">Jan 01 00:00 : update: added /6-le-baguette.ogg</span>
+</span><span id="__span-23-3"><a href="#__codelineno-23-3" id="__codelineno-23-3" name="__codelineno-23-3"></a><span class="go">Jan 01 00:00 : update: added /7-fireworks.ogg</span>
+</span><span id="__span-23-4"><a href="#__codelineno-23-4" id="__codelineno-23-4" name="__codelineno-23-4"></a><span class="go">Jan 01 00:00 : update: added /1-sample.ogg</span>
+</span><span id="__span-23-5"><a href="#__codelineno-23-5" id="__codelineno-23-5" name="__codelineno-23-5"></a><span class="go">Jan 01 00:00 : update: added /3-chronos.ogg</span>
+</span><span id="__span-23-6"><a href="#__codelineno-23-6" id="__codelineno-23-6" name="__codelineno-23-6"></a><span class="go">Jan 01 00:00 : update: added /4-land-of-pirates.ogg</span>
+</span><span id="__span-23-7"><a href="#__codelineno-23-7" id="__codelineno-23-7" name="__codelineno-23-7"></a><span class="go">Jan 01 00:00 : update: added /2-arpent.ogg</span>
+</span><span id="__span-23-8"><a href="#__codelineno-23-8" id="__codelineno-23-8" name="__codelineno-23-8"></a><span class="go">Jan 01 00:00 : update: added /5-ukulele-song.ogg</span>
+</span></code></pre></div>
+<p>You can also check the list of available files:</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - Buildroot</span><pre><span></span><code><span id="__span-24-1"><a href="#__codelineno-24-1" id="__codelineno-24-1" name="__codelineno-24-1"></a><span class="gp"># </span>mpc<span class="w"> </span>listall
+</span><span id="__span-24-2"><a href="#__codelineno-24-2" id="__codelineno-24-2" name="__codelineno-24-2"></a><span class="go">1-sample.ogg</span>
+</span><span id="__span-24-3"><a href="#__codelineno-24-3" id="__codelineno-24-3" name="__codelineno-24-3"></a><span class="go">2-arpent.ogg</span>
+</span><span id="__span-24-4"><a href="#__codelineno-24-4" id="__codelineno-24-4" name="__codelineno-24-4"></a><span class="go">5-ukulele-song.ogg</span>
+</span><span id="__span-24-5"><a href="#__codelineno-24-5" id="__codelineno-24-5" name="__codelineno-24-5"></a><span class="go">3-chronos.ogg</span>
+</span><span id="__span-24-6"><a href="#__codelineno-24-6" id="__codelineno-24-6" name="__codelineno-24-6"></a><span class="go">7-fireworks.ogg</span>
+</span><span id="__span-24-7"><a href="#__codelineno-24-7" id="__codelineno-24-7" name="__codelineno-24-7"></a><span class="go">6-le-baguette.ogg</span>
+</span><span id="__span-24-8"><a href="#__codelineno-24-8" id="__codelineno-24-8" name="__codelineno-24-8"></a><span class="go">4-land-of-pirates.ogg</span>
+</span></code></pre></div>
+<p>To play files, you first need to create a playlist.
+Let's create a playlist by adding all music files to it, then you should be able to start playing its songs.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - Buildroot</span><pre><span></span><code><span id="__span-25-1"><a href="#__codelineno-25-1" id="__codelineno-25-1" name="__codelineno-25-1"></a><span class="gp"># </span>mpc<span class="w"> </span>add<span class="w"> </span>/
+</span><span id="__span-25-2"><a href="#__codelineno-25-2" id="__codelineno-25-2" name="__codelineno-25-2"></a><span class="gp"># </span>mpc<span class="w"> </span>play
+</span><span id="__span-25-3"><a href="#__codelineno-25-3" id="__codelineno-25-3" name="__codelineno-25-3"></a><span class="go">1-sample.ogg</span>
+</span><span id="__span-25-4"><a href="#__codelineno-25-4" id="__codelineno-25-4" name="__codelineno-25-4"></a><span class="gp">[playing] #</span><span class="m">1</span>/7<span class="w">   </span><span class="m">0</span>:00/0:19<span class="w"> </span><span class="o">(</span><span class="m">0</span>%<span class="o">)</span>
+</span><span id="__span-25-5"><a href="#__codelineno-25-5" id="__codelineno-25-5" name="__codelineno-25-5"></a><span class="gp">volume:100%   </span>repeat:<span class="w"> </span>off<span class="w">   </span>random:<span class="w"> </span>off<span class="w">   </span>single:<span class="w"> </span>off<span class="w">   </span>consume:<span class="w"> </span>off
+</span></code></pre></div>
+<p>Here are a few further commands for controlling playback:</p>
+<ul>
+<li><code>mpc stop</code>: stop playing.</li>
+<li><code>mpc volume +5</code>: increase the volume by 5%.</li>
+<li><code>mpc volume -5</code>: reduce the volume by 5%.</li>
+<li><code>mpc prev</code>: switch to the previous song in the playlist.</li>
+<li><code>mpc next</code>: switch to the next song in the playlist.</li>
+<li><code>mpc toggle</code>: toggle between pause and playback modes.</li>
+</ul>
+<p>If you find that changing the volume is not available, you can add a custom configuration for <em>MPD</em>, as the standard one provided by <em>Buildroot</em> doesn't support allowing to change the audio playback volume with all sound cards we have tested.<br/>
+We can simply add a custom <em>MPD</em> configuration file to our overlay.<br/>
+Run <em>Buildroot</em> again, update your <em>root</em> filesystem, reboot (to get <em>MPD</em> restarted with the new configuration file), and make sure modifying the volume now works.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-26-1"><a href="#__codelineno-26-1" id="__codelineno-26-1" name="__codelineno-26-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-26-2"><a href="#__codelineno-26-2" id="__codelineno-26-2" name="__codelineno-26-2"></a><span class="hll"><span class="gp">$ </span>cp<span class="w"> </span>../data/mpd.conf<span class="w"> </span>board/bootlin/training/rootfs-overlay/etc/
+</span></span><span id="__span-26-3"><a href="#__codelineno-26-3" id="__codelineno-26-3" name="__codelineno-26-3"></a><span class="gp">$ </span>make
+</span><span id="__span-26-4"><a href="#__codelineno-26-4" id="__codelineno-26-4" name="__codelineno-26-4"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-26-5"><a href="#__codelineno-26-5" id="__codelineno-26-5" name="__codelineno-26-5"></a><span class="gp">$ </span>rm<span class="w"> </span>-rf<span class="w"> </span>*
+</span><span id="__span-26-6"><a href="#__codelineno-26-6" id="__codelineno-26-6" name="__codelineno-26-6"></a><span class="gp">$ </span>tar<span class="w"> </span>xfv<span class="w"> </span><span class="s2">"../buildroot/output/images/rootfs.tar"</span>
+</span></code></pre></div>
+<div class="language-console highlight"><span class="filename">picocomBBB - Buildroot</span><pre><span></span><code><span id="__span-27-1"><a href="#__codelineno-27-1" id="__codelineno-27-1" name="__codelineno-27-1"></a><span class="gp"># </span>reboot
+</span><span id="__span-27-2"><a href="#__codelineno-27-2" id="__codelineno-27-2" name="__codelineno-27-2"></a><span class="go">    ...</span>
+</span><span id="__span-27-3"><a href="#__codelineno-27-3" id="__codelineno-27-3" name="__codelineno-27-3"></a><span class="gp"># </span>mpc<span class="w"> </span>add<span class="w"> </span>/
+</span><span id="__span-27-4"><a href="#__codelineno-27-4" id="__codelineno-27-4" name="__codelineno-27-4"></a><span class="gp"># </span>mpc<span class="w"> </span>play
+</span><span id="__span-27-5"><a href="#__codelineno-27-5" id="__codelineno-27-5" name="__codelineno-27-5"></a><span class="gp"># </span>mpc<span class="w"> </span>volume<span class="w"> </span>-5
+</span><span id="__span-27-6"><a href="#__codelineno-27-6" id="__codelineno-27-6" name="__codelineno-27-6"></a><span class="gp"># </span>mpc<span class="w"> </span>volume<span class="w"> </span>+5
+</span></code></pre></div>
+<p>Later, we're going to compile and debug a custom <em>MPD</em> client application.</p>
+<h2 id="analyzing-dependencies"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.9</span> Analyzing dependencies</h2>
+<p>It's always useful to understand the dependencies drawn by the packages we build. First we need to install Graphviz and a PDF viewer:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-28-1"><a href="#__codelineno-28-1" id="__codelineno-28-1" name="__codelineno-28-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>evince<span class="w"> </span>graphviz
+</span></code></pre></div>
+<p>Now, let's use <em>Buildroot</em>'s target to generate a dependency graph. Once generated, it can ve viewed for visual inspection.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-29-1"><a href="#__codelineno-29-1" id="__codelineno-29-1" name="__codelineno-29-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-29-2"><a href="#__codelineno-29-2" id="__codelineno-29-2" name="__codelineno-29-2"></a><span class="gp">$ </span>make<span class="w"> </span>graph-depends
+</span><span id="__span-29-3"><a href="#__codelineno-29-3" id="__codelineno-29-3" name="__codelineno-29-3"></a><span class="go">Getting dependency tree...</span>
+</span><span id="__span-29-4"><a href="#__codelineno-29-4" id="__codelineno-29-4" name="__codelineno-29-4"></a><span class="go">dot  -Tpdf \</span>
+</span><span id="__span-29-5"><a href="#__codelineno-29-5" id="__codelineno-29-5" name="__codelineno-29-5"></a><span class="go">        -o /home/me/embedded-linux-bbb-labs/buildroot/buildroot/output/graphs/graph-depends.pdf \</span>
+</span><span id="__span-29-6"><a href="#__codelineno-29-6" id="__codelineno-29-6" name="__codelineno-29-6"></a><span class="go">        /home/me/embedded-linux-bbb-labs/buildroot/buildroot/output/graphs/graph-depends.dot</span>
+</span><span id="__span-29-7"><a href="#__codelineno-29-7" id="__codelineno-29-7" name="__codelineno-29-7"></a><span class="gp">$ </span>evince<span class="w"> </span>output/graphs/graph-depends.pdf
+</span><span id="__span-29-8"><a href="#__codelineno-29-8" id="__codelineno-29-8" name="__codelineno-29-8"></a><span class="gp">$ </span>cp<span class="w"> </span>output/graphs/graph-depends.pdf<span class="w"> </span>../graph-depends.pdf
+</span></code></pre></div>
+<p>In particular, you can see that adding <em>MPD</em> and its client required to compile <em>Meson</em> for the
+host, and in turn, <em>Python 3</em> for the host too. This substantially contributed to the build time.</p>
+<p><img alt="graph-depends.pdf viewed through evince" src="../buildroot_graph-depends_evince.png"/></p>
+<h2 id="adding-a-package"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.10</span> Adding a package</h2>
+<p>We would also like to build our <em>Nunchuk</em> external module with <em>Buildroot</em>.
+Fortunately, <em>Buildroot</em> has a <code>kernel-module</code> infrastructure to build kernel modules.</p>
+<p>First, create a <code>nunchuk-driver</code> subdirectory under package in <em>Buildroot</em> sources.</p>
+<p>The first thing is to create a <code>package/nunchuk-driver/Config.in</code> file for <em>Buildroot</em>'s configuration:</p>
+<div class="language-kconfig highlight"><span class="filename">File: package/nunchuk-driver/Config.in</span><pre><span></span><code><span id="__span-30-1"><a href="#__codelineno-30-1" id="__codelineno-30-1" name="__codelineno-30-1"></a><span class="k">config</span><span class="w"> </span>BR2_PACKAGE_NUNCHUK_DRIVER
+</span><span id="__span-30-2"><a href="#__codelineno-30-2" id="__codelineno-30-2" name="__codelineno-30-2"></a><span class="w">        </span><span class="nb">bool</span><span class="w"> </span><span class="s2">"nunchuk-driver"</span>
+</span><span id="__span-30-3"><a href="#__codelineno-30-3" id="__codelineno-30-3" name="__codelineno-30-3"></a><span class="w">        </span><span class="k">depends on</span><span class="w"> </span>BR2_LINUX_KERNEL
+</span><span id="__span-30-4"><a href="#__codelineno-30-4" id="__codelineno-30-4" name="__codelineno-30-4"></a><span class="w">        </span><span class="k">help</span>
+</span><span id="__span-30-5"><a href="#__codelineno-30-5" id="__codelineno-30-5" name="__codelineno-30-5"></a><span class="sd">                Linux Kernel module for the I2C Nunchuk.</span>
+</span></code></pre></div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-31-1"><a href="#__codelineno-31-1" id="__codelineno-31-1" name="__codelineno-31-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-31-2"><a href="#__codelineno-31-2" id="__codelineno-31-2" name="__codelineno-31-2"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>package/nunchuk-driver/
+</span><span id="__span-31-3"><a href="#__codelineno-31-3" id="__codelineno-31-3" name="__codelineno-31-3"></a><span class="gp">$ </span>cat<span class="w"> </span>&gt;<span class="w"> </span>package/nunchuk-driver/Config.in<span class="w"> </span>&lt;&lt;<span class="s1">'EOF'</span>
+</span><span id="__span-31-4"><a href="#__codelineno-31-4" id="__codelineno-31-4" name="__codelineno-31-4"></a><span class="go">config BR2_PACKAGE_NUNCHUK_DRIVER</span>
+</span><span id="__span-31-5"><a href="#__codelineno-31-5" id="__codelineno-31-5" name="__codelineno-31-5"></a><span class="go">        bool "nunchuk-driver"</span>
+</span><span id="__span-31-6"><a href="#__codelineno-31-6" id="__codelineno-31-6" name="__codelineno-31-6"></a><span class="go">        depends on BR2_LINUX_KERNEL</span>
+</span><span id="__span-31-7"><a href="#__codelineno-31-7" id="__codelineno-31-7" name="__codelineno-31-7"></a><span class="go">        help</span>
+</span><span id="__span-31-8"><a href="#__codelineno-31-8" id="__codelineno-31-8" name="__codelineno-31-8"></a><span class="go">                Linux Kernel module for the I2C Nunchuk.</span>
+</span><span id="__span-31-9"><a href="#__codelineno-31-9" id="__codelineno-31-9" name="__codelineno-31-9"></a><span class="go">EOF</span>
+</span><span id="__span-31-10"><a href="#__codelineno-31-10" id="__codelineno-31-10" name="__codelineno-31-10"></a><span class="gp">$ </span>cp<span class="w"> </span>package/nunchuk-driver/Config.in<span class="w"> </span>../nunchuk-driver-Config.in
+</span></code></pre></div>
+<p>Then add a line to <code>package/Config.in</code> to include this file, for example right before the line including <code>package/nvidia-driver/Config.in</code>, so that the alphabetic order of configuration options is preserved:</p>
+<div class="language-kconfig highlight"><span class="filename">File: package/Config.in</span><pre><span></span><code><span id="__span-32-1"><a href="#__codelineno-32-1" id="__codelineno-32-1" name="__codelineno-32-1"></a><span class="w">    </span>...
+</span><span id="__span-32-2"><a href="#__codelineno-32-2" id="__codelineno-32-2" name="__codelineno-32-2"></a><span class="k">menu</span><span class="w"> </span><span class="s2">"Hardware handling"</span>
+</span><span id="__span-32-3"><a href="#__codelineno-32-3" id="__codelineno-32-3" name="__codelineno-32-3"></a><span class="w">    </span>...
+</span><span id="__span-32-4"><a href="#__codelineno-32-4" id="__codelineno-32-4" name="__codelineno-32-4"></a><span class="w">        </span><span class="k">source</span><span class="w"> </span><span class="s2">"package/msr-tools/Config.in"</span>
+</span><span id="__span-32-5"><a href="#__codelineno-32-5" id="__codelineno-32-5" name="__codelineno-32-5"></a><span class="w">        </span><span class="k">source</span><span class="w"> </span><span class="s2">"package/nanocom/Config.in"</span>
+</span><span id="__span-32-6"><a href="#__codelineno-32-6" id="__codelineno-32-6" name="__codelineno-32-6"></a><span class="w">        </span><span class="k">source</span><span class="w"> </span><span class="s2">"package/neard/Config.in"</span>
+</span><span id="__span-32-7"><a href="#__codelineno-32-7" id="__codelineno-32-7" name="__codelineno-32-7"></a><span class="hll"><span class="w">        </span><span class="k">source</span><span class="w"> </span><span class="s2">"package/nunchuk-driver/Config.in"</span>
+</span></span><span id="__span-32-8"><a href="#__codelineno-32-8" id="__codelineno-32-8" name="__codelineno-32-8"></a><span class="w">        </span><span class="k">source</span><span class="w"> </span><span class="s2">"package/nvidia-driver/Config.in"</span>
+</span><span id="__span-32-9"><a href="#__codelineno-32-9" id="__codelineno-32-9" name="__codelineno-32-9"></a><span class="w">        </span><span class="k">source</span><span class="w"> </span><span class="s2">"package/nvidia-modprobe/Config.in"</span>
+</span><span id="__span-32-10"><a href="#__codelineno-32-10" id="__codelineno-32-10" name="__codelineno-32-10"></a><span class="w">        </span><span class="k">source</span><span class="w"> </span><span class="s2">"package/nvme/Config.in"</span>
+</span><span id="__span-32-11"><a href="#__codelineno-32-11" id="__codelineno-32-11" name="__codelineno-32-11"></a><span class="w">    </span>...
+</span></code></pre></div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-33-1"><a href="#__codelineno-33-1" id="__codelineno-33-1" name="__codelineno-33-1"></a><span class="gp">$ </span>nano<span class="w"> </span>package/Config.in
+</span><span id="__span-33-2"><a href="#__codelineno-33-2" id="__codelineno-33-2" name="__codelineno-33-2"></a><span class="gp">$ </span>cp<span class="w"> </span>package/Config.in<span class="w"> </span>../package-nunchuk-Config.in
+</span></code></pre></div>
+<p>Then, the next and last thing you need to do is to create <code>package/nunchuk-driver/nunchukdriver.mk</code> describing how to build the package.<br/>
+You can see that we're sourcing files from our <a href="../hardware/"><em>hardware lab</em></a>.</p>
+<div class="language-sh highlight"><span class="filename">File: package/nunchuk-driver/nunchukdriver.mk</span><pre><span></span><code><span id="__span-34-1"><a href="#__codelineno-34-1" id="__codelineno-34-1" name="__codelineno-34-1"></a><span class="nv">NUNCHUK_DRIVER_VERSION</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span>.0
+</span><span id="__span-34-2"><a href="#__codelineno-34-2" id="__codelineno-34-2" name="__codelineno-34-2"></a><span class="nv">NUNCHUK_DRIVER_SITE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">$(</span>HOME<span class="k">)</span>/embedded-linux-bbb-labs/hardware/data/nunchuk
+</span><span id="__span-34-3"><a href="#__codelineno-34-3" id="__codelineno-34-3" name="__codelineno-34-3"></a><span class="nv">NUNCHUK_DRIVER_SITE_METHOD</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">local</span>
+</span><span id="__span-34-4"><a href="#__codelineno-34-4" id="__codelineno-34-4" name="__codelineno-34-4"></a><span class="nv">NUNCHUK_DRIVER_LICENSE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>GPL-2.0
+</span><span id="__span-34-5"><a href="#__codelineno-34-5" id="__codelineno-34-5" name="__codelineno-34-5"></a>
+</span><span id="__span-34-6"><a href="#__codelineno-34-6" id="__codelineno-34-6" name="__codelineno-34-6"></a><span class="k">$(</span><span class="nb">eval</span><span class="w"> </span><span class="k">$(</span>kernel-module<span class="k">))</span>
+</span><span id="__span-34-7"><a href="#__codelineno-34-7" id="__codelineno-34-7" name="__codelineno-34-7"></a><span class="k">$(</span><span class="nb">eval</span><span class="w"> </span><span class="k">$(</span>generic-package<span class="k">))</span>
+</span></code></pre></div>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-35-1"><a href="#__codelineno-35-1" id="__codelineno-35-1" name="__codelineno-35-1"></a><span class="gp">$ </span>cat<span class="w"> </span>&gt;<span class="w"> </span>package/nunchuk-driver/nunchukdriver.mk<span class="w"> </span>&lt;&lt;<span class="s1">'EOF'</span>
+</span><span id="__span-35-2"><a href="#__codelineno-35-2" id="__codelineno-35-2" name="__codelineno-35-2"></a><span class="go">NUNCHUK_DRIVER_VERSION = 1.0</span>
+</span><span id="__span-35-3"><a href="#__codelineno-35-3" id="__codelineno-35-3" name="__codelineno-35-3"></a><span class="go">NUNCHUK_DRIVER_SITE = $(HOME)/embedded-linux-bbb-labs/hardware/data/nunchuk</span>
+</span><span id="__span-35-4"><a href="#__codelineno-35-4" id="__codelineno-35-4" name="__codelineno-35-4"></a><span class="go">NUNCHUK_DRIVER_SITE_METHOD = local</span>
+</span><span id="__span-35-5"><a href="#__codelineno-35-5" id="__codelineno-35-5" name="__codelineno-35-5"></a><span class="go">NUNCHUK_DRIVER_LICENSE = GPL-2.0</span>
+</span><span id="__span-35-6"><a href="#__codelineno-35-6" id="__codelineno-35-6" name="__codelineno-35-6"></a>
+</span><span id="__span-35-7"><a href="#__codelineno-35-7" id="__codelineno-35-7" name="__codelineno-35-7"></a><span class="gp">$</span><span class="o">(</span><span class="nb">eval</span><span class="w"> </span><span class="k">$(</span>kernel-module<span class="k">)</span><span class="o">)</span>
+</span><span id="__span-35-8"><a href="#__codelineno-35-8" id="__codelineno-35-8" name="__codelineno-35-8"></a><span class="gp">$</span><span class="o">(</span><span class="nb">eval</span><span class="w"> </span><span class="k">$(</span>generic-package<span class="k">)</span><span class="o">)</span>
+</span><span id="__span-35-9"><a href="#__codelineno-35-9" id="__codelineno-35-9" name="__codelineno-35-9"></a><span class="go">EOF</span>
+</span><span id="__span-35-10"><a href="#__codelineno-35-10" id="__codelineno-35-10" name="__codelineno-35-10"></a><span class="gp">$ </span>cp<span class="w"> </span>package/nunchuk-driver/nunchukdriver.mk<span class="w"> </span>../nunchukdriver.mk
+</span></code></pre></div>
+<p>Then, configure <em>Buildroot</em> to build your package.
+Just follow the menus as described in the configuration file we added before.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-36-1"><a href="#__codelineno-36-1" id="__codelineno-36-1" name="__codelineno-36-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-36-2"><a href="#__codelineno-36-2" id="__codelineno-36-2" name="__codelineno-36-2"></a><span class="gp">$ </span>make<span class="w"> </span>menuconfig
+</span><span id="__span-36-3"><a href="#__codelineno-36-3" id="__codelineno-36-3" name="__codelineno-36-3"></a><span class="gp">$ </span>cp<span class="w"> </span>.config<span class="w"> </span>../buildroot-nunchuk.config
+</span></code></pre></div>
+<p>In <code>Target packages</code> → <code>Hardware handling</code>:</p>
+<ul>
+<li>Enable <code>nunchuk-driver (NEW)</code>.</li>
+</ul>
+<p>Now run <em>Buildroot</em> and update your <em>root</em> filesystem.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-37-1"><a href="#__codelineno-37-1" id="__codelineno-37-1" name="__codelineno-37-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-37-2"><a href="#__codelineno-37-2" id="__codelineno-37-2" name="__codelineno-37-2"></a><span class="gp">$ </span>make
+</span><span id="__span-37-3"><a href="#__codelineno-37-3" id="__codelineno-37-3" name="__codelineno-37-3"></a><span class="go">  ...</span>
+</span><span id="__span-37-4"><a href="#__codelineno-37-4" id="__codelineno-37-4" name="__codelineno-37-4"></a><span class="hll"><span class="go">&gt;&gt;&gt; nunchuk-driver 1.0 Syncing from source dir /home/me/embedded-linux-bbb-labs/hardware/data/nunchuk</span>
+</span></span><span id="__span-37-5"><a href="#__codelineno-37-5" id="__codelineno-37-5" name="__codelineno-37-5"></a><span class="hll"><span class="go">&gt;&gt;&gt; nunchuk-driver 1.0 Configuring</span>
+</span></span><span id="__span-37-6"><a href="#__codelineno-37-6" id="__codelineno-37-6" name="__codelineno-37-6"></a><span class="hll"><span class="go">&gt;&gt;&gt; nunchuk-driver 1.0 Building</span>
+</span></span><span id="__span-37-7"><a href="#__codelineno-37-7" id="__codelineno-37-7" name="__codelineno-37-7"></a><span class="hll"><span class="go">&gt;&gt;&gt; nunchuk-driver 1.0 Building kernel module(s)</span>
+</span></span><span id="__span-37-8"><a href="#__codelineno-37-8" id="__codelineno-37-8" name="__codelineno-37-8"></a><span class="hll"><span class="go">&gt;&gt;&gt; nunchuk-driver 1.0 Installing to target</span>
+</span></span><span id="__span-37-9"><a href="#__codelineno-37-9" id="__codelineno-37-9" name="__codelineno-37-9"></a><span class="hll"><span class="go">&gt;&gt;&gt; nunchuk-driver 1.0 Installing kernel module(s)</span>
+</span></span><span id="__span-37-10"><a href="#__codelineno-37-10" id="__codelineno-37-10" name="__codelineno-37-10"></a><span class="go">  ...</span>
+</span><span id="__span-37-11"><a href="#__codelineno-37-11" id="__codelineno-37-11" name="__codelineno-37-11"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-37-12"><a href="#__codelineno-37-12" id="__codelineno-37-12" name="__codelineno-37-12"></a><span class="gp">$ </span>rm<span class="w"> </span>-rf<span class="w"> </span>*
+</span><span id="__span-37-13"><a href="#__codelineno-37-13" id="__codelineno-37-13" name="__codelineno-37-13"></a><span class="gp">$ </span>tar<span class="w"> </span>xfv<span class="w"> </span><span class="s2">"../buildroot/output/images/rootfs.tar"</span>
+</span></code></pre></div>
+<p>Check that you can load the <em>Nunchuk</em> module now.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - Buildroot</span><pre><span></span><code><span id="__span-38-1"><a href="#__codelineno-38-1" id="__codelineno-38-1" name="__codelineno-38-1"></a><span class="gp"># </span>reboot
+</span><span id="__span-38-2"><a href="#__codelineno-38-2" id="__codelineno-38-2" name="__codelineno-38-2"></a><span class="go">    ...</span>
+</span><span id="__span-38-3"><a href="#__codelineno-38-3" id="__codelineno-38-3" name="__codelineno-38-3"></a><span class="gp"># </span>modprobe<span class="w"> </span>nunchuk
+</span><span id="__span-38-4"><a href="#__codelineno-38-4" id="__codelineno-38-4" name="__codelineno-38-4"></a><span class="go">nunchuk: loading out-of-tree module taints kernel.</span>
+</span><span id="__span-38-5"><a href="#__codelineno-38-5" id="__codelineno-38-5" name="__codelineno-38-5"></a><span class="go">input: Wii Nunchuk as /devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@0/4802a000.target-module/4802a000.i2c/i2c-1/1-0052/input/input0</span>
+</span><span id="__span-38-6"><a href="#__codelineno-38-6" id="__codelineno-38-6" name="__codelineno-38-6"></a><span class="go">Nunchuk device probed successfully</span>
+</span></code></pre></div>
+<p>If everything's fine, add a line to <code>/etc/init.d/S03modprobe</code> for this driver, and update your <em>root</em> filesystem once again.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-39-1"><a href="#__codelineno-39-1" id="__codelineno-39-1" name="__codelineno-39-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-39-2"><a href="#__codelineno-39-2" id="__codelineno-39-2" name="__codelineno-39-2"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>board/bootlin/training/rootfs-overlay/
+</span><span id="__span-39-3"><a href="#__codelineno-39-3" id="__codelineno-39-3" name="__codelineno-39-3"></a><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">"modprobe nunchuk"</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>etc/init.d/S03modprobe
+</span><span id="__span-39-4"><a href="#__codelineno-39-4" id="__codelineno-39-4" name="__codelineno-39-4"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-39-5"><a href="#__codelineno-39-5" id="__codelineno-39-5" name="__codelineno-39-5"></a><span class="gp">$ </span>make
+</span><span id="__span-39-6"><a href="#__codelineno-39-6" id="__codelineno-39-6" name="__codelineno-39-6"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-39-7"><a href="#__codelineno-39-7" id="__codelineno-39-7" name="__codelineno-39-7"></a><span class="gp">$ </span>rm<span class="w"> </span>-rf<span class="w"> </span>*
+</span><span id="__span-39-8"><a href="#__codelineno-39-8" id="__codelineno-39-8" name="__codelineno-39-8"></a><span class="gp">$ </span>tar<span class="w"> </span>xfv<span class="w"> </span><span class="s2">"../buildroot/output/images/rootfs.tar"</span>
+</span></code></pre></div>
+<h2 id="testing-the-nunchuk"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.11</span> Testing the Nunchuk</h2>
+<p>Now that we have the <em>Nunchuk</em> driver loaded and that <em>Buildroot</em> compiled <code>evtest</code> for the target, thanks to <em>Buildroot</em>, we can now test the input events coming from the <em>Nunchuk</em>.</p>
+<div class="language-console highlight"><span class="filename">picocomBBB - Buildroot</span><pre><span></span><code><span id="__span-40-1"><a href="#__codelineno-40-1" id="__codelineno-40-1" name="__codelineno-40-1"></a><span class="gp"># </span>reboot
+</span><span id="__span-40-2"><a href="#__codelineno-40-2" id="__codelineno-40-2" name="__codelineno-40-2"></a><span class="go">    ...</span>
+</span><span id="__span-40-3"><a href="#__codelineno-40-3" id="__codelineno-40-3" name="__codelineno-40-3"></a><span class="gp"># </span>evtest
+</span><span id="__span-40-4"><a href="#__codelineno-40-4" id="__codelineno-40-4" name="__codelineno-40-4"></a><span class="go">No device specified, trying to scan all of /dev/input/event*</span>
+</span><span id="__span-40-5"><a href="#__codelineno-40-5" id="__codelineno-40-5" name="__codelineno-40-5"></a><span class="go">Available devices:</span>
+</span><span id="__span-40-6"><a href="#__codelineno-40-6" id="__codelineno-40-6" name="__codelineno-40-6"></a><span class="hll"><span class="go">/dev/input/event0:      Wii Nunchuk</span>
+</span></span><span id="__span-40-7"><a href="#__codelineno-40-7" id="__codelineno-40-7" name="__codelineno-40-7"></a><span class="go">Select the device event number [0-0]: 0</span>
+</span><span id="__span-40-8"><a href="#__codelineno-40-8" id="__codelineno-40-8" name="__codelineno-40-8"></a><span class="go">Input driver version is 1.0.1</span>
+</span><span id="__span-40-9"><a href="#__codelineno-40-9" id="__codelineno-40-9" name="__codelineno-40-9"></a><span class="go">Input device ID: bus 0x18 vendor 0x0 product 0x0 version 0x0</span>
+</span><span id="__span-40-10"><a href="#__codelineno-40-10" id="__codelineno-40-10" name="__codelineno-40-10"></a><span class="go">Input device name: "Wii Nunchuk"</span>
+</span><span id="__span-40-11"><a href="#__codelineno-40-11" id="__codelineno-40-11" name="__codelineno-40-11"></a><span class="go">Supported events:</span>
+</span><span id="__span-40-12"><a href="#__codelineno-40-12" id="__codelineno-40-12" name="__codelineno-40-12"></a><span class="go">  Event type 0 (EV_SYN)</span>
+</span><span id="__span-40-13"><a href="#__codelineno-40-13" id="__codelineno-40-13" name="__codelineno-40-13"></a><span class="go">  Event type 1 (EV_KEY)</span>
+</span><span id="__span-40-14"><a href="#__codelineno-40-14" id="__codelineno-40-14" name="__codelineno-40-14"></a><span class="go">    Event code 304 (BTN_SOUTH)</span>
+</span><span id="__span-40-15"><a href="#__codelineno-40-15" id="__codelineno-40-15" name="__codelineno-40-15"></a><span class="go">    Event code 305 (BTN_EAST)</span>
+</span><span id="__span-40-16"><a href="#__codelineno-40-16" id="__codelineno-40-16" name="__codelineno-40-16"></a><span class="go">    Event code 306 (BTN_C)</span>
+</span><span id="__span-40-17"><a href="#__codelineno-40-17" id="__codelineno-40-17" name="__codelineno-40-17"></a><span class="go">    Event code 307 (BTN_NORTH)</span>
+</span><span id="__span-40-18"><a href="#__codelineno-40-18" id="__codelineno-40-18" name="__codelineno-40-18"></a><span class="go">    Event code 308 (BTN_WEST)</span>
+</span><span id="__span-40-19"><a href="#__codelineno-40-19" id="__codelineno-40-19" name="__codelineno-40-19"></a><span class="go">    Event code 309 (BTN_Z)</span>
+</span><span id="__span-40-20"><a href="#__codelineno-40-20" id="__codelineno-40-20" name="__codelineno-40-20"></a><span class="go">    Event code 310 (BTN_TL)</span>
+</span><span id="__span-40-21"><a href="#__codelineno-40-21" id="__codelineno-40-21" name="__codelineno-40-21"></a><span class="go">    Event code 311 (BTN_TR)</span>
+</span><span id="__span-40-22"><a href="#__codelineno-40-22" id="__codelineno-40-22" name="__codelineno-40-22"></a><span class="go">    Event code 312 (BTN_TL2)</span>
+</span><span id="__span-40-23"><a href="#__codelineno-40-23" id="__codelineno-40-23" name="__codelineno-40-23"></a><span class="go">    Event code 313 (BTN_TR2)</span>
+</span><span id="__span-40-24"><a href="#__codelineno-40-24" id="__codelineno-40-24" name="__codelineno-40-24"></a><span class="go">    Event code 314 (BTN_SELECT)</span>
+</span><span id="__span-40-25"><a href="#__codelineno-40-25" id="__codelineno-40-25" name="__codelineno-40-25"></a><span class="go">    Event code 315 (BTN_START)</span>
+</span><span id="__span-40-26"><a href="#__codelineno-40-26" id="__codelineno-40-26" name="__codelineno-40-26"></a><span class="go">    Event code 316 (BTN_MODE)</span>
+</span><span id="__span-40-27"><a href="#__codelineno-40-27" id="__codelineno-40-27" name="__codelineno-40-27"></a><span class="go">  Event type 3 (EV_ABS)</span>
+</span><span id="__span-40-28"><a href="#__codelineno-40-28" id="__codelineno-40-28" name="__codelineno-40-28"></a><span class="go">    Event code 0 (ABS_X)</span>
+</span><span id="__span-40-29"><a href="#__codelineno-40-29" id="__codelineno-40-29" name="__codelineno-40-29"></a><span class="go">      Value    124</span>
+</span><span id="__span-40-30"><a href="#__codelineno-40-30" id="__codelineno-40-30" name="__codelineno-40-30"></a><span class="go">      Min       30</span>
+</span><span id="__span-40-31"><a href="#__codelineno-40-31" id="__codelineno-40-31" name="__codelineno-40-31"></a><span class="go">      Max      220</span>
+</span><span id="__span-40-32"><a href="#__codelineno-40-32" id="__codelineno-40-32" name="__codelineno-40-32"></a><span class="go">      Fuzz       4</span>
+</span><span id="__span-40-33"><a href="#__codelineno-40-33" id="__codelineno-40-33" name="__codelineno-40-33"></a><span class="go">      Flat       8</span>
+</span><span id="__span-40-34"><a href="#__codelineno-40-34" id="__codelineno-40-34" name="__codelineno-40-34"></a><span class="go">    Event code 1 (ABS_Y)</span>
+</span><span id="__span-40-35"><a href="#__codelineno-40-35" id="__codelineno-40-35" name="__codelineno-40-35"></a><span class="go">      Value    124</span>
+</span><span id="__span-40-36"><a href="#__codelineno-40-36" id="__codelineno-40-36" name="__codelineno-40-36"></a><span class="go">      Min       40</span>
+</span><span id="__span-40-37"><a href="#__codelineno-40-37" id="__codelineno-40-37" name="__codelineno-40-37"></a><span class="go">      Max      200</span>
+</span><span id="__span-40-38"><a href="#__codelineno-40-38" id="__codelineno-40-38" name="__codelineno-40-38"></a><span class="go">      Fuzz       4</span>
+</span><span id="__span-40-39"><a href="#__codelineno-40-39" id="__codelineno-40-39" name="__codelineno-40-39"></a><span class="go">      Flat       8</span>
+</span><span id="__span-40-40"><a href="#__codelineno-40-40" id="__codelineno-40-40" name="__codelineno-40-40"></a><span class="go">Properties:</span>
+</span><span id="__span-40-41"><a href="#__codelineno-40-41" id="__codelineno-40-41" name="__codelineno-40-41"></a><span class="go">Testing ... (interrupt to exit)</span>
+</span><span id="__span-40-42"><a href="#__codelineno-40-42" id="__codelineno-40-42" name="__codelineno-40-42"></a><span class="go">Event: time 66.081447, type 1 (EV_KEY), code 309 (BTN_Z), value 1</span>
+</span><span id="__span-40-43"><a href="#__codelineno-40-43" id="__codelineno-40-43" name="__codelineno-40-43"></a><span class="go">Event: time 66.081447, -------------- SYN_REPORT ------------</span>
+</span><span id="__span-40-44"><a href="#__codelineno-40-44" id="__codelineno-40-44" name="__codelineno-40-44"></a><span class="go">Event: time 66.281432, type 1 (EV_KEY), code 309 (BTN_Z), value 0</span>
+</span><span id="__span-40-45"><a href="#__codelineno-40-45" id="__codelineno-40-45" name="__codelineno-40-45"></a><span class="go">Event: time 66.281432, -------------- SYN_REPORT ------------</span>
+</span><span id="__span-40-46"><a href="#__codelineno-40-46" id="__codelineno-40-46" name="__codelineno-40-46"></a><span class="go">Event: time 71.181449, type 1 (EV_KEY), code 306 (BTN_C), value 1</span>
+</span><span id="__span-40-47"><a href="#__codelineno-40-47" id="__codelineno-40-47" name="__codelineno-40-47"></a><span class="go">Event: time 71.181449, -------------- SYN_REPORT ------------</span>
+</span><span id="__span-40-48"><a href="#__codelineno-40-48" id="__codelineno-40-48" name="__codelineno-40-48"></a><span class="go">Event: time 71.281437, type 1 (EV_KEY), code 306 (BTN_C), value 0</span>
+</span><span id="__span-40-49"><a href="#__codelineno-40-49" id="__codelineno-40-49" name="__codelineno-40-49"></a><span class="go">Event: time 71.281437, -------------- SYN_REPORT ------------</span>
+</span></code></pre></div>
+<p>Enter the number corresponding to the <em>Nunchuk</em> device.</p>
+<p>You can now press the <em>Nunchuk</em> buttons, use the joypad, and see which input events are emitted.</p>
+<p>By the way, you can also test which input events are exposed by the driver for your audio headset (if any), which doesn't mean that they physically exist.</p>
+<h2 id="commit-your-changes"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.12</span> Commit your changes</h2>
+<p>As we are going to reuse our <em>Buildroot</em> changes in the next labs, let's commit them into the dedicated <em>Buildroot</em> branch we created (<code>embedded-linux-bbb</code>):</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-41-1"><a href="#__codelineno-41-1" id="__codelineno-41-1" name="__codelineno-41-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-41-2"><a href="#__codelineno-41-2" id="__codelineno-41-2" name="__codelineno-41-2"></a><span class="gp">$ </span>git<span class="w"> </span>status
+</span><span id="__span-41-3"><a href="#__codelineno-41-3" id="__codelineno-41-3" name="__codelineno-41-3"></a><span class="hll"><span class="go">On branch embedded-linux-bbb</span>
+</span></span><span id="__span-41-4"><a href="#__codelineno-41-4" id="__codelineno-41-4" name="__codelineno-41-4"></a><span class="go">Changes not staged for commit:</span>
+</span><span id="__span-41-5"><a href="#__codelineno-41-5" id="__codelineno-41-5" name="__codelineno-41-5"></a><span class="go">  (use "git add &lt;file&gt;..." to update what will be committed)</span>
+</span><span id="__span-41-6"><a href="#__codelineno-41-6" id="__codelineno-41-6" name="__codelineno-41-6"></a><span class="go">  (use "git restore &lt;file&gt;..." to discard changes in working directory)</span>
+</span><span id="__span-41-7"><a href="#__codelineno-41-7" id="__codelineno-41-7" name="__codelineno-41-7"></a><span class="hll"><span class="go">        modified:   package/Config.in</span>
+</span></span><span id="__span-41-8"><a href="#__codelineno-41-8" id="__codelineno-41-8" name="__codelineno-41-8"></a>
+</span><span id="__span-41-9"><a href="#__codelineno-41-9" id="__codelineno-41-9" name="__codelineno-41-9"></a><span class="go">Untracked files:</span>
+</span><span id="__span-41-10"><a href="#__codelineno-41-10" id="__codelineno-41-10" name="__codelineno-41-10"></a><span class="go">  (use "git add &lt;file&gt;..." to include in what will be committed)</span>
+</span><span id="__span-41-11"><a href="#__codelineno-41-11" id="__codelineno-41-11" name="__codelineno-41-11"></a><span class="hll"><span class="go">        board/bootlin/</span>
+</span></span><span id="__span-41-12"><a href="#__codelineno-41-12" id="__codelineno-41-12" name="__codelineno-41-12"></a><span class="hll"><span class="go">        package/nunchuk-driver/</span>
+</span></span><span id="__span-41-13"><a href="#__codelineno-41-13" id="__codelineno-41-13" name="__codelineno-41-13"></a>
+</span><span id="__span-41-14"><a href="#__codelineno-41-14" id="__codelineno-41-14" name="__codelineno-41-14"></a><span class="go">no changes added to commit (use "git add" and/or "git commit -a")</span>
+</span><span id="__span-41-15"><a href="#__codelineno-41-15" id="__codelineno-41-15" name="__codelineno-41-15"></a><span class="gp">$ </span>git<span class="w"> </span>add<span class="w">  </span>board/bootlin/<span class="w">  </span>package/nunchuk-driver/<span class="w">  </span>package/Config.in
+</span><span id="__span-41-16"><a href="#__codelineno-41-16" id="__codelineno-41-16" name="__codelineno-41-16"></a><span class="gp">$ </span>git<span class="w"> </span>commit<span class="w"> </span>-as<span class="w"> </span>-m<span class="w"> </span><span class="s2">"Bootlin lab changes"</span>
+</span></code></pre></div>
+<h2 id="going-further"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.13</span> Going further</h2>
+<p>For more music playing fun, you can install the <code>ario</code> or <code>cantata</code> <em>MPD</em> client on your <em>host</em> machine, configure to connect to the IP address of your <em>target</em> system with the default port, and you will also be able to control playback from your <em>host</em> machine.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-42-1"><a href="#__codelineno-42-1" id="__codelineno-42-1" name="__codelineno-42-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>ario<span class="w"> </span>cantata
+</span></code></pre></div>
+<p><strong>TODO</strong></p>
+<h2 id="backup-and-restore"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.14</span> Backup and restore</h2>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-43-1"><a href="#__codelineno-43-1" id="__codelineno-43-1" name="__codelineno-43-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot/"</span>
+</span><span id="__span-43-2"><a href="#__codelineno-43-2" id="__codelineno-43-2" name="__codelineno-43-2"></a><span class="gp">$ </span>find<span class="w"> </span>.<span class="w"> </span>-depth<span class="w"> </span>-print0<span class="w"> </span><span class="p">|</span><span class="w"> </span>cpio<span class="w"> </span>-ocv0<span class="w"> </span><span class="p">|</span><span class="w"> </span>xz<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/nfsroot-buildroot.cpio.xz"</span>
+</span><span id="__span-43-3"><a href="#__codelineno-43-3" id="__codelineno-43-3" name="__codelineno-43-3"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-43-4"><a href="#__codelineno-43-4" id="__codelineno-43-4" name="__codelineno-43-4"></a><span class="gp">$ </span>tar<span class="w"> </span>cfJv<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot-patch.tar.xz"</span><span class="w"> </span>board/bootlin/<span class="w"> </span>package/nunchuk-driver/<span class="w"> </span>package/Config.in
+</span><span id="__span-43-5"><a href="#__codelineno-43-5" id="__codelineno-43-5" name="__codelineno-43-5"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/output/images/"</span>
+</span><span id="__span-43-6"><a href="#__codelineno-43-6" id="__codelineno-43-6" name="__codelineno-43-6"></a><span class="gp">$ </span>tar<span class="w"> </span>cfJv<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot-rootfs.tar.xz"</span><span class="w"> </span>rootfs.tar
+</span><span id="__span-43-7"><a href="#__codelineno-43-7" id="__codelineno-43-7" name="__codelineno-43-7"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>/srv/tftp/
+</span><span id="__span-43-8"><a href="#__codelineno-43-8" id="__codelineno-43-8" name="__codelineno-43-8"></a><span class="gp">$ </span>tar<span class="w"> </span>cfJv<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot-tftp.tar.xz"</span><span class="w"> </span>zImage<span class="w"> </span>am335x-boneblack-custom.dtb
+</span></code></pre></div>
+<h3 id="git-bundle"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.14.1</span> git bundle</h3>
+<p>To create a <em>git bundle</em> with just our patch (to have consistent <em>git commit</em> naming):</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-44-1"><a href="#__codelineno-44-1" id="__codelineno-44-1" name="__codelineno-44-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-44-2"><a href="#__codelineno-44-2" id="__codelineno-44-2" name="__codelineno-44-2"></a><span class="gp">$ </span><span class="nv">label</span><span class="o">=</span><span class="s2">"2022.02"</span>
+</span><span id="__span-44-3"><a href="#__codelineno-44-3" id="__codelineno-44-3" name="__codelineno-44-3"></a><span class="gp">$ </span><span class="nv">bundle</span><span class="o">=</span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot-</span><span class="nv">$label</span><span class="s2">-bootlin.bundle"</span>
+</span><span id="__span-44-4"><a href="#__codelineno-44-4" id="__codelineno-44-4" name="__codelineno-44-4"></a><span class="gp">$ </span>git<span class="w"> </span>bundle<span class="w"> </span>create<span class="w"> </span><span class="nv">$bundle</span><span class="w"> </span><span class="nv">$label</span>..
+</span></code></pre></div>
+<p>To restore the <em>git bundle</em>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-45-1"><a href="#__codelineno-45-1" id="__codelineno-45-1" name="__codelineno-45-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot/"</span>
+</span><span id="__span-45-2"><a href="#__codelineno-45-2" id="__codelineno-45-2" name="__codelineno-45-2"></a><span class="gp">$ </span><span class="nv">label</span><span class="o">=</span><span class="s2">"2022.02"</span>
+</span><span id="__span-45-3"><a href="#__codelineno-45-3" id="__codelineno-45-3" name="__codelineno-45-3"></a><span class="gp">$ </span><span class="nv">bundle</span><span class="o">=</span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/buildroot-</span><span class="nv">$label</span><span class="s2">-bootlin.bundle"</span>
+</span><span id="__span-45-4"><a href="#__codelineno-45-4" id="__codelineno-45-4" name="__codelineno-45-4"></a><span class="gp">$ </span>git<span class="w"> </span>bundle<span class="w"> </span>verify<span class="w"> </span><span class="nv">$bundle</span>
+</span><span id="__span-45-5"><a href="#__codelineno-45-5" id="__codelineno-45-5" name="__codelineno-45-5"></a><span class="go">The bundle contains this ref:</span>
+</span><span id="__span-45-6"><a href="#__codelineno-45-6" id="__codelineno-45-6" name="__codelineno-45-6"></a><span class="go">1dcc6c688d2ecdd1ed3a579584bb6223c209d301 HEAD</span>
+</span><span id="__span-45-7"><a href="#__codelineno-45-7" id="__codelineno-45-7" name="__codelineno-45-7"></a><span class="go">The bundle requires this ref:</span>
+</span><span id="__span-45-8"><a href="#__codelineno-45-8" id="__codelineno-45-8" name="__codelineno-45-8"></a><span class="go">08967921c4a91eb7d966c31f755a0720914e8bff</span>
+</span><span id="__span-45-9"><a href="#__codelineno-45-9" id="__codelineno-45-9" name="__codelineno-45-9"></a><span class="go">/home/me/embedded-linux-bbb-labs/buildroot/buildroot-2022.02-bootlin.bundle is okay</span>
+</span><span id="__span-45-10"><a href="#__codelineno-45-10" id="__codelineno-45-10" name="__codelineno-45-10"></a><span class="gp">$ </span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>embedded-linux-bbb<span class="w"> </span><span class="nv">$label</span>
+</span><span id="__span-45-11"><a href="#__codelineno-45-11" id="__codelineno-45-11" name="__codelineno-45-11"></a><span class="go">    ...</span>
+</span><span id="__span-45-12"><a href="#__codelineno-45-12" id="__codelineno-45-12" name="__codelineno-45-12"></a><span class="gp">$ </span>git<span class="w"> </span>bundle<span class="w"> </span>list-heads<span class="w"> </span><span class="nv">$bundle</span>
+</span><span id="__span-45-13"><a href="#__codelineno-45-13" id="__codelineno-45-13" name="__codelineno-45-13"></a><span class="go">1dcc6c688d2ecdd1ed3a579584bb6223c209d301 HEAD</span>
+</span><span id="__span-45-14"><a href="#__codelineno-45-14" id="__codelineno-45-14" name="__codelineno-45-14"></a><span class="gp">$ </span>git<span class="w"> </span>pull<span class="w"> </span><span class="nv">$bundle</span>
+</span></code></pre></div>
+<h2 id="licensing"><span class="enumerate-headings-plugin enumerate-heading-plugin">22.15</span> Licensing</h2>
+<p>This document is an extension to: <a href="https://bootlin.com/doc/training/embedded-linux-bbb/"><em>Embedded Linux System Development - Practical Labs - BeagleBone Black Variant</em></a>
+ — © 2004-2023, <em>Bootlin</em> <a href="https://bootlin.com">https://bootlin.com/</a>, <a href="(https://creativecommons.org/licenses/by-sa/3.0/)"><code>CC-BY-SA-3.0</code></a> license.</p>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.fac441b0.min.js"></script>
+</body>
+</html>

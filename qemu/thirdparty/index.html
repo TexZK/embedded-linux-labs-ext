@@ -1,0 +1,1326 @@
+
+<!DOCTYPE html>
+
+<html class="no-js" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<link href="../blockfs/" rel="prev"/>
+<link href="../buildroot/" rel="next"/>
+<link href="../../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.4.3, mkdocs-material-9.1.11" name="generator"/>
+<title>Third-party libraries and apps - Embedded Systems Linux Development Notes</title>
+<link href="../../assets/stylesheets/main.85bb2934.min.css" rel="stylesheet"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+</head>
+<body dir="ltr">
+<script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#third-party-libraries-and-apps">
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="Embedded Systems Linux Development Notes" class="md-header__button md-logo" data-md-component="logo" href="../.." title="Embedded Systems Linux Development Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            Embedded Systems Linux Development Notes
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              Third-party libraries and apps
+            
+          </span>
+</div>
+</div>
+</div>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="Embedded Systems Linux Development Notes" class="md-nav__button md-logo" data-md-component="logo" href="../.." title="Embedded Systems Linux Development Notes">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"></path></svg>
+</a>
+    Embedded Systems Linux Development Notes
+  </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../..">
+        Overview
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active md-nav__item--nested">
+<input checked="" class="md-nav__toggle md-toggle" id="__nav_2" type="checkbox"/>
+<label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          QEMU variant
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="true" aria-labelledby="__nav_2_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_2">
+<span class="md-nav__icon md-icon"></span>
+          QEMU variant
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../virtualbox/">
+        Host VM
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../toolchain/">
+        Building a cross-compile toolchain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../bootloader/">
+        Bootloader - U-Boot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../kernel/">
+        Linux Kernel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../tinysystem/">
+        Tiny embedded system with BusyBox
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../hardware/">
+        Accessing Hardware Devices
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../blockfs/">
+        Block Filesystems
+      </a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+          Third-party libraries and apps
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+        Third-party libraries and apps
+      </a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#objectives">
+    Objectives
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#required-tools">
+    Required tools
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#figuring-out-library-dependencies">
+    Figuring out library dependencies
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#preparation">
+    Preparation
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing">
+    Testing
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#alsa-lib">
+    alsa-lib
+  </a>
+<nav aria-label="alsa-lib" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#source-code">
+    Source code
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration">
+    Configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#build">
+    Build
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installation">
+    Installation
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#alsa-utils">
+    alsa-utils
+  </a>
+<nav aria-label="alsa-utils" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#source-code_1">
+    Source code
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration_1">
+    Configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#build_1">
+    Build
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installation_1">
+    Installation
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#quick-test">
+    Quick test
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ipcalc">
+    ipcalc
+  </a>
+<nav aria-label="ipcalc" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#source-code_2">
+    Source code
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration_2">
+    Configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#build_2">
+    Build
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installation_2">
+    Installation
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#quick-test_1">
+    Quick test
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#final-touch">
+    Final touch
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup-and-restore">
+    Backup and restore
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing">
+    Licensing
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../buildroot/">
+        Buildroot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../appdev/">
+        App - Development
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../debugging/">
+        App - Remote debug
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../debootstrap/">
+        debootstrap
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_3" type="checkbox"/>
+<label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          BeagleBone Black variant
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_3_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_3">
+<span class="md-nav__icon md-icon"></span>
+          BeagleBone Black variant
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/virtualbox/">
+        Host VM
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/toolchain/">
+        Building a cross-compile toolchain
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/bootloader/">
+        Bootloader - U-Boot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/kernel/">
+        Linux Kernel
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/tinysystem/">
+        Tiny embedded system with BusyBox
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/hardware/">
+        Accessing Hardware Devices
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/blockfs/">
+        Block Filesystems
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/thirdparty/">
+        Third-party libraries and apps
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/buildroot/">
+        Buildroot
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/integration/">
+        System integration
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../bbb/appdev/">
+        App - Development
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item md-nav__item--nested">
+<input class="md-nav__toggle md-toggle" id="__nav_4" type="checkbox"/>
+<label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          Knowledge Base
+          <span class="md-nav__icon md-icon"></span>
+</label>
+<nav aria-expanded="false" aria-labelledby="__nav_4_label" class="md-nav" data-md-level="1">
+<label class="md-nav__title" for="__nav_4">
+<span class="md-nav__icon md-icon"></span>
+          Knowledge Base
+        </label>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/git-hash/">
+        git commit hash expansion
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/menuconfig/">
+        menuconfig
+      </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../kb/processors/">
+        Processors
+      </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../../copying/">
+        Copying this document
+      </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#objectives">
+    Objectives
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#required-tools">
+    Required tools
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#figuring-out-library-dependencies">
+    Figuring out library dependencies
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#preparation">
+    Preparation
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#testing">
+    Testing
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#alsa-lib">
+    alsa-lib
+  </a>
+<nav aria-label="alsa-lib" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#source-code">
+    Source code
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration">
+    Configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#build">
+    Build
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installation">
+    Installation
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#alsa-utils">
+    alsa-utils
+  </a>
+<nav aria-label="alsa-utils" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#source-code_1">
+    Source code
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration_1">
+    Configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#build_1">
+    Build
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installation_1">
+    Installation
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#quick-test">
+    Quick test
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#ipcalc">
+    ipcalc
+  </a>
+<nav aria-label="ipcalc" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#source-code_2">
+    Source code
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#configuration_2">
+    Configuration
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#build_2">
+    Build
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installation_2">
+    Installation
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#quick-test_1">
+    Quick test
+  </a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#final-touch">
+    Final touch
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#backup-and-restore">
+    Backup and restore
+  </a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#licensing">
+    Licensing
+  </a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="third-party-libraries-and-apps"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.</span> Third-party libraries and apps</h1>
+<h2 id="objectives"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.1</span> Objectives</h2>
+<ul>
+<li>Learn how to leverage existing libraries and applications: how to configure, compile and install them.</li>
+</ul>
+<p>To illustrate how to use existing libraries and applications, we will extend the small <em>root</em> filesystem built in the <em>BusyBox</em> lab to add the <em>ALSA</em> libraries and tools to run basic sound support tests.<br/>
+<em>ALSA</em> stands for <em>Advanced Linux Sound Architecture</em>, and it's the Linux audio subsystem.</p>
+<p>We'll see that manually re-using existing libraries is quite tedious, so that more automated procedures are necessary to make it easier.
+However, learning how to perform these operations manually will significantly help you when you face issues with more automated tools.</p>
+<h2 id="required-tools"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.2</span> Required tools</h2>
+<ul>
+<li>
+<p>Our <a href="../toolchain/"><em>cross-compile toolchain</em></a></p>
+</li>
+<li>
+<p><em>Ubuntu</em> packages:</p>
+<p><code>meson</code></p>
+</li>
+<li>
+<p><a href="https://www.alsa-project.org/"><em>alsa-lib</em></a></p>
+<ul>
+<li><a href="https://www.alsa-project.org/files/pub/lib/alsa-lib-1.2.7.1.tar.bz2">Archived source code release <code>1.2.7.1</code></a></li>
+</ul>
+</li>
+<li>
+<p><a href="https://www.alsa-project.org/"><em>alsa-utils</em></a></p>
+<ul>
+<li><a href="https://www.alsa-project.org/files/pub/utils/alsa-utils-1.2.6.tar.bz2">Archived source code release <code>1.2.6</code></a></li>
+</ul>
+</li>
+<li>
+<p><a href="https://gitlab.com/ipcalc/"><em>ipcalc</em></a></p>
+<ul>
+<li><a href="https://gitlab.com/ipcalc/ipcalc/-/archive/1.0.1/ipcalc-1.0.1.tar.bz2">Archived source code release <code>1.0.1</code></a></li>
+</ul>
+</li>
+</ul>
+<h2 id="figuring-out-library-dependencies"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.3</span> Figuring out library dependencies</h2>
+<p>We're going to integrate the <code>alsa-utils</code> and <code>ipcalc</code> executables.<br/>
+In our case, the dependency chain for <code>alsa-utils</code> is quite simple: it only depends on the <code>alsa-lib</code> library.<br/>
+Instead, <code>ipcalc</code> is standalone and thus doesn't have any dependencies.</p>
+<p>Of course, all these libraries rely on the C library, which is not mentioned here, because it is already part of the <em>root</em> filesystem built in the <em>BusyBox</em> lab.<br/>
+You might wonder how to figure out this dependency tree by yourself. Basically, there are several ways, that can be combined:</p>
+<ul>
+<li>Read the library documentation, which often mentions the dependencies.</li>
+<li>Read the help message of the configure script (by running <code>./configure --help</code>).</li>
+<li>By running the configure script, compiling and looking at the errors.</li>
+</ul>
+<p>To configure, compile and install all the components of our system, we're going to start from the bottom of the tree with <code>alsa-lib</code>, then continue with <code>alsa-utils</code>. Then, we will also build <code>ipcalc</code>.</p>
+<h2 id="preparation"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.4</span> Preparation</h2>
+<p>For our cross-compilation work, we will need two separate spaces:</p>
+<ul>
+<li>
+<p>A <em>staging</em> space in which we will directly install all the packages: non-stripped versions of the libraries, headers, documentation and other files needed for the compilation.<br/>
+This <em>staging</em> space can be quite big, but will not be used on our target, only for compiling libraries or applications;</p>
+</li>
+<li>
+<p>A <em>target</em> space, in which we will only copy the required files from the <em>staging</em> space: binaries and libraries, after stripping, configuration files needed at runtime, etc.<br/>
+This <em>target</em> space will take a lot less space than the <em>staging</em> space, and it will contain only the files that are really needed to make the system work on the target.</p>
+</li>
+</ul>
+<p>To sum up, the <em>staging</em> space will contain everything that's needed for compilation, while the <em>target</em> space will contain only what's needed for execution.</p>
+<p>Create the <code>$HOME/embedded-linux-qemu-labs/thirdparty/</code> directory, and inside create two directories: <code>staging</code> and <code>target</code>.</p>
+<p>For the <em>target</em>, we need a basic system with <em>BusyBox</em> and initialization scripts.
+We're going to re-use the system built in the <em>BusyBox</em> lab, so copy this system in the <code>target</code> directory.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-0-1"><a href="#__codelineno-0-1" id="__codelineno-0-1" name="__codelineno-0-1"></a><span class="gp">$ </span><span class="nv">LAB_PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/embedded-linux-qemu-labs/thirdparty"</span>
+</span><span id="__span-0-2"><a href="#__codelineno-0-2" id="__codelineno-0-2" name="__codelineno-0-2"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/target/"</span>
+</span><span id="__span-0-3"><a href="#__codelineno-0-3" id="__codelineno-0-3" name="__codelineno-0-3"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/staging/"</span>
+</span><span id="__span-0-4"><a href="#__codelineno-0-4" id="__codelineno-0-4" name="__codelineno-0-4"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-0-5"><a href="#__codelineno-0-5" id="__codelineno-0-5" name="__codelineno-0-5"></a><span class="gp">$ </span>cp<span class="w"> </span>-arv<span class="w"> </span>../tinysystem/nfsroot/*<span class="w"> </span>target/
+</span><span id="__span-0-6"><a href="#__codelineno-0-6" id="__codelineno-0-6" name="__codelineno-0-6"></a><span class="go">    ...</span>
+</span></code></pre></div>
+<h2 id="testing"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.5</span> Testing</h2>
+<p>Make sure the <code>target/</code> directory is exported by your NFS server to your board by modifying <code>/etc/exports</code> and restarting your NFS server.
+You can of course change our previous <code>/srv/nfs/</code> <em>symlink</em> to point to this directory.<br/>
+Make your board boot from this new directory through NFS.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-1-1"><a href="#__codelineno-1-1" id="__codelineno-1-1" name="__codelineno-1-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>rm<span class="w"> </span>-f<span class="w"> </span>/srv/nfs
+</span><span id="__span-1-2"><a href="#__codelineno-1-2" id="__codelineno-1-2" name="__codelineno-1-2"></a><span class="gp">$ </span>sudo<span class="w"> </span>ln<span class="w"> </span>-snv<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/target/"</span><span class="w"> </span>/srv/nfs
+</span><span id="__span-1-3"><a href="#__codelineno-1-3" id="__codelineno-1-3" name="__codelineno-1-3"></a><span class="go">'/srv/nfs' -&gt; '/home/me/embedded-linux-qemu-labs/thirdparty/target/'</span>
+</span><span id="__span-1-4"><a href="#__codelineno-1-4" id="__codelineno-1-4" name="__codelineno-1-4"></a><span class="gp">$ </span>sudo<span class="w"> </span>chown<span class="w"> </span>-R<span class="w"> </span>tftp:tftp<span class="w"> </span>/srv/nfs
+</span><span id="__span-1-5"><a href="#__codelineno-1-5" id="__codelineno-1-5" name="__codelineno-1-5"></a><span class="gp">$ </span>sudo<span class="w"> </span>exportfs<span class="w"> </span>-ar
+</span><span id="__span-1-6"><a href="#__codelineno-1-6" id="__codelineno-1-6" name="__codelineno-1-6"></a><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class="w"> </span>nfs-kernel-server
+</span></code></pre></div>
+<p>Revert <em>U-Boot</em> to use TFTP and NFS:</p>
+<div class="language-text highlight"><span class="filename">QEMU - U-Boot</span><pre><span></span><code><span id="__span-2-1"><a href="#__codelineno-2-1" id="__codelineno-2-1" name="__codelineno-2-1"></a>    ...
+</span><span id="__span-2-2"><a href="#__codelineno-2-2" id="__codelineno-2-2" name="__codelineno-2-2"></a>Hit any key to stop autoboot:  0
+</span><span id="__span-2-3"><a href="#__codelineno-2-3" id="__codelineno-2-3" name="__codelineno-2-3"></a>=&gt; setenv bootcmd "tftp 0x61000000 zImage;  tftp 0x62000000 vexpress-v2p-ca9.dtb;  bootz 0x61000000 - 0x62000000"
+</span><span id="__span-2-4"><a href="#__codelineno-2-4" id="__codelineno-2-4" name="__codelineno-2-4"></a>=&gt; setenv bootargs console=ttyAMA0 root=/dev/nfs ip=${ipaddr}::${serverip}:${netmask}:: nfsroot=${serverip}:${servernfs},nfsvers=3,tcp rw
+</span><span id="__span-2-5"><a href="#__codelineno-2-5" id="__codelineno-2-5" name="__codelineno-2-5"></a>=&gt; saveenv
+</span><span id="__span-2-6"><a href="#__codelineno-2-6" id="__codelineno-2-6" name="__codelineno-2-6"></a>=&gt; reset
+</span><span id="__span-2-7"><a href="#__codelineno-2-7" id="__codelineno-2-7" name="__codelineno-2-7"></a>    ...
+</span></code></pre></div>
+<h2 id="alsa-lib"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.6</span> <code>alsa-lib</code></h2>
+<p><code>alsa-lib</code> is a library supposed to handle the interaction with the <em>ALSA</em> subsystem.
+It is available at <a href="https://alsa-project.org/">https://alsa-project.org/</a>.</p>
+<h3 id="source-code"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.6.1</span> Source code</h3>
+<p>Download version <code>1.2.7.1</code>, and extract it in <code>$HOME/embeddedlinux-qemu-labs/thirdparty/</code>.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-3-1"><a href="#__codelineno-3-1" id="__codelineno-3-1" name="__codelineno-3-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-3-2"><a href="#__codelineno-3-2" id="__codelineno-3-2" name="__codelineno-3-2"></a><span class="gp">$ </span><span class="nv">label</span><span class="o">=</span><span class="s2">"1.2.7.1"</span>
+</span><span id="__span-3-3"><a href="#__codelineno-3-3" id="__codelineno-3-3" name="__codelineno-3-3"></a><span class="gp">$ </span>wget<span class="w"> </span><span class="s2">"https://www.alsa-project.org/files/pub/lib/alsa-lib-</span><span class="si">${</span><span class="nv">label</span><span class="si">}</span><span class="s2">.tar.bz2"</span>
+</span><span id="__span-3-4"><a href="#__codelineno-3-4" id="__codelineno-3-4" name="__codelineno-3-4"></a><span class="gp">$ </span>tar<span class="w"> </span>xfv<span class="w"> </span><span class="s2">"alsa-lib-</span><span class="si">${</span><span class="nv">label</span><span class="si">}</span><span class="s2">.tar.bz2"</span>
+</span><span id="__span-3-5"><a href="#__codelineno-3-5" id="__codelineno-3-5" name="__codelineno-3-5"></a><span class="gp">$ </span>mv<span class="w"> </span>alsa-lib*/<span class="w"> </span>alsa-lib
+</span><span id="__span-3-6"><a href="#__codelineno-3-6" id="__codelineno-3-6" name="__codelineno-3-6"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>alsa-lib/
+</span></code></pre></div>
+<blockquote>
+<p><strong>Tip:</strong> if the website for any of the source packages that we need to download in the next sections is down, a great mirror that you can use is
+<a href="http://sources.buildroot.net/">http://sources.buildroot.net/</a>.</p>
+</blockquote>
+<h3 id="configuration"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.6.2</span> Configuration</h3>
+<p>Back to <code>alsa-lib</code> sources, look at the <code>configure</code> script and see that it has been generated by <code>autoconf</code> (the header contains a sentence like Generated by GNU Autoconf 2.69).
+Most of the time, <code>autoconf</code> comes with <code>automake</code>, that generates <em>Makefiles</em> from <code>Makefile.am</code> files.
+So <code>alsa-lib</code> uses a rather common <em>build system</em>.<br/>
+Let's try to configure and build it:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-4-1"><a href="#__codelineno-4-1" id="__codelineno-4-1" name="__codelineno-4-1"></a><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">MAKEFLAGS</span><span class="o">=</span>-j<span class="k">$(</span>nproc<span class="k">)</span>
+</span><span id="__span-4-2"><a href="#__codelineno-4-2" id="__codelineno-4-2" name="__codelineno-4-2"></a><span class="gp">$ </span>head<span class="w"> </span>-n3<span class="w"> </span>configure
+</span><span id="__span-4-3"><a href="#__codelineno-4-3" id="__codelineno-4-3" name="__codelineno-4-3"></a><span class="gp">#</span>!<span class="w"> </span>/bin/sh
+</span><span id="__span-4-4"><a href="#__codelineno-4-4" id="__codelineno-4-4" name="__codelineno-4-4"></a><span class="gp"># </span>Guess<span class="w"> </span>values<span class="w"> </span><span class="k">for</span><span class="w"> </span>system-dependent<span class="w"> </span>variables<span class="w"> </span>and<span class="w"> </span>create<span class="w"> </span>Makefiles.
+</span><span id="__span-4-5"><a href="#__codelineno-4-5" id="__codelineno-4-5" name="__codelineno-4-5"></a><span class="hll"><span class="gp"># </span>Generated<span class="w"> </span>by<span class="w"> </span>GNU<span class="w"> </span>Autoconf<span class="w"> </span><span class="m">2</span>.69<span class="w"> </span><span class="k">for</span><span class="w"> </span>alsa-lib<span class="w"> </span><span class="m">1</span>.2.7.1.
+</span></span><span id="__span-4-6"><a href="#__codelineno-4-6" id="__codelineno-4-6" name="__codelineno-4-6"></a><span class="gp">$ </span>./configure
+</span><span id="__span-4-7"><a href="#__codelineno-4-7" id="__codelineno-4-7" name="__codelineno-4-7"></a><span class="gp">$ </span>make
+</span></code></pre></div>
+<p>If you look at the generated binaries, you'll see that they are <em>x86</em> ones because we compiled the sources with <code>gcc</code>, the default compiler.
+This is obviously not what we want, so let's clean up the generated objects and tell the configure script to use the <em>ARM cross-compiler</em>.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-5-1"><a href="#__codelineno-5-1" id="__codelineno-5-1" name="__codelineno-5-1"></a><span class="gp">$ </span>file<span class="w"> </span>aserver/aserver.o
+</span><span id="__span-5-2"><a href="#__codelineno-5-2" id="__codelineno-5-2" name="__codelineno-5-2"></a><span class="hll"><span class="go">aserver/aserver.o: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), with debug_info, not stripped</span>
+</span></span><span id="__span-5-3"><a href="#__codelineno-5-3" id="__codelineno-5-3" name="__codelineno-5-3"></a><span class="gp">$ </span>make<span class="w"> </span>clean
+</span><span id="__span-5-4"><a href="#__codelineno-5-4" id="__codelineno-5-4" name="__codelineno-5-4"></a><span class="gp">$ </span><span class="nv">TC_NAME</span><span class="o">=</span><span class="s2">"arm-training-linux-uclibcgnueabihf"</span>
+</span><span id="__span-5-5"><a href="#__codelineno-5-5" id="__codelineno-5-5" name="__codelineno-5-5"></a><span class="gp">$ </span><span class="nv">TC_BASE</span><span class="o">=</span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/x-tools/</span><span class="nv">$TC_NAME</span><span class="s2">"</span>
+</span><span id="__span-5-6"><a href="#__codelineno-5-6" id="__codelineno-5-6" name="__codelineno-5-6"></a><span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="s2">"</span><span class="nv">$TC_BASE</span><span class="s2">/bin:</span><span class="nv">$PATH</span><span class="s2">"</span>
+</span><span id="__span-5-7"><a href="#__codelineno-5-7" id="__codelineno-5-7" name="__codelineno-5-7"></a><span class="gp">$ </span><span class="nv">CC</span><span class="o">=</span>arm-linux-gcc<span class="w"> </span>./configure
+</span><span id="__span-5-8"><a href="#__codelineno-5-8" id="__codelineno-5-8" name="__codelineno-5-8"></a><span class="go">    ...</span>
+</span><span id="__span-5-9"><a href="#__codelineno-5-9" id="__codelineno-5-9" name="__codelineno-5-9"></a><span class="go">checking whether we are cross compiling... configure: error: in `/home/me/embedded-linux-qemu-labs/thirdparty/alsa-lib':</span>
+</span><span id="__span-5-10"><a href="#__codelineno-5-10" id="__codelineno-5-10" name="__codelineno-5-10"></a><span class="hll"><span class="go">configure: error: cannot run C compiled programs.</span>
+</span></span><span id="__span-5-11"><a href="#__codelineno-5-11" id="__codelineno-5-11" name="__codelineno-5-11"></a><span class="hll"><span class="go">If you meant to cross compile, use `--host'.</span>
+</span></span><span id="__span-5-12"><a href="#__codelineno-5-12" id="__codelineno-5-12" name="__codelineno-5-12"></a><span class="go">See `config.log' for more details</span>
+</span></code></pre></div>
+<p>Of course, the <code>arm-linux-gcc</code> cross-compiler must be in your <code>PATH</code> prior to running the configure script.
+The <code>CC</code> environment variable is the classical name for specifying the compiler to use.<br/>
+Quickly, you should get an error, as highlighted above.</p>
+<p>If you look at the <code>config.log</code> file, you can see that the <code>configure</code> script compiles a binary with the cross-compiler and then tries to run it on the development workstation. This is a rather usual thing to do for a <code>configure</code> script, and that's why it tests so early that it's actually doable, and bails out if not.</p>
+<div class="language-text highlight"><span class="filename">config.log</span><pre><span></span><code><span id="__span-6-1"><a href="#__codelineno-6-1" id="__codelineno-6-1" name="__codelineno-6-1"></a>    ...
+</span><span id="__span-6-2"><a href="#__codelineno-6-2" id="__codelineno-6-2" name="__codelineno-6-2"></a>configure:3719: arm-linux-gcc -o conftest    conftest.c  &gt;&amp;5
+</span><span id="__span-6-3"><a href="#__codelineno-6-3" id="__codelineno-6-3" name="__codelineno-6-3"></a>configure:3723: $? = 0
+</span><span id="__span-6-4"><a href="#__codelineno-6-4" id="__codelineno-6-4" name="__codelineno-6-4"></a>configure:3730: ./conftest
+</span><span id="__span-6-5"><a href="#__codelineno-6-5" id="__codelineno-6-5" name="__codelineno-6-5"></a>arm-binfmt-P: Could not open '/lib/ld-uClibc.so.0': No such file or directory
+</span><span id="__span-6-6"><a href="#__codelineno-6-6" id="__codelineno-6-6" name="__codelineno-6-6"></a>configure:3734: $? = 255
+</span><span id="__span-6-7"><a href="#__codelineno-6-7" id="__codelineno-6-7" name="__codelineno-6-7"></a>configure:3741: error: in `/home/me/embedded-linux-qemu-labs/thirdparty/alsa-lib':
+</span><span id="__span-6-8"><a href="#__codelineno-6-8" id="__codelineno-6-8" name="__codelineno-6-8"></a>configure:3743: error: cannot run C compiled programs.
+</span><span id="__span-6-9"><a href="#__codelineno-6-9" id="__codelineno-6-9" name="__codelineno-6-9"></a>If you meant to cross compile, use `--host'.
+</span><span id="__span-6-10"><a href="#__codelineno-6-10" id="__codelineno-6-10" name="__codelineno-6-10"></a>See `config.log' for more details
+</span><span id="__span-6-11"><a href="#__codelineno-6-11" id="__codelineno-6-11" name="__codelineno-6-11"></a>    ...
+</span></code></pre></div>
+<p>Obviously, it cannot work in our case, and the scripts exits.
+The job of the <code>configure</code> script is to test the configuration of the system.
+To do so, it tries to compile and run a few sample applications to test if this library is available, if this compiler option is supported, etc.
+But in our case, running the test examples is definitely not possible.</p>
+<p>We need to tell the <code>configure</code> script that we are cross-compiling, and this can be done using the <code>--build</code> and <code>--host</code> options, as described in the <code>help</code> of the <code>configure</code> script.</p>
+<div class="language-text highlight"><span class="filename">./configure --help</span><pre><span></span><code><span id="__span-7-1"><a href="#__codelineno-7-1" id="__codelineno-7-1" name="__codelineno-7-1"></a>    ...
+</span><span id="__span-7-2"><a href="#__codelineno-7-2" id="__codelineno-7-2" name="__codelineno-7-2"></a>System types:
+</span><span id="__span-7-3"><a href="#__codelineno-7-3" id="__codelineno-7-3" name="__codelineno-7-3"></a>  --build=BUILD     configure for building on BUILD [guessed]
+</span><span id="__span-7-4"><a href="#__codelineno-7-4" id="__codelineno-7-4" name="__codelineno-7-4"></a>  --host=HOST       cross-compile to build programs to run on HOST [BUILD]
+</span><span id="__span-7-5"><a href="#__codelineno-7-5" id="__codelineno-7-5" name="__codelineno-7-5"></a>    ...
+</span></code></pre></div>
+<p>The <code>--build</code> option allows to specify on which system the package is built, while the <code>--host</code> option
+allows to specify on which system the package will run.
+By default, the value of the <code>--build</code> option is guessed, and the value of <code>--host</code> is the same as the value of the <code>--build</code> option.
+The value is guessed using the <code>./config.guess</code> script, which on your system should return <code>x86_64-pc-linux-gnu</code>.
+See <a href="https://www.gnu.org/software/autoconf/manual/html_node/Specifying-Names.html">the <code>autoconf</code> manual</a>
+for more details on these options.</p>
+<p>So, let's override the value of the <code>--host</code> option:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-8-1"><a href="#__codelineno-8-1" id="__codelineno-8-1" name="__codelineno-8-1"></a><span class="gp">$ </span>./configure<span class="w"> </span>--host<span class="o">=</span>arm-linux
+</span></code></pre></div>
+<p>Note that <code>CC</code> is not required anymore. It is implied by <code>--host</code>.</p>
+<p>The <code>configure</code> script should end properly now, and create a <code>Makefile</code>.
+However, there is one subtle last issue to handle: because the C library used in our toolchain (<em>uClibc-ng</em>) does not support symbol versioning, we need to tell <code>alsa-lib</code> about this by passing <code>--without-versioned</code>.
+Without this option, <code>alsa-lib</code> will build fine, but
+<a href="https://mailman.alsa-project.org/pipermail/alsa-devel/2009-February/014999.html">it will not work properly at runtime</a>.</p>
+<h3 id="build"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.6.3</span> Build</h3>
+<p>So, you should configure <code>alsa-lib</code> and <code>run</code> the make command, which should run just fine.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-9-1"><a href="#__codelineno-9-1" id="__codelineno-9-1" name="__codelineno-9-1"></a><span class="gp">$ </span>make<span class="w"> </span>clean
+</span><span id="__span-9-2"><a href="#__codelineno-9-2" id="__codelineno-9-2" name="__codelineno-9-2"></a><span class="gp">$ </span>./configure<span class="w"> </span>--host<span class="o">=</span>arm-linux<span class="w"> </span>--without-versioned
+</span><span id="__span-9-3"><a href="#__codelineno-9-3" id="__codelineno-9-3" name="__codelineno-9-3"></a><span class="gp">$ </span>make
+</span></code></pre></div>
+<p>Look at the result of compiling in <code>src/.libs/</code>: a set of object files and a set of <code>libasound.so*</code> files.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-10-1"><a href="#__codelineno-10-1" id="__codelineno-10-1" name="__codelineno-10-1"></a><span class="gp">$ </span>ls<span class="w"> </span>-l<span class="w"> </span>src/.libs/
+</span><span id="__span-10-2"><a href="#__codelineno-10-2" id="__codelineno-10-2" name="__codelineno-10-2"></a><span class="go">total 4316</span>
+</span><span id="__span-10-3"><a href="#__codelineno-10-3" id="__codelineno-10-3" name="__codelineno-10-3"></a><span class="go">-rw-rw-r-- 1 me me   36148 Apr 10 22:32 async.o</span>
+</span><span id="__span-10-4"><a href="#__codelineno-10-4" id="__codelineno-10-4" name="__codelineno-10-4"></a><span class="go">-rw-rw-r-- 1 me me   15832 Apr 10 22:32 confeval.o</span>
+</span><span id="__span-10-5"><a href="#__codelineno-10-5" id="__codelineno-10-5" name="__codelineno-10-5"></a><span class="go">-rw-rw-r-- 1 me me   70572 Apr 10 22:32 confmisc.o</span>
+</span><span id="__span-10-6"><a href="#__codelineno-10-6" id="__codelineno-10-6" name="__codelineno-10-6"></a><span class="go">-rw-rw-r-- 1 me me  237316 Apr 10 22:32 conf.o</span>
+</span><span id="__span-10-7"><a href="#__codelineno-10-7" id="__codelineno-10-7" name="__codelineno-10-7"></a><span class="go">-rw-rw-r-- 1 me me   19052 Apr 10 22:32 dlmisc.o</span>
+</span><span id="__span-10-8"><a href="#__codelineno-10-8" id="__codelineno-10-8" name="__codelineno-10-8"></a><span class="go">-rw-rw-r-- 1 me me   11824 Apr 10 22:32 error.o</span>
+</span><span id="__span-10-9"><a href="#__codelineno-10-9" id="__codelineno-10-9" name="__codelineno-10-9"></a><span class="go">-rw-rw-r-- 1 me me   18944 Apr 10 22:32 input.o</span>
+</span><span id="__span-10-10"><a href="#__codelineno-10-10" id="__codelineno-10-10" name="__codelineno-10-10"></a><span class="go">lrwxrwxrwx 1 me me      15 Apr 10 22:32 libasound.la -&gt; ../libasound.la</span>
+</span><span id="__span-10-11"><a href="#__codelineno-10-11" id="__codelineno-10-11" name="__codelineno-10-11"></a><span class="go">-rw-rw-r-- 1 me me     937 Apr 10 22:32 libasound.lai</span>
+</span><span id="__span-10-12"><a href="#__codelineno-10-12" id="__codelineno-10-12" name="__codelineno-10-12"></a><span class="hll"><span class="go">lrwxrwxrwx 1 me me      18 Apr 10 22:32 libasound.so -&gt; libasound.so.2.0.0</span>
+</span></span><span id="__span-10-13"><a href="#__codelineno-10-13" id="__codelineno-10-13" name="__codelineno-10-13"></a><span class="hll"><span class="go">lrwxrwxrwx 1 me me      18 Apr 10 22:32 libasound.so.2 -&gt; libasound.so.2.0.0</span>
+</span></span><span id="__span-10-14"><a href="#__codelineno-10-14" id="__codelineno-10-14" name="__codelineno-10-14"></a><span class="hll"><span class="go">-rwxrwxr-x 1 me me 3986260 Apr 10 22:32 libasound.so.2.0.0</span>
+</span></span><span id="__span-10-15"><a href="#__codelineno-10-15" id="__codelineno-10-15" name="__codelineno-10-15"></a><span class="go">-rw-rw-r-- 1 me me    3532 Apr 10 22:32 names.o</span>
+</span><span id="__span-10-16"><a href="#__codelineno-10-16" id="__codelineno-10-16" name="__codelineno-10-16"></a><span class="go">-rw-rw-r-- 1 me me   20552 Apr 10 22:32 output.o</span>
+</span><span id="__span-10-17"><a href="#__codelineno-10-17" id="__codelineno-10-17" name="__codelineno-10-17"></a><span class="go">-rw-rw-r-- 1 me me    6472 Apr 10 22:32 shmarea.o</span>
+</span><span id="__span-10-18"><a href="#__codelineno-10-18" id="__codelineno-10-18" name="__codelineno-10-18"></a><span class="go">-rw-rw-r-- 1 me me    7340 Apr 10 22:32 socket.o</span>
+</span><span id="__span-10-19"><a href="#__codelineno-10-19" id="__codelineno-10-19" name="__codelineno-10-19"></a><span class="go">-rw-rw-r-- 1 me me    7536 Apr 10 22:32 userfile.o</span>
+</span></code></pre></div>
+<p>The <code>libasound.so*</code> files are a dynamic version of the library.
+The shared library itself is <code>libasound.so.2.0.0</code>, which was generated by the following command line:</p>
+<div class="language-console highlight"><span class="filename">Compilation of libasound.so.2.0.0 by make</span><pre><span></span><code><span id="__span-11-1"><a href="#__codelineno-11-1" id="__codelineno-11-1" name="__codelineno-11-1"></a><span class="gp">$ </span>arm-linux-gcc<span class="w"> </span>-shared<span class="w"> </span>conf.o<span class="w"> </span>confmisc.o<span class="w"> </span>input.o<span class="w"> </span>output.o<span class="w"> </span>async.o<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-11-2"><a href="#__codelineno-11-2" id="__codelineno-11-2" name="__codelineno-11-2"></a><span class="w">  </span>error.o<span class="w"> </span>dlmisc.o<span class="w"> </span>socket.o<span class="w"> </span>shmarea.o<span class="w"> </span>userfile.o<span class="w"> </span>names.o<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-11-3"><a href="#__codelineno-11-3" id="__codelineno-11-3" name="__codelineno-11-3"></a><span class="w">  </span>-lm<span class="w"> </span>-ldl<span class="w"> </span>-lpthread<span class="w"> </span>-lrt<span class="w"> </span>-Wl,-soname<span class="w"> </span>-Wl,libasound.so.2<span class="w">  </span><span class="se">\</span>
+</span><span id="__span-11-4"><a href="#__codelineno-11-4" id="__codelineno-11-4" name="__codelineno-11-4"></a><span class="w">  </span>-o<span class="w"> </span>libasound.so.2.0.0
+</span></code></pre></div>
+<p>It creates the <em>symbolic links</em> <code>libasound.so</code> and <code>libasound.so.2</code>.</p>
+<div class="language-console highlight"><span class="filename">Symbolic linking of libasound.so.2.0.0 by make</span><pre><span></span><code><span id="__span-12-1"><a href="#__codelineno-12-1" id="__codelineno-12-1" name="__codelineno-12-1"></a><span class="gp">$ </span>ln<span class="w"> </span>-s<span class="w"> </span>libasound.so.2.0.0<span class="w"> </span>libasound.so.2
+</span><span id="__span-12-2"><a href="#__codelineno-12-2" id="__codelineno-12-2" name="__codelineno-12-2"></a><span class="gp">$ </span>ln<span class="w"> </span>-s<span class="w"> </span>libasound.so.2.0.0<span class="w"> </span>libasound.so
+</span></code></pre></div>
+<p>These <em>symlinks</em> are needed for two different reasons:</p>
+<ul>
+<li>
+<p><code>libasound.so</code> is used at compile time when you want to compile an application that is dynamically linked against the library.
+To do so, you pass the <code>-l&lt;LIBNAME&gt;</code> option to the compiler, which will look for a file named <code>lib&lt;LIBNAME&gt;.so</code>.
+In our case, the compilation option is <code>-lasound</code> and the name of the library file is <code>libasound.so</code>.<br/>
+So, the <code>libasound.so</code> <em>symlink</em> is needed at <em>compile time</em>.</p>
+</li>
+<li>
+<p><code>libasound.so.2</code> is needed because it is the <em>SONAME</em> of the library. <em>SONAME</em> stands for <em>Shared Object Name</em>.
+It is the name of the library as it will be stored in applications linked against this library.
+It means that at runtime, the dynamic loader will look for exactly this name when looking for the shared library.<br/>
+So, this <em>symbolic link</em> is needed at <em>runtime</em>.</p>
+</li>
+</ul>
+<p>To know what's the <em>SONAME</em> of a library, you can use:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-13-1"><a href="#__codelineno-13-1" id="__codelineno-13-1" name="__codelineno-13-1"></a><span class="gp">$ </span>arm-linux-readelf<span class="w"> </span>-d<span class="w"> </span>src/.libs/libasound.so.2.0.0
+</span><span id="__span-13-2"><a href="#__codelineno-13-2" id="__codelineno-13-2" name="__codelineno-13-2"></a>
+</span><span id="__span-13-3"><a href="#__codelineno-13-3" id="__codelineno-13-3" name="__codelineno-13-3"></a><span class="go">Dynamic section at offset 0xdff20 contains 24 entries:</span>
+</span><span id="__span-13-4"><a href="#__codelineno-13-4" id="__codelineno-13-4" name="__codelineno-13-4"></a><span class="go">  Tag        Type                         Name/Value</span>
+</span><span id="__span-13-5"><a href="#__codelineno-13-5" id="__codelineno-13-5" name="__codelineno-13-5"></a><span class="hll"><span class="go"> 0x00000001 (NEEDED)                     Shared library: [libc.so.0]</span>
+</span></span><span id="__span-13-6"><a href="#__codelineno-13-6" id="__codelineno-13-6" name="__codelineno-13-6"></a><span class="hll"><span class="go"> 0x00000001 (NEEDED)                     Shared library: [ld-uClibc.so.1]</span>
+</span></span><span id="__span-13-7"><a href="#__codelineno-13-7" id="__codelineno-13-7" name="__codelineno-13-7"></a><span class="hll"><span class="go"> 0x0000000e (SONAME)                     Library soname: [libasound.so.2]</span>
+</span></span><span id="__span-13-8"><a href="#__codelineno-13-8" id="__codelineno-13-8" name="__codelineno-13-8"></a><span class="go"> 0x0000000c (INIT)                       0x23b1c</span>
+</span><span id="__span-13-9"><a href="#__codelineno-13-9" id="__codelineno-13-9" name="__codelineno-13-9"></a><span class="go"> 0x0000000d (FINI)                       0xbc6b4</span>
+</span><span id="__span-13-10"><a href="#__codelineno-13-10" id="__codelineno-13-10" name="__codelineno-13-10"></a><span class="go"> 0x00000019 (INIT_ARRAY)                 0xed2fc</span>
+</span><span id="__span-13-11"><a href="#__codelineno-13-11" id="__codelineno-13-11" name="__codelineno-13-11"></a><span class="go"> 0x0000001b (INIT_ARRAYSZ)               4 (bytes)</span>
+</span><span id="__span-13-12"><a href="#__codelineno-13-12" id="__codelineno-13-12" name="__codelineno-13-12"></a><span class="go"> 0x0000001a (FINI_ARRAY)                 0xed300</span>
+</span><span id="__span-13-13"><a href="#__codelineno-13-13" id="__codelineno-13-13" name="__codelineno-13-13"></a><span class="go"> 0x0000001c (FINI_ARRAYSZ)               8 (bytes)</span>
+</span><span id="__span-13-14"><a href="#__codelineno-13-14" id="__codelineno-13-14" name="__codelineno-13-14"></a><span class="go"> 0x00000004 (HASH)                       0x114</span>
+</span><span id="__span-13-15"><a href="#__codelineno-13-15" id="__codelineno-13-15" name="__codelineno-13-15"></a><span class="go"> 0x6ffffef5 (GNU_HASH)                   0x4318</span>
+</span><span id="__span-13-16"><a href="#__codelineno-13-16" id="__codelineno-13-16" name="__codelineno-13-16"></a><span class="go"> 0x00000005 (STRTAB)                     0x1021c</span>
+</span><span id="__span-13-17"><a href="#__codelineno-13-17" id="__codelineno-13-17" name="__codelineno-13-17"></a><span class="go"> 0x00000006 (SYMTAB)                     0x7a7c</span>
+</span><span id="__span-13-18"><a href="#__codelineno-13-18" id="__codelineno-13-18" name="__codelineno-13-18"></a><span class="go"> 0x0000000a (STRSZ)                      52374 (bytes)</span>
+</span><span id="__span-13-19"><a href="#__codelineno-13-19" id="__codelineno-13-19" name="__codelineno-13-19"></a><span class="go"> 0x0000000b (SYMENT)                     16 (bytes)</span>
+</span><span id="__span-13-20"><a href="#__codelineno-13-20" id="__codelineno-13-20" name="__codelineno-13-20"></a><span class="go"> 0x00000003 (PLTGOT)                     0xf0000</span>
+</span><span id="__span-13-21"><a href="#__codelineno-13-21" id="__codelineno-13-21" name="__codelineno-13-21"></a><span class="go"> 0x00000002 (PLTRELSZ)                   7776 (bytes)</span>
+</span><span id="__span-13-22"><a href="#__codelineno-13-22" id="__codelineno-13-22" name="__codelineno-13-22"></a><span class="go"> 0x00000014 (PLTREL)                     REL</span>
+</span><span id="__span-13-23"><a href="#__codelineno-13-23" id="__codelineno-13-23" name="__codelineno-13-23"></a><span class="go"> 0x00000017 (JMPREL)                     0x21cbc</span>
+</span><span id="__span-13-24"><a href="#__codelineno-13-24" id="__codelineno-13-24" name="__codelineno-13-24"></a><span class="go"> 0x00000011 (REL)                        0x1ceb4</span>
+</span><span id="__span-13-25"><a href="#__codelineno-13-25" id="__codelineno-13-25" name="__codelineno-13-25"></a><span class="go"> 0x00000012 (RELSZ)                      19976 (bytes)</span>
+</span><span id="__span-13-26"><a href="#__codelineno-13-26" id="__codelineno-13-26" name="__codelineno-13-26"></a><span class="go"> 0x00000013 (RELENT)                     8 (bytes)</span>
+</span><span id="__span-13-27"><a href="#__codelineno-13-27" id="__codelineno-13-27" name="__codelineno-13-27"></a><span class="go"> 0x6ffffffa (RELCOUNT)                   2084</span>
+</span><span id="__span-13-28"><a href="#__codelineno-13-28" id="__codelineno-13-28" name="__codelineno-13-28"></a><span class="go"> 0x00000000 (NULL)                       0x0</span>
+</span></code></pre></div>
+<p>and look at the <code>(SONAME)</code> line. You'll also see that this library needs the C library, because of the <code>(NEEDED)</code> line on <code>libc.so.0</code>.
+The mechanism of <em>SONAME</em> allows to change the library without recompiling the applications linked with this library.</p>
+<p>Let's imagine that a security problem is found in the <code>alsa-lib</code> release that provides <code>libasound.so.2.0.0</code>, and fixed in the next <code>alsa-lib</code> release, which will now provide <code>libasound.so.2.0.1</code>.<br/>
+You can just recompile the library, install it on your target system, change the <code>libasound.so.2</code> link so that it points to <code>libasound.so.2.0.1</code> and restart your applications.
+It will work, because your applications don't look specifically for <code>libasound.so.2.0.0</code> but for the <em>SONAME</em> <code>libasound.so.2</code>.<br/>
+However, it also means that as a library developer, if you break the <em>ABI</em> of the library, you must change the <em>SONAME</em>: change from <code>libasound.so.2</code> to <code>libasound.so.3</code>.</p>
+<h3 id="installation"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.6.4</span> Installation</h3>
+<p>Finally, the last step is to tell the <code>configure</code> script where the library is going to be installed.
+Most <code>configure</code> scripts consider that the installation prefix is <code>/usr/local/</code> (so that the library is installed in <code>/usr/local/lib/</code>, the headers in <code>/usr/local/include/</code>, etc.).
+Instead, in our system we simply want the libraries to be installed in the <code>/usr/</code> prefix, so let's tell the <code>configure</code> script about this:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-14-1"><a href="#__codelineno-14-1" id="__codelineno-14-1" name="__codelineno-14-1"></a><span class="gp">$ </span>make<span class="w"> </span>clean
+</span><span id="__span-14-2"><a href="#__codelineno-14-2" id="__codelineno-14-2" name="__codelineno-14-2"></a><span class="gp">$ </span>./configure<span class="w"> </span>--host<span class="o">=</span>arm-linux<span class="w"> </span>--without-versioned<span class="w"> </span>--prefix<span class="o">=</span>/usr/
+</span><span id="__span-14-3"><a href="#__codelineno-14-3" id="__codelineno-14-3" name="__codelineno-14-3"></a><span class="gp">$ </span>make
+</span></code></pre></div>
+<p>For this library, this option may not change anything to the resulting binaries.
+But, for safety it is always recommended to make sure that the prefix matches where your library will be running on the target system.</p>
+<p>Do not confuse the <em>prefix</em> (where the application or library will be running on the target system) with the location where the application or library will be installed on your host while building the <em>root</em> filesystem.</p>
+<p>For example, <code>libasound</code> is installed in <code>$HOME/embedded-linux-qemu-labs/thirdparty/target/usr/lib/</code> because this is the directory where we are building the <em>root</em> filesystem.
+But, once our target system is running, it looks for <code>libasound</code> in <code>/usr/lib/</code>.</p>
+<p>The <em>prefix</em> corresponds to the path in the <em>target</em> system and <strong>never</strong> on the <em>host</em>.
+So, one should <strong>never</strong> pass a <em>prefix</em> like <code>$HOME/embedded-linux-qemu-labs/thirdparty/target/usr/</code>, otherwise at runtime the application or library may look for files inside this directory on the <em>target</em>
+system, which obviously doesn't exist!<br/>
+By default, most build systems install the application or library in the given prefix (<code>/usr/</code> or <code>/usr/local/</code>), but with most build systems (including <code>autotools</code>), the installation <em>prefix</em> can be overridden,  different from the configuration <em>prefix</em>.</p>
+<p>We now only have the installation process left to do.<br/>
+First, let's make the installation in the <em>staging</em> space:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-15-1"><a href="#__codelineno-15-1" id="__codelineno-15-1" name="__codelineno-15-1"></a><span class="gp">$ </span>make<span class="w"> </span><span class="nv">DESTDIR</span><span class="o">=</span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/staging"</span><span class="w"> </span>install
+</span><span id="__span-15-2"><a href="#__codelineno-15-2" id="__codelineno-15-2" name="__codelineno-15-2"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/staging/"</span>
+</span></code></pre></div>
+<p>Now look at what has been installed by <code>alsa-lib</code>:</p>
+<ul>
+<li>
+<p>Some configuration files in <code>/usr/share/alsa/</code>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-16-1"><a href="#__codelineno-16-1" id="__codelineno-16-1" name="__codelineno-16-1"></a><span class="gp">$ </span>ls<span class="w"> </span>-p<span class="w"> </span>usr/share/alsa/
+</span><span id="__span-16-2"><a href="#__codelineno-16-2" id="__codelineno-16-2" name="__codelineno-16-2"></a><span class="go">alsa.conf  cards/  ctl/  pcm/</span>
+</span></code></pre></div>
+</li>
+<li>
+<p>The headers in <code>/usr/include/</code>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-17-1"><a href="#__codelineno-17-1" id="__codelineno-17-1" name="__codelineno-17-1"></a><span class="gp">$ </span>ls<span class="w"> </span>-p<span class="w"> </span>usr/include/
+</span><span id="__span-17-2"><a href="#__codelineno-17-2" id="__codelineno-17-2" name="__codelineno-17-2"></a><span class="go">alsa/  asoundlib.h  sys/</span>
+</span></code></pre></div>
+</li>
+<li>
+<p>The shared library and its <code>libtool</code> (<code>.la</code>) file in <code>/usr/lib/</code>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-18-1"><a href="#__codelineno-18-1" id="__codelineno-18-1" name="__codelineno-18-1"></a><span class="gp">$ </span>ls<span class="w"> </span>-p<span class="w"> </span>usr/lib/
+</span><span id="__span-18-2"><a href="#__codelineno-18-2" id="__codelineno-18-2" name="__codelineno-18-2"></a><span class="go">libasound.la  libasound.so.2      libatopology.la  libatopology.so.2      pkgconfig/</span>
+</span><span id="__span-18-3"><a href="#__codelineno-18-3" id="__codelineno-18-3" name="__codelineno-18-3"></a><span class="go">libasound.so  libasound.so.2.0.0  libatopology.so  libatopology.so.2.0.0</span>
+</span></code></pre></div>
+</li>
+<li>
+<p>A pkgconfig file in <code>/usr/lib/pkgconfig/</code> — we'll come back to these later:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-19-1"><a href="#__codelineno-19-1" id="__codelineno-19-1" name="__codelineno-19-1"></a><span class="gp">$ </span>ls<span class="w"> </span>-p<span class="w"> </span>usr/lib/pkgconfig/
+</span><span id="__span-19-2"><a href="#__codelineno-19-2" id="__codelineno-19-2" name="__codelineno-19-2"></a><span class="go">alsa.pc  alsa-topology.pc</span>
+</span></code></pre></div>
+</li>
+</ul>
+<p>Finally, let's install the library in the <code>target</code> space:</p>
+<ol>
+<li>
+<p>Create the <code>target/usr/lib</code> directory, it will contain the <em>stripped</em> version of the library.</p>
+</li>
+<li>
+<p>Copy the <em>dynamic</em> version of the library. Only <code>libasound.so.2</code> and <code>libasound.so.2.0.0</code> are needed, since <code>libasound.so.2</code> is the <em>SONAME</em> of the library and <code>libasound.so.2.0.0</code> is the real binary.</p>
+</li>
+<li>
+<p>Measure the size of the <code>target/usr/lib/libasound.so.2.0.0</code> library before <em>stripping</em>.</p>
+</li>
+<li>
+<p><em>Strip</em> the library.</p>
+</li>
+<li>
+<p>Measure the size of the <code>target/usr/lib/libasound.so.2.0.0</code> library again after <em>stripping</em>.
+How many unnecessary bytes were saved?</p>
+</li>
+</ol>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-20-1"><a href="#__codelineno-20-1" id="__codelineno-20-1" name="__codelineno-20-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-20-2"><a href="#__codelineno-20-2" id="__codelineno-20-2" name="__codelineno-20-2"></a><span class="gp">$ </span>cp<span class="w"> </span>-av<span class="w"> </span>staging/usr/lib/libasound.so.2*<span class="w"> </span>target/usr/lib/
+</span><span id="__span-20-3"><a href="#__codelineno-20-3" id="__codelineno-20-3" name="__codelineno-20-3"></a><span class="go">'staging/usr/lib/libasound.so.2' -&gt; 'target/usr/lib/libasound.so.2'</span>
+</span><span id="__span-20-4"><a href="#__codelineno-20-4" id="__codelineno-20-4" name="__codelineno-20-4"></a><span class="go">'staging/usr/lib/libasound.so.2.0.0' -&gt; 'target/usr/lib/libasound.so.2.0.0'</span>
+</span><span id="__span-20-5"><a href="#__codelineno-20-5" id="__codelineno-20-5" name="__codelineno-20-5"></a><span class="gp">$ </span>du<span class="w"> </span>-h<span class="w"> </span>target/usr/lib/libasound.so.2.0.0
+</span><span id="__span-20-6"><a href="#__codelineno-20-6" id="__codelineno-20-6" name="__codelineno-20-6"></a><span class="hll"><span class="go">3.8M    target/usr/lib/libasound.so.2.0.0</span>
+</span></span><span id="__span-20-7"><a href="#__codelineno-20-7" id="__codelineno-20-7" name="__codelineno-20-7"></a><span class="gp">$ </span>arm-linux-strip<span class="w"> </span>target/usr/lib/libasound.so.2.0.0
+</span><span id="__span-20-8"><a href="#__codelineno-20-8" id="__codelineno-20-8" name="__codelineno-20-8"></a><span class="gp">$ </span>du<span class="w"> </span>-h<span class="w"> </span>target/usr/lib/libasound.so.2.0.0
+</span><span id="__span-20-9"><a href="#__codelineno-20-9" id="__codelineno-20-9" name="__codelineno-20-9"></a><span class="hll"><span class="go">904K    target/usr/lib/libasound.so.2.0.0</span>
+</span></span></code></pre></div>
+<p>Then, we need to install the <code>alsa-lib</code> configuration files:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-21-1"><a href="#__codelineno-21-1" id="__codelineno-21-1" name="__codelineno-21-1"></a><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span>target/usr/share
+</span><span id="__span-21-2"><a href="#__codelineno-21-2" id="__codelineno-21-2" name="__codelineno-21-2"></a><span class="gp">$ </span>cp<span class="w"> </span>-arv<span class="w"> </span>staging/usr/share/alsa/<span class="w"> </span>target/usr/share/
+</span><span id="__span-21-3"><a href="#__codelineno-21-3" id="__codelineno-21-3" name="__codelineno-21-3"></a><span class="go">    ...</span>
+</span></code></pre></div>
+<p>Now, we need to adjust one small detail in one of the configuration files.
+Indeed, <code>/usr/share/alsa/alsa.conf</code> assumes a <em>UNIX group</em> called <code>audio</code> exists, which is not the case on our very small system; let's set to <em>root</em> instead (<em>group id</em> <code>0</code>).<br/>
+Edit this file and replace <code>defaults.pcm.ipc_gid audio</code> with <code>defaults.pcm.ipc_gid 0</code> instead.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-22-1"><a href="#__codelineno-22-1" id="__codelineno-22-1" name="__codelineno-22-1"></a><span class="gp">$ </span>sed<span class="w"> </span>-i<span class="w"> </span><span class="s2">"s/defaults.pcm.ipc_gid audio/defaults.pcm.ipc_gid 0/g"</span><span class="w">  </span><span class="se">\</span>
+</span><span id="__span-22-2"><a href="#__codelineno-22-2" id="__codelineno-22-2" name="__codelineno-22-2"></a><span class="w">  </span>target/usr/share/alsa/alsa.conf
+</span></code></pre></div>
+<p>And we're done with <code>alsa-lib</code>!</p>
+<h2 id="alsa-utils"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.7</span> <code>alsa-utils</code></h2>
+<h3 id="source-code_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.7.1</span> Source code</h3>
+<p>Download <code>alsa-utils</code> from the <em>ALSA</em> offical webpage. We tested the lab with version <code>1.2.6</code>.
+Once uncompressed, we quickly discover that the <code>alsa-utils</code> build system is based on the <em>autotools</em>, so we will work once again with a regular <code>configure</code> script.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-23-1"><a href="#__codelineno-23-1" id="__codelineno-23-1" name="__codelineno-23-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-23-2"><a href="#__codelineno-23-2" id="__codelineno-23-2" name="__codelineno-23-2"></a><span class="gp">$ </span><span class="nv">label</span><span class="o">=</span><span class="s2">"1.2.6"</span>
+</span><span id="__span-23-3"><a href="#__codelineno-23-3" id="__codelineno-23-3" name="__codelineno-23-3"></a><span class="gp">$ </span>wget<span class="w"> </span><span class="s2">"https://www.alsa-project.org/files/pub/utils/alsa-utils-</span><span class="si">${</span><span class="nv">label</span><span class="si">}</span><span class="s2">.tar.bz2"</span>
+</span><span id="__span-23-4"><a href="#__codelineno-23-4" id="__codelineno-23-4" name="__codelineno-23-4"></a><span class="gp">$ </span>tar<span class="w"> </span>xfv<span class="w"> </span><span class="s2">"alsa-utils-</span><span class="si">${</span><span class="nv">label</span><span class="si">}</span><span class="s2">.tar.bz2"</span>
+</span><span id="__span-23-5"><a href="#__codelineno-23-5" id="__codelineno-23-5" name="__codelineno-23-5"></a><span class="gp">$ </span>mv<span class="w"> </span>alsa-utils*/<span class="w"> </span>alsa-utils
+</span><span id="__span-23-6"><a href="#__codelineno-23-6" id="__codelineno-23-6" name="__codelineno-23-6"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>alsa-utils/
+</span></code></pre></div>
+<h3 id="configuration_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.7.2</span> Configuration</h3>
+<p>As we've seen previously, we have to provide the <em>prefix</em>, <em>host</em> options, and the <code>CC</code> variable.<br/>
+We should quiclky get an error in the execution of the configure script.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-24-1"><a href="#__codelineno-24-1" id="__codelineno-24-1" name="__codelineno-24-1"></a><span class="gp">$ </span>./configure<span class="w"> </span>--host<span class="o">=</span>arm-linux<span class="w"> </span>--prefix<span class="o">=</span>/usr
+</span><span id="__span-24-2"><a href="#__codelineno-24-2" id="__codelineno-24-2" name="__codelineno-24-2"></a><span class="go">    ...</span>
+</span><span id="__span-24-3"><a href="#__codelineno-24-3" id="__codelineno-24-3" name="__codelineno-24-3"></a><span class="go">checking for libasound headers version &gt;= 1.2.5 (1.2.5)... not present.</span>
+</span><span id="__span-24-4"><a href="#__codelineno-24-4" id="__codelineno-24-4" name="__codelineno-24-4"></a><span class="hll"><span class="go">configure: error: Sufficiently new version of libasound not found.</span>
+</span></span></code></pre></div>
+<p>Again, we can check in <code>config.log</code> what the configure script is trying to do.</p>
+<div class="language-text highlight"><span class="filename">File: config.log</span><pre><span></span><code><span id="__span-25-1"><a href="#__codelineno-25-1" id="__codelineno-25-1" name="__codelineno-25-1"></a>    ...
+</span><span id="__span-25-2"><a href="#__codelineno-25-2" id="__codelineno-25-2" name="__codelineno-25-2"></a>configure:8080: checking for libasound headers version &gt;= 1.2.5 (1.2.5)
+</span><span id="__span-25-3"><a href="#__codelineno-25-3" id="__codelineno-25-3" name="__codelineno-25-3"></a>configure:8127: arm-linux-gcc -c -g -O2  conftest.c &gt;&amp;5
+</span><span id="__span-25-4"><a href="#__codelineno-25-4" id="__codelineno-25-4" name="__codelineno-25-4"></a><span class="hll">conftest.c:12:10: fatal error: alsa/asoundlib.h: No such file or directory
+</span></span><span id="__span-25-5"><a href="#__codelineno-25-5" id="__codelineno-25-5" name="__codelineno-25-5"></a>   12 | #include &lt;alsa/asoundlib.h&gt;
+</span><span id="__span-25-6"><a href="#__codelineno-25-6" id="__codelineno-25-6" name="__codelineno-25-6"></a>      |          ^~~~~~~~~~~~~~~~~~
+</span><span id="__span-25-7"><a href="#__codelineno-25-7" id="__codelineno-25-7" name="__codelineno-25-7"></a>compilation terminated.
+</span><span id="__span-25-8"><a href="#__codelineno-25-8" id="__codelineno-25-8" name="__codelineno-25-8"></a>    ...
+</span></code></pre></div>
+<p>Of course, since <code>alsa-utils</code> uses <code>alsa-lib</code>, it includes its header file!
+So, we need to tell the C compiler where the headers can be found.
+They aren't in the default directory <code>/usr/include/</code>, but in the equivalent directory of our staging space.
+The <code>help</code> text of the <code>configure</code> script says:</p>
+<div class="language-text highlight"><span class="filename">File: configure</span><pre><span></span><code><span id="__span-26-1"><a href="#__codelineno-26-1" id="__codelineno-26-1" name="__codelineno-26-1"></a>    ...
+</span><span id="__span-26-2"><a href="#__codelineno-26-2" id="__codelineno-26-2" name="__codelineno-26-2"></a>Some influential environment variables:
+</span><span id="__span-26-3"><a href="#__codelineno-26-3" id="__codelineno-26-3" name="__codelineno-26-3"></a>    ...
+</span><span id="__span-26-4"><a href="#__codelineno-26-4" id="__codelineno-26-4" name="__codelineno-26-4"></a>  CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I&lt;include dir&gt; if
+</span><span id="__span-26-5"><a href="#__codelineno-26-5" id="__codelineno-26-5" name="__codelineno-26-5"></a>              you have headers in a nonstandard directory &lt;include dir&gt;
+</span><span id="__span-26-6"><a href="#__codelineno-26-6" id="__codelineno-26-6" name="__codelineno-26-6"></a>    ...
+</span></code></pre></div>
+<p>Let's use it!
+Now, it should stop a bit later, this time with another error.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-27-1"><a href="#__codelineno-27-1" id="__codelineno-27-1" name="__codelineno-27-1"></a><span class="gp">$ </span><span class="nv">CPPFLAGS</span><span class="o">=</span>-I<span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/staging/usr/include"</span><span class="w">  </span><span class="se">\</span>
+</span><span id="__span-27-2"><a href="#__codelineno-27-2" id="__codelineno-27-2" name="__codelineno-27-2"></a><span class="w">  </span>./configure<span class="w"> </span>--host<span class="o">=</span>arm-linux<span class="w"> </span>--prefix<span class="o">=</span>/usr
+</span><span id="__span-27-3"><a href="#__codelineno-27-3" id="__codelineno-27-3" name="__codelineno-27-3"></a><span class="go">    ...</span>
+</span><span id="__span-27-4"><a href="#__codelineno-27-4" id="__codelineno-27-4" name="__codelineno-27-4"></a><span class="go">checking for libasound headers version &gt;= 1.2.5 (1.2.5)... found.</span>
+</span><span id="__span-27-5"><a href="#__codelineno-27-5" id="__codelineno-27-5" name="__codelineno-27-5"></a><span class="go">    ...</span>
+</span><span id="__span-27-6"><a href="#__codelineno-27-6" id="__codelineno-27-6" name="__codelineno-27-6"></a><span class="go">checking for snd_ctl_open in -lasound... no</span>
+</span><span id="__span-27-7"><a href="#__codelineno-27-7" id="__codelineno-27-7" name="__codelineno-27-7"></a><span class="hll"><span class="go">configure: error: No linkable libasound was found.</span>
+</span></span></code></pre></div>
+<p>The configure script tries to compile an application against <code>libasound</code> (see the <code>-lasound</code> option): <code>alsa-utils</code> uses <code>alsa-lib</code>, so the <code>configure</code> script wants to make sure this library is already installed.<br/>
+Unfortunately, the <code>ld</code> linker doesn't find it. So, let's tell the linker where to look for libraries using the <code>-L</code> option followed by the directory where our libraries are (in <code>staging/usr/lib</code>).
+This <code>-L</code> option can be passed to the linker by using the <code>LDFLAGS</code> at <code>configure</code> time, as told by the help text of the configure script:</p>
+<div class="language-text highlight"><span class="filename">File: configure</span><pre><span></span><code><span id="__span-28-1"><a href="#__codelineno-28-1" id="__codelineno-28-1" name="__codelineno-28-1"></a>    ...
+</span><span id="__span-28-2"><a href="#__codelineno-28-2" id="__codelineno-28-2" name="__codelineno-28-2"></a>Some influential environment variables:
+</span><span id="__span-28-3"><a href="#__codelineno-28-3" id="__codelineno-28-3" name="__codelineno-28-3"></a>    ...
+</span><span id="__span-28-4"><a href="#__codelineno-28-4" id="__codelineno-28-4" name="__codelineno-28-4"></a>  LDFLAGS     linker flags, e.g. -L&lt;lib dir&gt; if you have libraries in a
+</span><span id="__span-28-5"><a href="#__codelineno-28-5" id="__codelineno-28-5" name="__codelineno-28-5"></a>              nonstandard directory &lt;lib dir&gt;
+</span><span id="__span-28-6"><a href="#__codelineno-28-6" id="__codelineno-28-6" name="__codelineno-28-6"></a>    ...
+</span></code></pre></div>
+<p>Let's use this LDFLAGS variable:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-29-1"><a href="#__codelineno-29-1" id="__codelineno-29-1" name="__codelineno-29-1"></a><span class="gp">$ </span><span class="nv">LDFLAGS</span><span class="o">=</span>-L<span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/staging/usr/lib"</span><span class="w">  </span><span class="se">\</span>
+</span><span id="__span-29-2"><a href="#__codelineno-29-2" id="__codelineno-29-2" name="__codelineno-29-2"></a><span class="w">  </span><span class="nv">CPPFLAGS</span><span class="o">=</span>-I<span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/staging/usr/include"</span><span class="w">  </span><span class="se">\</span>
+</span><span id="__span-29-3"><a href="#__codelineno-29-3" id="__codelineno-29-3" name="__codelineno-29-3"></a><span class="w">  </span>./configure<span class="w"> </span>--host<span class="o">=</span>arm-linux<span class="w"> </span>--prefix<span class="o">=</span>/usr
+</span><span id="__span-29-4"><a href="#__codelineno-29-4" id="__codelineno-29-4" name="__codelineno-29-4"></a><span class="go">    ...</span>
+</span><span id="__span-29-5"><a href="#__codelineno-29-5" id="__codelineno-29-5" name="__codelineno-29-5"></a><span class="go">checking panel.h usability... no</span>
+</span><span id="__span-29-6"><a href="#__codelineno-29-6" id="__codelineno-29-6" name="__codelineno-29-6"></a><span class="go">checking panel.h presence... no</span>
+</span><span id="__span-29-7"><a href="#__codelineno-29-7" id="__codelineno-29-7" name="__codelineno-29-7"></a><span class="go">checking for panel.h... no</span>
+</span><span id="__span-29-8"><a href="#__codelineno-29-8" id="__codelineno-29-8" name="__codelineno-29-8"></a><span class="hll"><span class="go">configure: error: required curses helper header not found</span>
+</span></span></code></pre></div>
+<p>Once again, it should fail a bit further down the tests, this time complaining about a missing
+<em>curses helper header</em>.
+<code>curses</code> (or <code>ncurses</code>, <em>new curses</em>) is a graphical framework to design text UIs within the terminal.</p>
+<p>This is only used by <code>alsamixer</code>, one of the tools provided by <code>alsa-utils</code>, that we are not going to use.
+Hence, we can just disable the build of <code>alsamixer</code>. Of course, if we wanted it, we would have had to build <code>ncurses</code> first, just like we built <code>alsa-lib</code>.</p>
+<h3 id="build_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.7.3</span> Build</h3>
+<p>Then, run the compilation with <code>make</code>. Hopefully, it works!</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-30-1"><a href="#__codelineno-30-1" id="__codelineno-30-1" name="__codelineno-30-1"></a><span class="gp">$ </span><span class="nv">LDFLAGS</span><span class="o">=</span>-L<span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/staging/usr/lib"</span><span class="w">  </span><span class="se">\</span>
+</span><span id="__span-30-2"><a href="#__codelineno-30-2" id="__codelineno-30-2" name="__codelineno-30-2"></a><span class="w">  </span><span class="nv">CPPFLAGS</span><span class="o">=</span>-I<span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/staging/usr/include"</span><span class="w">  </span><span class="se">\</span>
+</span><span id="__span-30-3"><a href="#__codelineno-30-3" id="__codelineno-30-3" name="__codelineno-30-3"></a><span class="w">  </span>./configure<span class="w"> </span>--host<span class="o">=</span>arm-linux<span class="w"> </span>--prefix<span class="o">=</span>/usr<span class="w"> </span>--disable-alsamixer
+</span><span id="__span-30-4"><a href="#__codelineno-30-4" id="__codelineno-30-4" name="__codelineno-30-4"></a><span class="gp">$ </span>make
+</span></code></pre></div>
+<h3 id="installation_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.7.4</span> Installation</h3>
+<p>Let's now begin the installation process. Before really installing in the <code>staging</code> directory, let's install in a dummy directory, to see what's going to be installed — this dummy directory will not be used afterwards, it is only to verify what will be installed before polluting the staging space.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-31-1"><a href="#__codelineno-31-1" id="__codelineno-31-1" name="__codelineno-31-1"></a><span class="gp">$ </span>make<span class="w"> </span><span class="nv">DESTDIR</span><span class="o">=</span>/tmp/alsa-utils<span class="w"> </span>install
+</span></code></pre></div>
+<p>The <code>DESTDIR</code> variable can be used with all <em>Makefiles</em> based on <code>automake</code>.
+It allows to override the installation directory: instead of being installed in the configuration <code>prefix</code> directory, the files will be installed in <code>$DESTDIR/configuration-prefix</code>.<br/>
+Now, let's see what has been installed in <code>/tmp/alsa-utils/</code>;</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-32-1"><a href="#__codelineno-32-1" id="__codelineno-32-1" name="__codelineno-32-1"></a><span class="gp">$ </span>tree<span class="w"> </span>/tmp/alsa-utils/
+</span><span id="__span-32-2"><a href="#__codelineno-32-2" id="__codelineno-32-2" name="__codelineno-32-2"></a><span class="go">/tmp/alsa-utils/</span>
+</span><span id="__span-32-3"><a href="#__codelineno-32-3" id="__codelineno-32-3" name="__codelineno-32-3"></a><span class="go">├── lib</span>
+</span><span id="__span-32-4"><a href="#__codelineno-32-4" id="__codelineno-32-4" name="__codelineno-32-4"></a><span class="go">│   ├── systemd</span>
+</span><span id="__span-32-5"><a href="#__codelineno-32-5" id="__codelineno-32-5" name="__codelineno-32-5"></a><span class="go">│   │   └── system</span>
+</span><span id="__span-32-6"><a href="#__codelineno-32-6" id="__codelineno-32-6" name="__codelineno-32-6"></a><span class="go">│   │       ├── alsa-restore.service</span>
+</span><span id="__span-32-7"><a href="#__codelineno-32-7" id="__codelineno-32-7" name="__codelineno-32-7"></a><span class="go">│   │       ├── alsa-state.service</span>
+</span><span id="__span-32-8"><a href="#__codelineno-32-8" id="__codelineno-32-8" name="__codelineno-32-8"></a><span class="go">│   │       └── sound.target.wants</span>
+</span><span id="__span-32-9"><a href="#__codelineno-32-9" id="__codelineno-32-9" name="__codelineno-32-9"></a><span class="go">│   │           ├── alsa-restore.service -&gt; ../alsa-restore.service</span>
+</span><span id="__span-32-10"><a href="#__codelineno-32-10" id="__codelineno-32-10" name="__codelineno-32-10"></a><span class="go">│   │           └── alsa-state.service -&gt; ../alsa-state.service</span>
+</span><span id="__span-32-11"><a href="#__codelineno-32-11" id="__codelineno-32-11" name="__codelineno-32-11"></a><span class="go">│   └── udev</span>
+</span><span id="__span-32-12"><a href="#__codelineno-32-12" id="__codelineno-32-12" name="__codelineno-32-12"></a><span class="go">│       └── rules.d</span>
+</span><span id="__span-32-13"><a href="#__codelineno-32-13" id="__codelineno-32-13" name="__codelineno-32-13"></a><span class="go">│           └── 90-alsa-restore.rules</span>
+</span><span id="__span-32-14"><a href="#__codelineno-32-14" id="__codelineno-32-14" name="__codelineno-32-14"></a><span class="go">├── usr</span>
+</span><span id="__span-32-15"><a href="#__codelineno-32-15" id="__codelineno-32-15" name="__codelineno-32-15"></a><span class="go">│   ├── bin</span>
+</span><span id="__span-32-16"><a href="#__codelineno-32-16" id="__codelineno-32-16" name="__codelineno-32-16"></a><span class="go">│   │   ├── aconnect</span>
+</span><span id="__span-32-17"><a href="#__codelineno-32-17" id="__codelineno-32-17" name="__codelineno-32-17"></a><span class="go">│   │   ├── alsabat</span>
+</span><span id="__span-32-18"><a href="#__codelineno-32-18" id="__codelineno-32-18" name="__codelineno-32-18"></a><span class="go">│   │   ├── alsaloop</span>
+</span><span id="__span-32-19"><a href="#__codelineno-32-19" id="__codelineno-32-19" name="__codelineno-32-19"></a><span class="go">│   │   ├── alsatplg</span>
+</span><span id="__span-32-20"><a href="#__codelineno-32-20" id="__codelineno-32-20" name="__codelineno-32-20"></a><span class="go">│   │   ├── alsaucm</span>
+</span><span id="__span-32-21"><a href="#__codelineno-32-21" id="__codelineno-32-21" name="__codelineno-32-21"></a><span class="go">│   │   ├── amidi</span>
+</span><span id="__span-32-22"><a href="#__codelineno-32-22" id="__codelineno-32-22" name="__codelineno-32-22"></a><span class="go">│   │   ├── amixer</span>
+</span><span id="__span-32-23"><a href="#__codelineno-32-23" id="__codelineno-32-23" name="__codelineno-32-23"></a><span class="go">│   │   ├── aplay</span>
+</span><span id="__span-32-24"><a href="#__codelineno-32-24" id="__codelineno-32-24" name="__codelineno-32-24"></a><span class="go">│   │   ├── aplaymidi</span>
+</span><span id="__span-32-25"><a href="#__codelineno-32-25" id="__codelineno-32-25" name="__codelineno-32-25"></a><span class="go">│   │   ├── arecord -&gt; aplay</span>
+</span><span id="__span-32-26"><a href="#__codelineno-32-26" id="__codelineno-32-26" name="__codelineno-32-26"></a><span class="go">│   │   ├── arecordmidi</span>
+</span><span id="__span-32-27"><a href="#__codelineno-32-27" id="__codelineno-32-27" name="__codelineno-32-27"></a><span class="go">│   │   ├── aseqdump</span>
+</span><span id="__span-32-28"><a href="#__codelineno-32-28" id="__codelineno-32-28" name="__codelineno-32-28"></a><span class="go">│   │   ├── aseqnet</span>
+</span><span id="__span-32-29"><a href="#__codelineno-32-29" id="__codelineno-32-29" name="__codelineno-32-29"></a><span class="go">│   │   ├── axfer</span>
+</span><span id="__span-32-30"><a href="#__codelineno-32-30" id="__codelineno-32-30" name="__codelineno-32-30"></a><span class="go">│   │   ├── iecset</span>
+</span><span id="__span-32-31"><a href="#__codelineno-32-31" id="__codelineno-32-31" name="__codelineno-32-31"></a><span class="go">│   │   └── speaker-test</span>
+</span><span id="__span-32-32"><a href="#__codelineno-32-32" id="__codelineno-32-32" name="__codelineno-32-32"></a><span class="go">│   ├── sbin</span>
+</span><span id="__span-32-33"><a href="#__codelineno-32-33" id="__codelineno-32-33" name="__codelineno-32-33"></a><span class="go">│   │   ├── alsabat-test.sh</span>
+</span><span id="__span-32-34"><a href="#__codelineno-32-34" id="__codelineno-32-34" name="__codelineno-32-34"></a><span class="go">│   │   ├── alsaconf</span>
+</span><span id="__span-32-35"><a href="#__codelineno-32-35" id="__codelineno-32-35" name="__codelineno-32-35"></a><span class="go">│   │   ├── alsactl</span>
+</span><span id="__span-32-36"><a href="#__codelineno-32-36" id="__codelineno-32-36" name="__codelineno-32-36"></a><span class="go">│   │   └── alsa-info.sh</span>
+</span><span id="__span-32-37"><a href="#__codelineno-32-37" id="__codelineno-32-37" name="__codelineno-32-37"></a><span class="go">│   └── share</span>
+</span><span id="__span-32-38"><a href="#__codelineno-32-38" id="__codelineno-32-38" name="__codelineno-32-38"></a><span class="go">│       ├── alsa</span>
+</span><span id="__span-32-39"><a href="#__codelineno-32-39" id="__codelineno-32-39" name="__codelineno-32-39"></a><span class="go">│       │   ├── init</span>
+</span><span id="__span-32-40"><a href="#__codelineno-32-40" id="__codelineno-32-40" name="__codelineno-32-40"></a><span class="go">│       │   │   ├── 00main</span>
+</span><span id="__span-32-41"><a href="#__codelineno-32-41" id="__codelineno-32-41" name="__codelineno-32-41"></a><span class="go">│       │   │   ├── ca0106</span>
+</span><span id="__span-32-42"><a href="#__codelineno-32-42" id="__codelineno-32-42" name="__codelineno-32-42"></a><span class="go">│       │   │   ├── default</span>
+</span><span id="__span-32-43"><a href="#__codelineno-32-43" id="__codelineno-32-43" name="__codelineno-32-43"></a><span class="go">│       │   │   ├── hda</span>
+</span><span id="__span-32-44"><a href="#__codelineno-32-44" id="__codelineno-32-44" name="__codelineno-32-44"></a><span class="go">│       │   │   ├── help</span>
+</span><span id="__span-32-45"><a href="#__codelineno-32-45" id="__codelineno-32-45" name="__codelineno-32-45"></a><span class="go">│       │   │   ├── info</span>
+</span><span id="__span-32-46"><a href="#__codelineno-32-46" id="__codelineno-32-46" name="__codelineno-32-46"></a><span class="go">│       │   │   └── test</span>
+</span><span id="__span-32-47"><a href="#__codelineno-32-47" id="__codelineno-32-47" name="__codelineno-32-47"></a><span class="go">│       │   └── speaker-test</span>
+</span><span id="__span-32-48"><a href="#__codelineno-32-48" id="__codelineno-32-48" name="__codelineno-32-48"></a><span class="go">│       │       └── sample_map.csv</span>
+</span><span id="__span-32-49"><a href="#__codelineno-32-49" id="__codelineno-32-49" name="__codelineno-32-49"></a><span class="go">│       ├── man</span>
+</span><span id="__span-32-50"><a href="#__codelineno-32-50" id="__codelineno-32-50" name="__codelineno-32-50"></a><span class="go">│       │   ├── fr</span>
+</span><span id="__span-32-51"><a href="#__codelineno-32-51" id="__codelineno-32-51" name="__codelineno-32-51"></a><span class="go">│       │   │   └── man8</span>
+</span><span id="__span-32-52"><a href="#__codelineno-32-52" id="__codelineno-32-52" name="__codelineno-32-52"></a><span class="go">│       │   │       └── alsaconf.8</span>
+</span><span id="__span-32-53"><a href="#__codelineno-32-53" id="__codelineno-32-53" name="__codelineno-32-53"></a><span class="go">│       │   ├── man1</span>
+</span><span id="__span-32-54"><a href="#__codelineno-32-54" id="__codelineno-32-54" name="__codelineno-32-54"></a><span class="go">│       │   │   ├── aconnect.1</span>
+</span><span id="__span-32-55"><a href="#__codelineno-32-55" id="__codelineno-32-55" name="__codelineno-32-55"></a><span class="go">│       │   │   ├── alsabat.1</span>
+</span><span id="__span-32-56"><a href="#__codelineno-32-56" id="__codelineno-32-56" name="__codelineno-32-56"></a><span class="go">│       │   │   ├── alsactl.1</span>
+</span><span id="__span-32-57"><a href="#__codelineno-32-57" id="__codelineno-32-57" name="__codelineno-32-57"></a><span class="go">│       │   │   ├── alsa-info.sh.1</span>
+</span><span id="__span-32-58"><a href="#__codelineno-32-58" id="__codelineno-32-58" name="__codelineno-32-58"></a><span class="go">│       │   │   ├── alsaloop.1</span>
+</span><span id="__span-32-59"><a href="#__codelineno-32-59" id="__codelineno-32-59" name="__codelineno-32-59"></a><span class="go">│       │   │   ├── amidi.1</span>
+</span><span id="__span-32-60"><a href="#__codelineno-32-60" id="__codelineno-32-60" name="__codelineno-32-60"></a><span class="go">│       │   │   ├── amixer.1</span>
+</span><span id="__span-32-61"><a href="#__codelineno-32-61" id="__codelineno-32-61" name="__codelineno-32-61"></a><span class="go">│       │   │   ├── aplay.1</span>
+</span><span id="__span-32-62"><a href="#__codelineno-32-62" id="__codelineno-32-62" name="__codelineno-32-62"></a><span class="go">│       │   │   ├── aplaymidi.1</span>
+</span><span id="__span-32-63"><a href="#__codelineno-32-63" id="__codelineno-32-63" name="__codelineno-32-63"></a><span class="go">│       │   │   ├── arecord.1 -&gt; aplay.1</span>
+</span><span id="__span-32-64"><a href="#__codelineno-32-64" id="__codelineno-32-64" name="__codelineno-32-64"></a><span class="go">│       │   │   ├── arecordmidi.1</span>
+</span><span id="__span-32-65"><a href="#__codelineno-32-65" id="__codelineno-32-65" name="__codelineno-32-65"></a><span class="go">│       │   │   ├── aseqdump.1</span>
+</span><span id="__span-32-66"><a href="#__codelineno-32-66" id="__codelineno-32-66" name="__codelineno-32-66"></a><span class="go">│       │   │   ├── aseqnet.1</span>
+</span><span id="__span-32-67"><a href="#__codelineno-32-67" id="__codelineno-32-67" name="__codelineno-32-67"></a><span class="go">│       │   │   ├── axfer.1</span>
+</span><span id="__span-32-68"><a href="#__codelineno-32-68" id="__codelineno-32-68" name="__codelineno-32-68"></a><span class="go">│       │   │   ├── axfer-list.1</span>
+</span><span id="__span-32-69"><a href="#__codelineno-32-69" id="__codelineno-32-69" name="__codelineno-32-69"></a><span class="go">│       │   │   ├── axfer-transfer.1</span>
+</span><span id="__span-32-70"><a href="#__codelineno-32-70" id="__codelineno-32-70" name="__codelineno-32-70"></a><span class="go">│       │   │   ├── iecset.1</span>
+</span><span id="__span-32-71"><a href="#__codelineno-32-71" id="__codelineno-32-71" name="__codelineno-32-71"></a><span class="go">│       │   │   └── speaker-test.1</span>
+</span><span id="__span-32-72"><a href="#__codelineno-32-72" id="__codelineno-32-72" name="__codelineno-32-72"></a><span class="go">│       │   ├── man7</span>
+</span><span id="__span-32-73"><a href="#__codelineno-32-73" id="__codelineno-32-73" name="__codelineno-32-73"></a><span class="go">│       │   └── man8</span>
+</span><span id="__span-32-74"><a href="#__codelineno-32-74" id="__codelineno-32-74" name="__codelineno-32-74"></a><span class="go">│       │       └── alsaconf.8</span>
+</span><span id="__span-32-75"><a href="#__codelineno-32-75" id="__codelineno-32-75" name="__codelineno-32-75"></a><span class="go">│       └── sounds</span>
+</span><span id="__span-32-76"><a href="#__codelineno-32-76" id="__codelineno-32-76" name="__codelineno-32-76"></a><span class="go">│           └── alsa</span>
+</span><span id="__span-32-77"><a href="#__codelineno-32-77" id="__codelineno-32-77" name="__codelineno-32-77"></a><span class="go">│               ├── Front_Center.wav</span>
+</span><span id="__span-32-78"><a href="#__codelineno-32-78" id="__codelineno-32-78" name="__codelineno-32-78"></a><span class="go">│               ├── Front_Left.wav</span>
+</span><span id="__span-32-79"><a href="#__codelineno-32-79" id="__codelineno-32-79" name="__codelineno-32-79"></a><span class="go">│               ├── Front_Right.wav</span>
+</span><span id="__span-32-80"><a href="#__codelineno-32-80" id="__codelineno-32-80" name="__codelineno-32-80"></a><span class="go">│               ├── Noise.wav</span>
+</span><span id="__span-32-81"><a href="#__codelineno-32-81" id="__codelineno-32-81" name="__codelineno-32-81"></a><span class="go">│               ├── Rear_Center.wav</span>
+</span><span id="__span-32-82"><a href="#__codelineno-32-82" id="__codelineno-32-82" name="__codelineno-32-82"></a><span class="go">│               ├── Rear_Left.wav</span>
+</span><span id="__span-32-83"><a href="#__codelineno-32-83" id="__codelineno-32-83" name="__codelineno-32-83"></a><span class="go">│               ├── Rear_Right.wav</span>
+</span><span id="__span-32-84"><a href="#__codelineno-32-84" id="__codelineno-32-84" name="__codelineno-32-84"></a><span class="go">│               ├── Side_Left.wav</span>
+</span><span id="__span-32-85"><a href="#__codelineno-32-85" id="__codelineno-32-85" name="__codelineno-32-85"></a><span class="go">│               └── Side_Right.wav</span>
+</span><span id="__span-32-86"><a href="#__codelineno-32-86" id="__codelineno-32-86" name="__codelineno-32-86"></a><span class="go">└── var</span>
+</span><span id="__span-32-87"><a href="#__codelineno-32-87" id="__codelineno-32-87" name="__codelineno-32-87"></a><span class="go">    └── lib</span>
+</span><span id="__span-32-88"><a href="#__codelineno-32-88" id="__codelineno-32-88" name="__codelineno-32-88"></a><span class="go">        └── alsa</span>
+</span><span id="__span-32-89"><a href="#__codelineno-32-89" id="__codelineno-32-89" name="__codelineno-32-89"></a>
+</span><span id="__span-32-90"><a href="#__codelineno-32-90" id="__codelineno-32-90" name="__codelineno-32-90"></a><span class="go">24 directories, 62 files</span>
+</span></code></pre></div>
+<p>So, we have</p>
+<ul>
+<li>The <code>systemd</code> service definitions in <code>lib/systemd/</code>.</li>
+<li>The <code>udev</code> rules in <code>lib/udev/</code>.</li>
+<li>The <code>alsa-utils</code> binaries in <code>/usr/bin/</code> and <code>/usr/sbin/</code>.</li>
+<li>Some sound samples in <code>/usr/share/sounds/</code>.</li>
+<li>The various translations in <code>/usr/share/locale/</code>.</li>
+<li>The manual pages in <code>/usr/share/man/</code>, explaining how to use the various tools.</li>
+<li>Some configuration samples in <code>/usr/share/alsa/</code>.</li>
+</ul>
+<p>Now, let's make the installation in the <code>staging</code> space:
+Then, let's manually install only the necessary files in the <code>target</code> space. We are only interested in <code>speaker-test</code>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-33-1"><a href="#__codelineno-33-1" id="__codelineno-33-1" name="__codelineno-33-1"></a><span class="gp">$ </span>make<span class="w"> </span><span class="nv">DESTDIR</span><span class="o">=</span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/staging"</span><span class="w"> </span>install
+</span><span id="__span-33-2"><a href="#__codelineno-33-2" id="__codelineno-33-2" name="__codelineno-33-2"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-33-3"><a href="#__codelineno-33-3" id="__codelineno-33-3" name="__codelineno-33-3"></a><span class="gp">$ </span>cp<span class="w"> </span>-a<span class="w"> </span>staging/usr/bin/speaker-test<span class="w"> </span>target/usr/bin/
+</span><span id="__span-33-4"><a href="#__codelineno-33-4" id="__codelineno-33-4" name="__codelineno-33-4"></a><span class="gp">$ </span>arm-linux-strip<span class="w"> </span>target/usr/bin/speaker-test
+</span></code></pre></div>
+<p>You may need to add the missing libraries from the toolchain install directory.</p>
+<p>We're finally done with <code>alsa-utils</code>!</p>
+<h3 id="quick-test"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.7.5</span> Quick test</h3>
+<p>Now test that all is working fine by running the <code>speaker-test</code> utility on your board.</p>
+<p>Now you can launch your <em>QEMU</em> machine as usual, with <em>rootfs</em> on NFS, and test <code>speaker-test</code> in a shell:</p>
+<div class="language-console highlight"><span class="filename">QEMU - BusyBox</span><pre><span></span><code><span id="__span-34-1"><a href="#__codelineno-34-1" id="__codelineno-34-1" name="__codelineno-34-1"></a><span class="gp"># </span>speaker-test<span class="w"> </span>-t<span class="w"> </span>sine<span class="w"> </span>-l<span class="w"> </span><span class="m">1</span>
+</span><span id="__span-34-2"><a href="#__codelineno-34-2" id="__codelineno-34-2" name="__codelineno-34-2"></a>
+</span><span id="__span-34-3"><a href="#__codelineno-34-3" id="__codelineno-34-3" name="__codelineno-34-3"></a><span class="go">speaker-test 1.2.6</span>
+</span><span id="__span-34-4"><a href="#__codelineno-34-4" id="__codelineno-34-4" name="__codelineno-34-4"></a>
+</span><span id="__span-34-5"><a href="#__codelineno-34-5" id="__codelineno-34-5" name="__codelineno-34-5"></a><span class="go">Playback device is default</span>
+</span><span id="__span-34-6"><a href="#__codelineno-34-6" id="__codelineno-34-6" name="__codelineno-34-6"></a><span class="go">Stream parameters are 48000Hz, S16_LE, 1 channels</span>
+</span><span id="__span-34-7"><a href="#__codelineno-34-7" id="__codelineno-34-7" name="__codelineno-34-7"></a><span class="go">Sine wave rate is 440.0000Hz</span>
+</span><span id="__span-34-8"><a href="#__codelineno-34-8" id="__codelineno-34-8" name="__codelineno-34-8"></a><span class="go">Rate set to 48000Hz (requested 48000Hz)</span>
+</span><span id="__span-34-9"><a href="#__codelineno-34-9" id="__codelineno-34-9" name="__codelineno-34-9"></a><span class="go">Buffer size range from 256 to 16384</span>
+</span><span id="__span-34-10"><a href="#__codelineno-34-10" id="__codelineno-34-10" name="__codelineno-34-10"></a><span class="go">Period size range from 64 to 1024</span>
+</span><span id="__span-34-11"><a href="#__codelineno-34-11" id="__codelineno-34-11" name="__codelineno-34-11"></a><span class="go">Using max buffer size 16384</span>
+</span><span id="__span-34-12"><a href="#__codelineno-34-12" id="__codelineno-34-12" name="__codelineno-34-12"></a><span class="go">Periods = 4</span>
+</span><span id="__span-34-13"><a href="#__codelineno-34-13" id="__codelineno-34-13" name="__codelineno-34-13"></a><span class="go">was set period_size = 1024</span>
+</span><span id="__span-34-14"><a href="#__codelineno-34-14" id="__codelineno-34-14" name="__codelineno-34-14"></a><span class="go">was set buffer_size = 16384</span>
+</span><span id="__span-34-15"><a href="#__codelineno-34-15" id="__codelineno-34-15" name="__codelineno-34-15"></a><span class="go"> 0 - Front Left</span>
+</span><span id="__span-34-16"><a href="#__codelineno-34-16" id="__codelineno-34-16" name="__codelineno-34-16"></a><span class="go">Time per period = 2.577584</span>
+</span></code></pre></div>
+<p>There you are: you built and ran your first program depending on a library different from the C library!</p>
+<h2 id="ipcalc"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.8</span> <code>ipcalc</code></h2>
+<p>After practicing with autotools based packages, let's build <code>ipcalc</code>, which is using <em>Meson</em> as build system.
+We won't really need this utility in our system, but at least it has no dependencies and therefore offers an easy way to build our first <em>Meson</em> based package.</p>
+<p>So, first install the <code>meson</code> package:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-35-1"><a href="#__codelineno-35-1" id="__codelineno-35-1" name="__codelineno-35-1"></a><span class="gp">$ </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>meson
+</span></code></pre></div>
+<h3 id="source-code_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.8.1</span> Source code</h3>
+<p>In the main lab directory, then let's check out the sources through git:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-36-1"><a href="#__codelineno-36-1" id="__codelineno-36-1" name="__codelineno-36-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-36-2"><a href="#__codelineno-36-2" id="__codelineno-36-2" name="__codelineno-36-2"></a><span class="gp">$ </span><span class="nv">label</span><span class="o">=</span><span class="s2">"1.0.1"</span>
+</span><span id="__span-36-3"><a href="#__codelineno-36-3" id="__codelineno-36-3" name="__codelineno-36-3"></a><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://gitlab.com/ipcalc/ipcalc.git
+</span><span id="__span-36-4"><a href="#__codelineno-36-4" id="__codelineno-36-4" name="__codelineno-36-4"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>ipcalc/
+</span><span id="__span-36-5"><a href="#__codelineno-36-5" id="__codelineno-36-5" name="__codelineno-36-5"></a><span class="gp">$ </span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>embedded-linux-qemu<span class="w"> </span><span class="nv">$label</span>
+</span></code></pre></div>
+<p>Alternatively, you can retrieve an archived release:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-37-1"><a href="#__codelineno-37-1" id="__codelineno-37-1" name="__codelineno-37-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-37-2"><a href="#__codelineno-37-2" id="__codelineno-37-2" name="__codelineno-37-2"></a><span class="gp">$ </span><span class="nv">label</span><span class="o">=</span><span class="s2">"1.0.1"</span>
+</span><span id="__span-37-3"><a href="#__codelineno-37-3" id="__codelineno-37-3" name="__codelineno-37-3"></a><span class="gp">$ </span>wget<span class="w"> </span><span class="s2">"https://gitlab.com/ipcalc/ipcalc/-/archive/</span><span class="si">${</span><span class="nv">label</span><span class="si">}</span><span class="s2">/ipcalc-</span><span class="si">${</span><span class="nv">label</span><span class="si">}</span><span class="s2">.tar.bz2"</span>
+</span><span id="__span-37-4"><a href="#__codelineno-37-4" id="__codelineno-37-4" name="__codelineno-37-4"></a><span class="gp">$ </span>tar<span class="w"> </span>xfv<span class="w"> </span><span class="s2">"ipcalc-</span><span class="si">${</span><span class="nv">label</span><span class="si">}</span><span class="s2">.tar.bz2"</span>
+</span><span id="__span-37-5"><a href="#__codelineno-37-5" id="__codelineno-37-5" name="__codelineno-37-5"></a><span class="gp">$ </span>mv<span class="w"> </span>ipcalc*/<span class="w"> </span>ipcalc
+</span><span id="__span-37-6"><a href="#__codelineno-37-6" id="__codelineno-37-6" name="__codelineno-37-6"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>ipcalc/
+</span></code></pre></div>
+<h3 id="configuration_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.8.2</span> Configuration</h3>
+<p>To cross-compile with <em>Meson</em>, we need to create a <em>cross file</em>.
+Let's create the <code>$LAB_PATH/cross-file.txt</code> file with the following content:</p>
+<div class="language-ini highlight"><span class="filename">File: $LAB_PATH/cross-file.txt</span><pre><span></span><code><span id="__span-38-1"><a href="#__codelineno-38-1" id="__codelineno-38-1" name="__codelineno-38-1"></a><span class="k">[binaries]</span>
+</span><span id="__span-38-2"><a href="#__codelineno-38-2" id="__codelineno-38-2" name="__codelineno-38-2"></a><span class="na">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'arm-linux-gcc'</span>
+</span><span id="__span-38-3"><a href="#__codelineno-38-3" id="__codelineno-38-3" name="__codelineno-38-3"></a><span class="k">[host_machine]</span>
+</span><span id="__span-38-4"><a href="#__codelineno-38-4" id="__codelineno-38-4" name="__codelineno-38-4"></a><span class="na">system</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'linux'</span>
+</span><span id="__span-38-5"><a href="#__codelineno-38-5" id="__codelineno-38-5" name="__codelineno-38-5"></a><span class="na">cpu_family</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'arm'</span>
+</span><span id="__span-38-6"><a href="#__codelineno-38-6" id="__codelineno-38-6" name="__codelineno-38-6"></a><span class="na">cpu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'cortex-a9'</span>
+</span><span id="__span-38-7"><a href="#__codelineno-38-7" id="__codelineno-38-7" name="__codelineno-38-7"></a><span class="na">endian</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">'little'</span>
+</span></code></pre></div>
+<p>Command-line shortcut:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-39-1"><a href="#__codelineno-39-1" id="__codelineno-39-1" name="__codelineno-39-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/ipcalc/"</span>
+</span><span id="__span-39-2"><a href="#__codelineno-39-2" id="__codelineno-39-2" name="__codelineno-39-2"></a><span class="gp">$ </span>cat<span class="w"> </span>&gt;<span class="w"> </span>../cross-file.txt<span class="w"> </span>&lt;&lt;<span class="s1">'EOF'</span>
+</span><span id="__span-39-3"><a href="#__codelineno-39-3" id="__codelineno-39-3" name="__codelineno-39-3"></a><span class="go">[binaries]</span>
+</span><span id="__span-39-4"><a href="#__codelineno-39-4" id="__codelineno-39-4" name="__codelineno-39-4"></a><span class="go">c = 'arm-linux-gcc'</span>
+</span><span id="__span-39-5"><a href="#__codelineno-39-5" id="__codelineno-39-5" name="__codelineno-39-5"></a><span class="go">[host_machine]</span>
+</span><span id="__span-39-6"><a href="#__codelineno-39-6" id="__codelineno-39-6" name="__codelineno-39-6"></a><span class="go">system = 'linux'</span>
+</span><span id="__span-39-7"><a href="#__codelineno-39-7" id="__codelineno-39-7" name="__codelineno-39-7"></a><span class="go">cpu_family = 'arm'</span>
+</span><span id="__span-39-8"><a href="#__codelineno-39-8" id="__codelineno-39-8" name="__codelineno-39-8"></a><span class="go">cpu = 'cortex-a9'</span>
+</span><span id="__span-39-9"><a href="#__codelineno-39-9" id="__codelineno-39-9" name="__codelineno-39-9"></a><span class="go">endian = 'little'</span>
+</span><span id="__span-39-10"><a href="#__codelineno-39-10" id="__codelineno-39-10" name="__codelineno-39-10"></a><span class="go">EOF</span>
+</span></code></pre></div>
+<p>We also need to create a special directory for building:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-40-1"><a href="#__codelineno-40-1" id="__codelineno-40-1" name="__codelineno-40-1"></a><span class="gp">$ </span>mkdir<span class="w"> </span>cross-build
+</span><span id="__span-40-2"><a href="#__codelineno-40-2" id="__codelineno-40-2" name="__codelineno-40-2"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>cross-build/
+</span></code></pre></div>
+<h3 id="build_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.8.3</span> Build</h3>
+<p>We can now have <em>Meson</em> create the <em>Ninja</em> build files for us:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-41-1"><a href="#__codelineno-41-1" id="__codelineno-41-1" name="__codelineno-41-1"></a><span class="gp">$ </span>meson<span class="w"> </span>--cross-file<span class="w"> </span>../../cross-file.txt<span class="w"> </span>--prefix<span class="w"> </span>/usr<span class="w"> </span>..
+</span><span id="__span-41-2"><a href="#__codelineno-41-2" id="__codelineno-41-2" name="__codelineno-41-2"></a><span class="go">The Meson build system</span>
+</span><span id="__span-41-3"><a href="#__codelineno-41-3" id="__codelineno-41-3" name="__codelineno-41-3"></a><span class="go">    ...</span>
+</span><span id="__span-41-4"><a href="#__codelineno-41-4" id="__codelineno-41-4" name="__codelineno-41-4"></a><span class="go">C compiler for the host machine: arm-linux-gcc (gcc 11.3.0 "arm-linux-gcc (crosstool-NG 1.25.0.95_7622b49) 11.3.0")</span>
+</span><span id="__span-41-5"><a href="#__codelineno-41-5" id="__codelineno-41-5" name="__codelineno-41-5"></a><span class="go">C linker for the host machine: arm-linux-gcc ld.bfd 1.25.0.95</span>
+</span><span id="__span-41-6"><a href="#__codelineno-41-6" id="__codelineno-41-6" name="__codelineno-41-6"></a><span class="go">C compiler for the build machine: cc (gcc 11.3.0 "cc (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0")</span>
+</span><span id="__span-41-7"><a href="#__codelineno-41-7" id="__codelineno-41-7" name="__codelineno-41-7"></a><span class="go">C linker for the build machine: cc ld.bfd 2.38</span>
+</span><span id="__span-41-8"><a href="#__codelineno-41-8" id="__codelineno-41-8" name="__codelineno-41-8"></a><span class="go">Build machine cpu family: x86_64</span>
+</span><span id="__span-41-9"><a href="#__codelineno-41-9" id="__codelineno-41-9" name="__codelineno-41-9"></a><span class="go">Build machine cpu: x86_64</span>
+</span><span id="__span-41-10"><a href="#__codelineno-41-10" id="__codelineno-41-10" name="__codelineno-41-10"></a><span class="go">Host machine cpu family: arm</span>
+</span><span id="__span-41-11"><a href="#__codelineno-41-11" id="__codelineno-41-11" name="__codelineno-41-11"></a><span class="go">Host machine cpu: cortex-a9</span>
+</span><span id="__span-41-12"><a href="#__codelineno-41-12" id="__codelineno-41-12" name="__codelineno-41-12"></a><span class="go">Target machine cpu family: arm</span>
+</span><span id="__span-41-13"><a href="#__codelineno-41-13" id="__codelineno-41-13" name="__codelineno-41-13"></a><span class="go">Target machine cpu: cortex-a9</span>
+</span><span id="__span-41-14"><a href="#__codelineno-41-14" id="__codelineno-41-14" name="__codelineno-41-14"></a><span class="go">    ...</span>
+</span><span id="__span-41-15"><a href="#__codelineno-41-15" id="__codelineno-41-15" name="__codelineno-41-15"></a><span class="go">Build targets in project: 1</span>
+</span><span id="__span-41-16"><a href="#__codelineno-41-16" id="__codelineno-41-16" name="__codelineno-41-16"></a>
+</span><span id="__span-41-17"><a href="#__codelineno-41-17" id="__codelineno-41-17" name="__codelineno-41-17"></a><span class="go">ipcalc 1.0.1</span>
+</span><span id="__span-41-18"><a href="#__codelineno-41-18" id="__codelineno-41-18" name="__codelineno-41-18"></a>
+</span><span id="__span-41-19"><a href="#__codelineno-41-19" id="__codelineno-41-19" name="__codelineno-41-19"></a><span class="go">  User defined options</span>
+</span><span id="__span-41-20"><a href="#__codelineno-41-20" id="__codelineno-41-20" name="__codelineno-41-20"></a><span class="go">    Cross files: ../../cross-file.txt</span>
+</span><span id="__span-41-21"><a href="#__codelineno-41-21" id="__codelineno-41-21" name="__codelineno-41-21"></a><span class="go">    prefix     : /usr</span>
+</span><span id="__span-41-22"><a href="#__codelineno-41-22" id="__codelineno-41-22" name="__codelineno-41-22"></a>
+</span><span id="__span-41-23"><a href="#__codelineno-41-23" id="__codelineno-41-23" name="__codelineno-41-23"></a><span class="go">Found ninja-1.10.1 at /usr/bin/ninja</span>
+</span><span id="__span-41-24"><a href="#__codelineno-41-24" id="__codelineno-41-24" name="__codelineno-41-24"></a><span class="go">WARNING: Cross file does not specify strip binary, result will not be stripped.</span>
+</span></code></pre></div>
+<p>We're finally ready to build <code>ipcalc</code>:</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-42-1"><a href="#__codelineno-42-1" id="__codelineno-42-1" name="__codelineno-42-1"></a><span class="gp">$ </span>ninja
+</span><span id="__span-42-2"><a href="#__codelineno-42-2" id="__codelineno-42-2" name="__codelineno-42-2"></a><span class="go">[7/7] Linking target ipcalc</span>
+</span></code></pre></div>
+<h3 id="installation_2"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.8.4</span> Installation</h3>
+<p>And now install <code>ipcalc</code> into the <code>staging</code> space.
+Check that the <code>staging/usr/bin/ipcalc</code> file is indeed an <em>ARM</em> executable!</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-43-1"><a href="#__codelineno-43-1" id="__codelineno-43-1" name="__codelineno-43-1"></a><span class="gp">$ </span><span class="nv">DESTDIR</span><span class="o">=</span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/staging"</span><span class="w"> </span>ninja<span class="w"> </span>install
+</span><span id="__span-43-2"><a href="#__codelineno-43-2" id="__codelineno-43-2" name="__codelineno-43-2"></a><span class="go">[0/1] Installing files.</span>
+</span><span id="__span-43-3"><a href="#__codelineno-43-3" id="__codelineno-43-3" name="__codelineno-43-3"></a><span class="go">Installing ipcalc to /home/me/embedded-linux-qemu-labs/thirdparty/staging/usr/bin</span>
+</span><span id="__span-43-4"><a href="#__codelineno-43-4" id="__codelineno-43-4" name="__codelineno-43-4"></a><span class="gp">$ </span>file<span class="w"> </span><span class="s2">"</span><span class="nv">$LAB_PATH</span><span class="s2">/staging/usr/bin/ipcalc"</span>
+</span><span id="__span-43-5"><a href="#__codelineno-43-5" id="__codelineno-43-5" name="__codelineno-43-5"></a><span class="go">/home/me/embedded-linux-qemu-labs/thirdparty/staging/usr/bin/ipcalc: ELF 32-bit LSB executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-uClibc.so.0, with debug_info, not stripped</span>
+</span></code></pre></div>
+<p>The last thing to do is to copy it to the target space and strip it.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-44-1"><a href="#__codelineno-44-1" id="__codelineno-44-1" name="__codelineno-44-1"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span><span class="nv">$LAB_PATH</span>
+</span><span id="__span-44-2"><a href="#__codelineno-44-2" id="__codelineno-44-2" name="__codelineno-44-2"></a><span class="gp">$ </span>cp<span class="w"> </span>staging/usr/bin/ipcalc<span class="w"> </span>target/usr/bin/
+</span><span id="__span-44-3"><a href="#__codelineno-44-3" id="__codelineno-44-3" name="__codelineno-44-3"></a><span class="gp">$ </span>arm-linux-strip<span class="w"> </span>target/usr/bin/ipcalc
+</span></code></pre></div>
+<p>Note that we could have asked <code>ninja install</code> to strip the executable for us when installing it into the <code>staging</code> directory.
+To do, this, we would have added a <code>strip</code> entry in the <em>cross file</em>, and passed <code>--strip</code> to <em>Meson</em>.
+However, it's better to keep files unstripped in the <code>staging</code> space, in case we need to debug them!</p>
+<h3 id="quick-test_1"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.8.5</span> Quick test</h3>
+<p>You can now test that <code>ipcalc</code> works on the target:</p>
+<div class="language-console highlight"><span class="filename">QEMU - BusyBox</span><pre><span></span><code><span id="__span-45-1"><a href="#__codelineno-45-1" id="__codelineno-45-1" name="__codelineno-45-1"></a><span class="gp"># </span>ipcalc<span class="w"> </span><span class="m">10</span>.0.2.15
+</span><span id="__span-45-2"><a href="#__codelineno-45-2" id="__codelineno-45-2" name="__codelineno-45-2"></a><span class="go">Address:        10.0.2.15</span>
+</span><span id="__span-45-3"><a href="#__codelineno-45-3" id="__codelineno-45-3" name="__codelineno-45-3"></a><span class="go">Address space:  Private Use</span>
+</span></code></pre></div>
+<p>You can now <code>halt</code> and quit <em>QEMU</em>.</p>
+<h2 id="final-touch"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.9</span> Final touch</h2>
+<p>To finish this lab completely, and to be consistent with what we've done before, let's <em>strip</em> the <em>C library</em> and its <em>loader</em> too. Let's compare the size of the binaries to confirm.</p>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-46-1"><a href="#__codelineno-46-1" id="__codelineno-46-1" name="__codelineno-46-1"></a><span class="gp">$ </span>ls<span class="w"> </span>-l<span class="w"> </span>target/lib/
+</span><span id="__span-46-2"><a href="#__codelineno-46-2" id="__codelineno-46-2" name="__codelineno-46-2"></a><span class="hll"><span class="go">total 1248</span>
+</span></span><span id="__span-46-3"><a href="#__codelineno-46-3" id="__codelineno-46-3" name="__codelineno-46-3"></a><span class="go">-r-xr-xr-x 1 me me  69584 Apr  8 15:14 ld-uClibc.so.0</span>
+</span><span id="__span-46-4"><a href="#__codelineno-46-4" id="__codelineno-46-4" name="__codelineno-46-4"></a><span class="go">-r-xr-xr-x 1 me me  69584 Apr  8 15:14 ld-uClibc.so.1</span>
+</span><span id="__span-46-5"><a href="#__codelineno-46-5" id="__codelineno-46-5" name="__codelineno-46-5"></a><span class="go">-r-xr-xr-x 1 me me 635188 Apr  8 15:14 libc.so.0</span>
+</span><span id="__span-46-6"><a href="#__codelineno-46-6" id="__codelineno-46-6" name="__codelineno-46-6"></a><span class="go">-r-xr-xr-x 1 me me 635188 Apr  8 15:14 libc.so.1</span>
+</span><span id="__span-46-7"><a href="#__codelineno-46-7" id="__codelineno-46-7" name="__codelineno-46-7"></a><span class="gp">$ </span>chmod<span class="w"> </span>+w<span class="w"> </span>target/lib/*.so.*
+</span><span id="__span-46-8"><a href="#__codelineno-46-8" id="__codelineno-46-8" name="__codelineno-46-8"></a><span class="gp">$ </span>arm-linux-strip<span class="w"> </span>target/lib/*.so.*
+</span><span id="__span-46-9"><a href="#__codelineno-46-9" id="__codelineno-46-9" name="__codelineno-46-9"></a><span class="gp">$ </span>ls<span class="w"> </span>-l<span class="w"> </span>target/lib/
+</span><span id="__span-46-10"><a href="#__codelineno-46-10" id="__codelineno-46-10" name="__codelineno-46-10"></a><span class="hll"><span class="go">total 1040</span>
+</span></span><span id="__span-46-11"><a href="#__codelineno-46-11" id="__codelineno-46-11" name="__codelineno-46-11"></a><span class="go">-rwxrwxr-x 1 me me  66460 Apr 12 20:35 ld-uClibc.so.0</span>
+</span><span id="__span-46-12"><a href="#__codelineno-46-12" id="__codelineno-46-12" name="__codelineno-46-12"></a><span class="go">-rwxrwxr-x 1 me me  66460 Apr 12 20:35 ld-uClibc.so.1</span>
+</span><span id="__span-46-13"><a href="#__codelineno-46-13" id="__codelineno-46-13" name="__codelineno-46-13"></a><span class="go">-rwxrwxr-x 1 me me 460764 Apr 12 20:35 libc.so.0</span>
+</span><span id="__span-46-14"><a href="#__codelineno-46-14" id="__codelineno-46-14" name="__codelineno-46-14"></a><span class="go">-rwxrwxr-x 1 me me 460764 Apr 12 20:35 libc.so.1</span>
+</span></code></pre></div>
+<h2 id="backup-and-restore"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.10</span> Backup and restore</h2>
+<div class="language-console highlight"><pre><span></span><code><span id="__span-47-1"><a href="#__codelineno-47-1" id="__codelineno-47-1" name="__codelineno-47-1"></a><span class="gp">$ </span>tar<span class="w"> </span>cfJv<span class="w"> </span>thirdparty-staging.tar.xz<span class="w"> </span>staging/
+</span><span id="__span-47-2"><a href="#__codelineno-47-2" id="__codelineno-47-2" name="__codelineno-47-2"></a><span class="gp">$ </span>tar<span class="w"> </span>cfJv<span class="w"> </span>thirdparty-target.tar.xz<span class="w"> </span>target/
+</span><span id="__span-47-3"><a href="#__codelineno-47-3" id="__codelineno-47-3" name="__codelineno-47-3"></a><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>target/
+</span><span id="__span-47-4"><a href="#__codelineno-47-4" id="__codelineno-47-4" name="__codelineno-47-4"></a><span class="gp">$ </span>find<span class="w"> </span>.<span class="w"> </span>-depth<span class="w"> </span>-print0<span class="w"> </span><span class="p">|</span><span class="w"> </span>cpio<span class="w"> </span>-ocv0<span class="w"> </span><span class="p">|</span><span class="w"> </span>xz<span class="w"> </span>&gt;<span class="w"> </span>../thirdparty-target.cpio.xz
+</span></code></pre></div>
+<h2 id="licensing"><span class="enumerate-headings-plugin enumerate-heading-plugin">9.11</span> Licensing</h2>
+<p>This document is an extension to: <a href="https://bootlin.com/doc/training/embedded-linux-qemu/"><em>Embedded Linux System Development - Practical Labs - QEMU Variant</em></a>
+ — © 2004-2023, <em>Bootlin</em> <a href="https://bootlin.com">https://bootlin.com/</a>, <a href="(https://creativecommons.org/licenses/by-sa/3.0/)"><code>CC-BY-SA-3.0</code></a> license.</p>
+</article>
+</div>
+</div>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+<script src="../../assets/javascripts/bundle.fac441b0.min.js"></script>
+</body>
+</html>
