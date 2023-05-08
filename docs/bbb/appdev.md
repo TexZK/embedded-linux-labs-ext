@@ -603,20 +603,219 @@ If you are ahead of time, don't hesitate to spend more time with *VSC*, for exam
 
 ## Profiling the application with perf
 
-**TODO**
+Let's connect to the *target* via SSH for the best user experience.
+
+```console
+$ ssh -i ~/.ssh/id_rsa_empty root@192.168.0.69
+```
+
+Let's make a quick attempt at profiling our application with the `perf` command:
+
+```console title="ssh - systemd"
+# perf record /root/nunchuk-mpd-client
+```
+
+Use your application and leave it when you are done.
+
+This stores profiling data in a `perf.data` file.
+One way to extract information from it is to run the below command in the same directory (the one containing `perf.data`):
+
+```console title="ssh - systemd"
+# perf report
+```
+
+```
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 43  of event 'cycles'
+# Event count (approx.): 8939291
+#
+# Overhead  Command          Shared Object        Symbol
+# ........  ...............  ...................  ...............................
+#
+     5.75%  nunchuk-mpd-cli  ld-linux-armhf.so.3  [.] _dl_relocate_object
+     5.57%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] getname_flags
+     5.47%  nunchuk-mpd-cli  ld-linux-armhf.so.3  [.] strcmp
+     5.35%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] __mutex_init
+     5.33%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] __fsnotify_inode_delete
+     4.80%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] _raw_spin_lock
+     4.72%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] down_read_trylock
+     4.56%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] _raw_spin_unlock_irqrestore
+     3.86%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] next_uptodate_page
+     3.72%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] queue_work_on
+     3.67%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] release_pages
+     3.24%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] __anon_vma_prepare
+     3.24%  nunchuk-mpd-cli  ld-linux-armhf.so.3  [.] _dl_name_match_p
+     2.83%  nunchuk-mpd-cli  ld-linux-armhf.so.3  [.] do_lookup_x
+     2.82%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] do_page_fault
+     2.82%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] v7_flush_icache_all
+     2.81%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] __audit_syscall_exit
+     2.81%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] xas_find
+     2.80%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] tcp_write_xmit
+     2.80%  nunchuk-mpd-cli  libc.so.6            [.] getenv
+     2.80%  nunchuk-mpd-cli  libc.so.6            [.] strlen
+     2.56%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] expand_downwards
+     2.07%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] core_sys_select
+     2.07%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] syscall_trace_exit
+     2.07%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] vfs_write
+     1.86%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] mark_page_accessed
+     1.86%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] skb_unlink
+     1.86%  nunchuk-mpd-cli  libc.so.6            [.] __fdelt_warn
+     1.75%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] __flush_work
+     1.70%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] tcp_ack
+     0.37%  nunchuk-mpd-cli  [kernel.kallsyms]    [k] set_cred_ucounts
+     0.06%  perf-exec        [kernel.kallsyms]    [k] perf_event_exec
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#
+
+~
+```
+
+See the time spent in various kernel (`[k]`) and userspace (`[.]`) functions.
+
+Now, let's profile the whole system.<br/>
+First, make sure that the system is currently playing audio.<br/>
+Then SSH to your board and run `perf top` (working better through SSH) to see live information about kernel and userspace functions consuming most CPU time.
+
+This is interactive, but hard to analyze. You can also run `perf record` for about 30 seconds, followed by `perf report` to have a useful summary of system wide activity for a substantial amount of time.
+
+This was a very brief start at practising with `perf`, which offers many more possibilities than we could see here.
 
 
 ## What to remember
 
-**TODO**
+During this lab, we learned that...
+
+* It's easy to study the behavior of programs and diagnose issues without even having the source code, thanks to strace, ltrace and perf.
+
+* You can use `perf` as a system wide profiler too.
+
+* You can leave a small `gdbserver` program (about 400 KB) on your *target* that allows to debug target applications, using a standard `gdb` debugger on the development *host*, or a graphical IDE such as *Visual Studio Code*.
+
+* It is fine to *strip* applications and binaries on the *target* machine, as long as the programs and libraries with debugging symbols are available on the development *host*.
+
+* Thanks to *core dumps*, you can know where a program crashed, without having to reproduce the issue by running the program through the debugger.
 
 
 ## Packaging with Meson
 
-**TODO**
+Now that our application is ready, the next thing to do is to properly integrate it into our root filesystem.
+This is a nice opportunity to see how to do this with *Meson* and leverage *Buildroot*'s infrastructure to cross-compile *Meson* based packages.
+
+Still in the main `appdev/` directory, create a `nunchuk-mpd-client-1.0/` directory and copy the `nunchuk-mpd-client.c` file to it.
+In this new directory, all you have to do is create a very simple `meson.build` file.
+
+```console
+$ mkdir -p "$LAB_PATH/nunchuk-mpd-client-1.0/"
+$ cd $_
+$ cp ../nunchuk-mpd-client.c .
+$ nano meson.build
+```
+
+```js title="File: meson.build"
+project('nunchuk-mpd-client', 'c', version: '1.0')
+libmpdclient_dep = dependency('libmpdclient', version: '>= 2.16')
+executable('nunchuk-mpd-client', 'nunchuk-mpd-client.c',
+           dependencies: libmpdclient_dep, install: true)
+```
+
+Note that `install: true` is necessary to get the executable installed by `ninja install`.
+
+Now, the next thing is to add a new *package* to the *Buildroot* source tree.
+
+Create a `nunchuk-mpd-client` directory under `package/`.
+In this directory, create a `Config.in` file. You can reuse the one from the `mpd-mpc` package (the `mpc` client) which also depends on `libmpdclient`.
+
+```console
+$ mkdir -p "$BUILDROOT/package/nunchuk-mpd-client/"
+$ cd $_
+$ cp ../mpd-mpc/Config.in .
+$ nano Config.in
+```
+
+```kconfig title="File: Config.in"
+config BR2_PACKAGE_NUNCHUK_MPD_CLIENT
+        bool "nunchuk-mpd-client"
+        select BR2_PACKAGE_LIBMPDCLIENT
+        help
+          A minimalist Nintendo Nunchuk interface to MPD.
+
+          https://bootlin.com/doc/training/embedded-linux-bbb/
+```
+
+Modify `package/Config.in` to source this new file in the `Audio and video applications` submenu.
+
+```console
+$ nano ../Config.in
+```
+
+```kconfig title="File: package/Config.in - added package" hl_lines="6"
+    ...
+menu "Audio and video applications"
+    ...
+        source "package/musepack/Config.in"
+        source "package/ncmpc/Config.in"
+        source "package/nunchuk-mpd-client/Config.in"
+        source "package/omxplayer/Config.in"
+        source "package/on2-8170-libs/Config.in"
+    ...
+```
+
+Last but not least, create the `nunchuk-mpd-client.mk`.
+
+```console
+$ nano nunchuk-mpd-client.mk
+```
+
+```make title="File: nunchuk-mpd-client.mk"
+NUNCHUK_MPD_CLIENT_VERSION = 1.0
+NUNCHUK_MPD_CLIENT_SITE = $(HOME)/embedded-linux-bbb-labs/appdev/nunchuk-mpd-client-1.0
+NUNCHUK_MPD_CLIENT_SITE_METHOD = local
+NUNCHUK_MPD_CLIENT_DEPENDENCIES = host-pkgconf libmpdclient
+
+$(eval $(meson-package))
+```
+
+All you have to do now is to enable the `nunchuk-mpd-client` package in *Buildroot*'s configuration, run `make`, update the *root* filesystem and check on the *target* that `/usr/bin/nunchuk-mpd-client` exists and runs fine.
+
+```console
+$ cd $BUILDROOT
+$ make menuconfig
+$ cp .config "$LAB_PATH/buildroot-nunchuk-mpd-client.config"
+$ make
+$ cp output/images/zImage /srv/tftp/
+$ cd $NFSROOT
+$ sudo rm -rf *
+$ tar xfv "$BUILDROOT/output/images/rootfs.tar"
+```
+
+```console title="picocomBBB - systemd"
+# reboot
+    ...
+# which nunchuk-mpd-client
+/usr/bin/nunchuk-mpd-client
+# nunchuk-mpd-client
+Connection successful
+Quit
+Connection terminated
+```
+
+All this was pretty straightforward, wasn't it? *Meson* rocks!
+
+Congratulations, you've reached the end of all our labs. Try to look back, and see how much experience you've gained in these last days.
 
 
 ## Backup and restore
+
+**TODO: git commit + bundle**
+
+**TODO: add missing files and folders to tar xz**
 
 ```console
 $ cd "$BUILDROOT/output/images/"
