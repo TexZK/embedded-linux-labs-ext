@@ -147,6 +147,8 @@ $ cp output/graphs/graph-depends.pdf ../graph-depends.pdf
 To test the new system, create a new `nfsroot` directory, extract then new *root* filesystem into it, and boot your board on it through NFS.
 
 ```console
+$ cd "$LAB_PATH/buildroot/"
+$ cp output/images/zImage /srv/tftp/
 $ mkdir -p "$LAB_PATH/nfsroot/"
 $ cd "$LAB_PATH/nfsroot/"
 $ tar xfv "../buildroot/output/images/rootfs.tar"
@@ -169,30 +171,30 @@ You can ask *systemd* to show you the various running services:
     State: degraded
      Jobs: 0 queued
    Failed: 1 units
-    Since: Thu 1970-01-01 00:00:06 UTC; 52 years 0 months ago
+    Since: Thu 1970-01-01 00:00:13 UTC; 52 years 0 months ago
    CGroup: /
            ├─init.scope
            │ └─1 /sbin/init
            └─system.slice
              ├─dbus.service
-             │ └─164 /usr/bin/dbus-daemon --system --address=systemd: --no
+             │ └─165 /usr/bin/dbus-daemon --system --address=systemd: --no
              ├─dropbear.service
              │ └─171 /usr/sbin/dropbear -F -R
              ├─mpd.service
-             │ └─166 /usr/bin/mpd --systemd
+             │ └─167 /usr/bin/mpd --systemd
              ├─system-serial\x2dgetty.slice
              │ └─serial-getty@ttyS0.service
-             │   ├─167 -sh
-             │   ├─182 systemctl status
-             │   └─183 less
+             │   ├─168 -sh
+             │   ├─185 systemctl status
+             │   └─186 less
              ├─systemd-journald.service
              │ └─92 /usr/lib/systemd/systemd-journald
              ├─systemd-networkd.service
-             │ └─111 /usr/lib/systemd/systemd-networkd
+             │ └─113 /usr/lib/systemd/systemd-networkd
              ├─systemd-resolved.service
-             │ └─129 /usr/lib/systemd/systemd-resolved
+             │ └─130 /usr/lib/systemd/systemd-resolved
              ├─systemd-timesyncd.service
-             │ └─125 /usr/lib/systemd/systemd-timesyncd
+             │ └─129 /usr/lib/systemd/systemd-timesyncd
              └─systemd-udevd.service
                └─104 /usr/lib/systemd/systemd-udevd
 
@@ -324,49 +326,50 @@ Check the currently loaded modules on your system.
 # lsmod
 Module                  Size  Used by
 input_leds             16384  0
-snd_soc_hdmi_codec     16384  1
 hid_generic            16384  0
+snd_usb_audio         217088  0
+snd_hwdep              16384  1 snd_usb_audio
+snd_usbmidi_lib        28672  1 snd_usb_audio
+mc                     36864  1 snd_usb_audio
+snd_rawmidi            28672  1 snd_usbmidi_lib
+usbhid                 32768  0
+joydev                 20480  0
+snd_soc_hdmi_codec     16384  1
 snd_soc_simple_card    16384  0
 snd_soc_simple_card_utils    20480  1 snd_soc_simple_card
 omap_aes_driver        24576  0
-omap_crypto            16384  1 omap_aes_driver
-libaes                 16384  1 omap_aes_driver
-omap_sham              28672  0
 pm33xx                 16384  0
-crypto_engine          16384  2 omap_aes_driver,omap_sham
+omap_crypto            16384  1 omap_aes_driver
+omap_sham              28672  0
+libaes                 16384  1 omap_aes_driver
 ti_emif_sram           16384  1 pm33xx
-tilcdc                 32768  0
+crypto_engine          16384  2 omap_aes_driver,omap_sham
 snd_soc_davinci_mcasp    28672  2
-snd_usb_audio         217088  2
 snd_soc_ti_udma        16384  1 snd_soc_davinci_mcasp
 snd_soc_ti_edma        16384  1 snd_soc_davinci_mcasp
-snd_hwdep              16384  1 snd_usb_audio
 snd_soc_ti_sdma        16384  1 snd_soc_davinci_mcasp
-snd_usbmidi_lib        28672  1 snd_usb_audio
+tilcdc                 32768  0
 snd_soc_core          172032  7 snd_soc_davinci_mcasp,snd_soc_hdmi_codec,snd_soc_simple_card_utils,snd_soc_ti_sdma,snd_soc_ti_edma,snd_soc_ti_udma,snd_soc_simple_card
-mc                     36864  1 snd_usb_audio
 snd_pcm_dmaengine      16384  1 snd_soc_core
-snd_rawmidi            28672  1 snd_usbmidi_lib
-snd_pcm               106496  6 snd_soc_davinci_mcasp,snd_usb_audio,snd_pcm_dmaengine,snd_soc_hdmi_codec,snd_soc_core
-snd_timer              28672  2 snd_pcm
-snd                    61440  10 snd_hwdep,snd_usb_audio,snd_soc_hdmi_codec,snd_timer,snd_rawmidi,snd_usbmidi_lib,snd_soc_core,snd_pcm
+snd_pcm               106496  5 snd_soc_davinci_mcasp,snd_usb_audio,snd_pcm_dmaengine,snd_soc_hdmi_codec,snd_soc_core
+snd_timer              28672  1 snd_pcm
+snd                    61440  8 snd_hwdep,snd_usb_audio,snd_soc_hdmi_codec,snd_timer,snd_rawmidi,snd_usbmidi_lib,snd_soc_core,snd_pcm
 soundcore              16384  1 snd
-omap_mailbox           20480  1
-usbhid                 32768  0
 nunchuk                16384  0
+omap_mailbox           20480  1
 tda998x                28672  0
-rtc_omap               20480  2 pm33xx
 drm_kms_helper        192512  3 tda998x,tilcdc
 cfbfillrect            16384  1 drm_kms_helper
 syscopyarea            16384  1 drm_kms_helper
+rtc_omap               20480  2 pm33xx
 cfbimgblt              16384  1 drm_kms_helper
 sysfillrect            16384  1 drm_kms_helper
-sysimgblt              16384  1 drm_kms_helper
-wkup_m3_ipc            16384  1 pm33xx
-fb_sys_fops            16384  1 drm_kms_helper
 omap_wdt               16384  0
-cfbcopyarea            16384  1 drm_kms_helper
+sysimgblt              16384  1 drm_kms_helper
+fb_sys_fops            16384  1 drm_kms_helper
 watchdog               20480  1 omap_wdt
+wkup_m3_ipc            16384  1 pm33xx
+cfbcopyarea            16384  1 drm_kms_helper
 tps65218_pwrbutton     16384  0
 drm                   385024  4 tda998x,tilcdc,drm_kms_helper
 drm_panel_orientation_quirks    16384  1 drm
@@ -455,29 +458,29 @@ However, you can find in *sysfs* which `MODALIAS` was emitted for your device:
 # cd /sys/class/sound/card0/device/
 # ls -la
 total 0
-drwxr-xr-x    4 root     root             0 Jan 18 11:35 .
-drwxr-xr-x    8 root     root             0 Jan 18 11:35 ..
--rw-r--r--    1 root     root          4096 Jan 18 11:43 authorized
--r--r--r--    1 root     root          4096 Jan 18 11:43 bAlternateSetting
--r--r--r--    1 root     root          4096 Jan 18 11:35 bInterfaceClass
--r--r--r--    1 root     root          4096 Jan 18 11:35 bInterfaceNumber
--r--r--r--    1 root     root          4096 Jan 18 11:43 bInterfaceProtocol
--r--r--r--    1 root     root          4096 Jan 18 11:43 bInterfaceSubClass
--r--r--r--    1 root     root          4096 Jan 18 11:43 bNumEndpoints
-lrwxrwxrwx    1 root     root             0 Jan 18 11:35 driver -> ../../../../../../../../../bus/usb/drivers/snd-usb-audio
--r--r--r--    1 root     root          4096 Jan 18 11:43 modalias
-drwxr-xr-x    2 root     root             0 Jan 18 11:43 power
-drwxr-xr-x    3 root     root             0 Jan 18 11:35 sound
-lrwxrwxrwx    1 root     root             0 Jan 18 11:35 subsystem -> ../../../../../../../../../bus/usb
--r--r--r--    1 root     root          4096 Jan 18 11:43 supports_autosuspend
--rw-r--r--    1 root     root          4096 Jan 18 11:35 uevent
+drwxr-xr-x    4 root     root             0 Jan 18  2022 .
+drwxr-xr-x    8 root     root             0 Jan 18  2022 ..
+-rw-r--r--    1 root     root          4096 May  6 11:15 authorized
+-r--r--r--    1 root     root          4096 May  6 11:15 bAlternateSetting
+-r--r--r--    1 root     root          4096 May  6 11:15 bInterfaceClass
+-r--r--r--    1 root     root          4096 May  6 11:15 bInterfaceNumber
+-r--r--r--    1 root     root          4096 May  6 11:15 bInterfaceProtocol
+-r--r--r--    1 root     root          4096 May  6 11:15 bInterfaceSubClass
+-r--r--r--    1 root     root          4096 May  6 11:15 bNumEndpoints
+lrwxrwxrwx    1 root     root             0 May  6 11:15 driver -> ../../../../../../../../../bus/usb/drivers/snd-usb-audio
+-r--r--r--    1 root     root          4096 May  6 11:15 modalias
+drwxr-xr-x    2 root     root             0 May  6 11:15 power
+drwxr-xr-x    3 root     root             0 May  6 11:15 sound
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 subsystem -> ../../../../../../../../../bus/usb
+-r--r--r--    1 root     root          4096 May  6 11:15 supports_autosuspend
+-rw-r--r--    1 root     root          4096 Jan 18  2022 uevent
 # cat modalias
 usb:v046Dp0A38d0115dc00dsc00dp00ic01isc01ip00in00
 ```
 
-With a bit of patience, you could find the matching linewithin the `modules.alias` file.
+With a bit of patience, you could find the matching line within the `modules.alias` file.
 
-If you want to see the information sent to Udev* by the kernel when a new device is plugged in, here are a few debugging commands.
+If you want to see the information sent to *Udev* by the kernel when a new device is plugged in, here are a few debugging commands.
 
 First unplug your device and run `udevadm monitor`.<br/>
 Then plug in your headset again. You will find all the events emitted by the kernel, and with the same string (with `UDEV` instead of `KERNEL`), the time when *Udev* finished processing each event.
@@ -582,20 +585,43 @@ SOUND_FORM_FACTOR=headset
 ```
 
 As far as the *Nunchuk* is concerned, we cannot easily remove it from the *Device Tree* and add it back, but it's easier to find its `MODALIAS` value:
-> **TODO**
 
-```console title="picocomBBB - systemd"
+```console title="picocomBBB - systemd" hl_lines="10"
 # cd /sys/bus/i2c/devices/
 # ls -la
-    **TODO**
+total 0
+drwxr-xr-x    2 root     root             0 Jan 18  2022 .
+drwxr-xr-x    4 root     root             0 Jan 18  2022 ..
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 0-0024 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0024
+lrwxrwxrwx    1 root     root             0 May  6 11:18 0-0034 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0034
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 0-0050 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0050
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 0-0070 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0/0-0070
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 1-0052 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@0/4802a000.target-module/4802a000.i2c/i2c-1/1-0052
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 2-0054 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0054
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 2-0055 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0055
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 2-0056 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0056
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 2-0057 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2/2-0057
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 i2c-0 -> ../../../devices/platform/ocp/44c00000.interconnect/44c00000.interconnect:segment@200000/44e0b000.target-module/44e0b000.i2c/i2c-0
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 i2c-1 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@0/4802a000.target-module/4802a000.i2c/i2c-1
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 i2c-2 -> ../../../devices/platform/ocp/48000000.interconnect/48000000.interconnect:segment@100000/4819c000.target-module/4819c000.i2c/i2c-2
 ```
 
 Here you will recognize our *Nunchuk* device through its `0x52` address.
-> **TODO**
 
 ```console title="picocomBBB - systemd"
-# cd 1-0052
+# cd "1-0052/"
 # ls -la
+total 0
+drwxr-xr-x    4 root     root             0 Jan 18  2022 .
+drwxr-xr-x    5 root     root             0 Jan 18  2022 ..
+lrwxrwxrwx    1 root     root             0 May  6 11:15 driver -> ../../../../../../../../../bus/i2c/drivers/nunchuk
+drwxr-xr-x    3 root     root             0 May  6 11:15 input
+-r--r--r--    1 root     root          4096 May  6 11:19 modalias
+-r--r--r--    1 root     root          4096 Jan  1  2000 name
+lrwxrwxrwx    1 root     root             0 May  6 11:19 of_node -> ../../../../../../../../../firmware/devicetree/base/ocp/interconnect@48000000/segment@0/target-module@2a000/i2c@0/joystick@52
+drwxr-xr-x    2 root     root             0 May  6 11:19 power
+lrwxrwxrwx    1 root     root             0 Jan 18  2022 subsystem -> ../../../../../../../../../bus/i2c
+-rw-r--r--    1 root     root          4096 Jan 18  2022 uevent
 # cat modalias
 of:NjoystickT(null)Cnintendo,nunchuk
 ```
@@ -604,7 +630,6 @@ Here the bus is `of`, meaning *Open Firmware*, which was the former name of the 
 When an event was emitted by the kernel with this `MODALIAS` string, the `nunchuk` module got loaded by *Udev* thanks to the matching alias.
 
 This actually happened when *systemd* ran the *coldplugging* operation: at system startup, it asked the kernel to emit *hotplug* events for devices already present when the system booted:
-> **TODO**
 
 ```
 [ OK ] Finished Coldplug All udev Devices.
@@ -620,13 +645,14 @@ Make sure that audio playback still works on your system:
 
 ```console title="picocomBBB - systemd"
 # mpc update
-Updating DB (#2) ...
+Updating DB (#1) ...
 volume:100%   repeat: off   random: off   single: off   consume: off
 # mpc add /
-
 # mpc play
 1-sample.ogg
 [playing] #1/7   0:00/0:19 (0%)
+volume:100%   repeat: off   random: off   single: off   consume: off
+# mpc stop
 volume:100%   repeat: off   random: off   single: off   consume: off
 ```
 
@@ -638,5 +664,10 @@ If it doesn't, look at the *systemd* logs in your serial console history (`dmesg
 
 ```console
 $ cd "$LAB_PATH/buildroot/output/images/"
-$ tar cfJv "$LAB_PATH/integration-rootfs.tar.xz" rootfs.tar
+$ tar cfJv "$LAB_PATH/integration-images.tar.xz" *
 ```
+
+## Licensing
+
+This document is an extension to: [*Embedded Linux System Development - Practical Labs - BeagleBone Black Variant*](https://bootlin.com/doc/training/embedded-linux-bbb/)
+ &mdash; &copy; 2004-2023, *Bootlin* [https://bootlin.com/](https://bootlin.com), [`CC-BY-SA-3.0`]((https://creativecommons.org/licenses/by-sa/3.0/)) license.

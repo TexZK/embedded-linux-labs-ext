@@ -28,7 +28,6 @@ nav:
     - bbb/buildroot.md
     - bbb/integration.md
     - bbb/appdev.md
-    - bbb/debugging.md
 
   - Knowledge Base:
     - 'git commit hash expansion': kb/git-hash.md
